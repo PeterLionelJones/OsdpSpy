@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using ThirdMillennium.Annotations;
 
 namespace ThirdMillennium.Utility.OSDP
 {
@@ -7,7 +8,7 @@ namespace ThirdMillennium.Utility.OSDP
         public static IServiceCollection AddFactories(this IServiceCollection services)
         {
             return services
-                .AddSingleton<IAnnotationsFactory, AnnotationsFactory>()
+                .AddSingleton<IFactory<IAnnotation>, AnnotationFactory>()
                 .AddSingleton<IExchangeFactory, ExchangeFactory>()
                 .AddSingleton<IFrameProductFactory, FrameProductFactory>()
                 .AddTransient<IAnnotation, Annotation>();

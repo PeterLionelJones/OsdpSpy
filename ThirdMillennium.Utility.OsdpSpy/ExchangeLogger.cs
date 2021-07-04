@@ -1,10 +1,12 @@
+using ThirdMillennium.Annotations;
+
 namespace ThirdMillennium.Utility.OSDP
 {
     public class ExchangeLogger : IExchangeConsumer, ISummariser
     {
         public ExchangeLogger(
             IExchangeLoggerOptions options,
-            IAnnotationsFactory annotations,
+            IFactory<IAnnotation> annotations,
             IRawFrameAnnotator rawFrameAnnotator,
             //IOctetAnnotator octetAnnotator,
             ISecureChannelAnnotator secureChannelAnnotator,
@@ -14,7 +16,7 @@ namespace ThirdMillennium.Utility.OSDP
             _options = options;
             _annotations = annotations;
             
-            _annotators = new IAnnotator[]
+            _annotators = new IAnnotator<IExchange>[]
             {
                 rawFrameAnnotator,
                 //octetAnnotator,
@@ -30,8 +32,8 @@ namespace ThirdMillennium.Utility.OSDP
         }
 
         private readonly IExchangeLoggerOptions _options;
-        private readonly IAnnotationsFactory _annotations;
-        private readonly IAnnotator[] _annotators;
+        private readonly IFactory<IAnnotation> _annotations;
+        private readonly IAnnotator<IExchange>[] _annotators;
         private readonly ISummariser[] _summarisers;
         private IExchangeProducer _input;
         

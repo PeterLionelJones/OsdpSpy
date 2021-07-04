@@ -1,3 +1,4 @@
+using ThirdMillennium.Annotations;
 using ThirdMillennium.Protocol;
 
 namespace ThirdMillennium.Utility.OSDP

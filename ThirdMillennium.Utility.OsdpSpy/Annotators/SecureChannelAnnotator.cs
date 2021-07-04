@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using ThirdMillennium.Annotations;
 using ThirdMillennium.Protocol;
 using ThirdMillennium.Protocol.OSDP;
 
