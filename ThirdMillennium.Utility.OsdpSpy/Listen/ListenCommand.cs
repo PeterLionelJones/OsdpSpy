@@ -1,5 +1,6 @@
 using System.Threading;
 using McMaster.Extensions.CommandLineUtils;
+using ThirdMillennium.Annotations;
 
 namespace ThirdMillennium.Utility.OSDP
 {
@@ -36,7 +37,7 @@ namespace ThirdMillennium.Utility.OSDP
             template: "-c|--capture", 
             description: "Capture to osdpcap file", 
             optionType: CommandOptionType.NoValue)]
-        public bool OutputFileName
+        public bool Capture
         {
             get => _listenOptions.Capture;
             set => _listenOptions.Capture = value;
@@ -127,10 +128,14 @@ namespace ThirdMillennium.Utility.OSDP
             // Listen to the OSDP channel for as long as the user wants.
             while (!cancelled) Thread.Sleep(100);
             
+            // Summarise the traffic.
+            _consumer.Summarise();
+            
             // Stop listening to OSDP frames.
             _frames.Stop();
             _exchanges.Unsubscribe();
             _consumer.Unsubscribe();
+            
             return 1;
         }
     }

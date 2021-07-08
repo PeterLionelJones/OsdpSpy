@@ -3,9 +3,11 @@ using ThirdMillennium.Protocol;
 
 namespace ThirdMillennium.Utility.OSDP
 {
-    public class ReplyAnnotator : IReplyAnnotator
+    public class ReplyAnnotator : ExchangeAnnotator
     {
-        public void Annotate(IExchange input, IAnnotation output)
+        public ReplyAnnotator() : base(3) {}
+        
+        public override void Annotate(IExchange input, IAnnotation output)
         {
             if (input.Pd?.Payload == null) return;
             

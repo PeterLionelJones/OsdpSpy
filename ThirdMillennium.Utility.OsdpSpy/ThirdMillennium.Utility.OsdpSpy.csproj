@@ -19,9 +19,9 @@
       <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
       <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
       <PackageReference Include="Serilog.Sinks.Seq" Version="5.0.1" />
-      <PackageReference Include="ThirdMillennium.Annotations" Version="0.0.2" />
-      <PackageReference Include="ThirdMillennium.Protocol.Core" Version="0.4.0" />
-      <PackageReference Include="ThirdMillennium.Protocol.OSDP" Version="0.4.7" />
+      <PackageReference Include="ThirdMillennium.Annotations" Version="0.0.3" />
+      <PackageReference Include="ThirdMillennium.Protocol.Core" Version="0.4.3" />
+      <PackageReference Include="ThirdMillennium.Protocol.OSDP" Version="0.4.11" />
     </ItemGroup>
 
 </Project>

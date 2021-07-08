@@ -5,6 +5,7 @@ using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using ThirdMillennium.Annotations;
 using ThirdMillennium.Protocol;
 using ThirdMillennium.Protocol.Core;
 
@@ -47,24 +48,19 @@ namespace ThirdMillennium.Utility.OSDP
             IServiceCollection services)
         {
             services
+                .AddAnnotators()
                 .AddFactories()
                 .AddSingleton(PhysicalConsole.Singleton)
-                .AddSingleton<ICommandAnnotator, CommandAnnotator>()
                 .AddSingleton<IExchangeConsumer, ExchangeLogger>()
                 .AddSingleton<IExchangeLoggerOptions, ListenOptions>()
                 .AddSingleton<IExchangeProducer, ExchangeProducer>()
                 .AddSingleton<IFileFrameProducer, FileFrameProducer>()
                 .AddSingleton<IFrameLogger, FrameLogger>()
                 .AddSingleton<IKeyStore, KeyStore>()
-                .AddSingleton<IRawFrameAnnotator, RawFrameAnnotator>()
                 .AddSingleton<IImportOptions, ImportOptions>()
                 .AddSingleton<IListenOptions, ListenOptions>()
-                //.AddSingleton<IOctetAnnotator, OctetAnnotator>()
                 .AddSingleton<IBusFrameProducer, BusFrameProducer>()
-                .AddSingleton<IReplyAnnotator, ReplyAnnotator>()
-                .AddSingleton<ISecureChannelAnnotator, SecureChannelAnnotator>()
-                .AddSingleton<ISerialDeviceManager, SerialDeviceManager>()
-                .AddSingleton<ISummariser, ExchangeLogger>();
+                .AddSingleton<ISerialDeviceManager, SerialDeviceManager>();
         }
 
         // ReSharper disable once UnusedParameter.Local

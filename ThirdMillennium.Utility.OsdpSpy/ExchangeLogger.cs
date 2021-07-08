@@ -2,55 +2,26 @@ using ThirdMillennium.Annotations;
 
 namespace ThirdMillennium.Utility.OSDP
 {
-    public class ExchangeLogger : IExchangeConsumer, ISummariser
+    public class ExchangeLogger : IExchangeConsumer
     {
-        public ExchangeLogger(
-            IExchangeLoggerOptions options,
-            IFactory<IAnnotation> annotations,
-            IRawFrameAnnotator rawFrameAnnotator,
-            //IOctetAnnotator octetAnnotator,
-            ISecureChannelAnnotator secureChannelAnnotator,
-            ICommandAnnotator commandAnnotator,
-            IReplyAnnotator replyAnnotator)
+        public ExchangeLogger(IAnnotatorCollection<IExchange> annotators)
         {
-            _options = options;
-            _annotations = annotations;
-            
-            _annotators = new IAnnotator<IExchange>[]
-            {
-                rawFrameAnnotator,
-                //octetAnnotator,
-                secureChannelAnnotator,
-                commandAnnotator,
-                replyAnnotator
-            };
-            
-            _summarisers = new ISummariser[]
-            {
-                //octetAnnotator
-            };
+            _annotators = annotators;
         }
 
-        private readonly IExchangeLoggerOptions _options;
-        private readonly IFactory<IAnnotation> _annotations;
-        private readonly IAnnotator<IExchange>[] _annotators;
-        private readonly ISummariser[] _summarisers;
+        private readonly IAnnotatorCollection<IExchange> _annotators;
+        
         private IExchangeProducer _input;
         
         private void OnExchange(object sender, IExchange input)
         {
-            // Annotate the exchange.
-            var annotation = _annotations.Create();
-            foreach (var annotator in _annotators)
-            {
-                annotator.Annotate(input, annotation);
-            }
-                
-            // Filter out the Poll/Ack pairs?
-            if (input.IsPollAckPair() && _options.FilterPollAck) return;
-            
-            // Log the exchange.
-            annotation.Log();
+            _annotators.Annotate(input);
+            _annotators.ReportState();
+        }
+
+        public void Summarise()
+        {
+            _annotators.Summarise();
         }
         
         public void Subscribe(IExchangeProducer input)
@@ -67,14 +38,6 @@ namespace ThirdMillennium.Utility.OSDP
 
             _input.ExchangeHandler -= OnExchange;
             _input = null;
-        }
-
-        public void Summarise()
-        {
-            foreach (var summariser in _summarisers)
-            {
-                summariser.Summarise();
-            }
         }
     }
 }

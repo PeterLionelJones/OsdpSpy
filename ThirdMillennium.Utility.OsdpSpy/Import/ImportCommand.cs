@@ -1,4 +1,5 @@
 using McMaster.Extensions.CommandLineUtils;
+using ThirdMillennium.Annotations;
 
 namespace ThirdMillennium.Utility.OSDP
 {
@@ -10,7 +11,6 @@ namespace ThirdMillennium.Utility.OSDP
             IExchangeProducer exchanges,
             IImportOptions importOptions,
             IExchangeConsumer consumer,
-            ISummariser summariser,
             IExchangeLoggerOptions loggerOptions)
         {
             _frames = frames;
@@ -18,7 +18,6 @@ namespace ThirdMillennium.Utility.OSDP
             _importOptions = importOptions;
             _consumer = consumer;
             _loggerOptions = loggerOptions;
-            _summariser = summariser;
         }
 
         private readonly IFileFrameProducer _frames;
@@ -26,7 +25,6 @@ namespace ThirdMillennium.Utility.OSDP
         private readonly IImportOptions _importOptions;
         private readonly IExchangeConsumer _consumer;
         private readonly IExchangeLoggerOptions _loggerOptions;
-        private readonly ISummariser _summariser;
         
         [Option(
             template: "-f|--filter",
@@ -63,7 +61,7 @@ namespace ThirdMillennium.Utility.OSDP
             var result =_frames.Process(_importOptions.InputFileName);
             
             // Summarise the findings.
-            _summariser.Summarise();
+            //_summariser.Summarise();
 
             // Disconnect the feeds.
             _exchanges.Unsubscribe();

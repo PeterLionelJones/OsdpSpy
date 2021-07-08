@@ -6,10 +6,12 @@ using ThirdMillennium.Protocol.OSDP;
 
 namespace ThirdMillennium.Utility.OSDP
 {
-    public class SecureChannelAnnotator : ISecureChannelAnnotator
+    public class SecureChannelAnnotator : ExchangeAnnotator
     {
-        public SecureChannelAnnotator(IKeyStore keys)
-            => _keys = keys;
+        public SecureChannelAnnotator(IKeyStore keys) : base(1)
+        {
+            _keys = keys;
+        }
 
         private readonly IKeyStore _keys;
         
@@ -119,7 +121,7 @@ namespace ThirdMillennium.Utility.OSDP
             _keys.Store(_client, key);
         }
 
-        public void Annotate(IExchange input, IAnnotation output)
+        public override void Annotate(IExchange input, IAnnotation output)
         {
             // Update the input and output.
             _input = input;

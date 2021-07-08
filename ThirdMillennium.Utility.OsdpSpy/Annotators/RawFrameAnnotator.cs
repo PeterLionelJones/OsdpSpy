@@ -2,9 +2,19 @@ using ThirdMillennium.Annotations;
 
 namespace ThirdMillennium.Utility.OSDP
 {
-    public class RawFrameAnnotator : IRawFrameAnnotator
+    public class RawFrameAnnotator : ExchangeAnnotator
     {
-        public void Annotate(IExchange input, IAnnotation output)
+        public RawFrameAnnotator(IExchangeLoggerOptions options) : base(0)
+        {
+            _options = options;
+        }
+
+        private readonly IExchangeLoggerOptions _options;
+
+        public override bool IncludeInput(IExchange input)
+            => !input.IsPollAckPair() || !_options.FilterPollAck;
+
+        public override void Annotate(IExchange input, IAnnotation output)
         {
             output.Append("Sequence: {Sequence}, ", new object[] {input.Sequence});
             

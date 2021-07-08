@@ -5,7 +5,7 @@ using ThirdMillennium.Annotations;
 
 namespace ThirdMillennium.Utility.OSDP
 {
-    public class OctetAnnotator : IOctetAnnotator
+    public class OctetAnnotator : ExchangeAnnotator
     {
         public OctetAnnotator(ILogger<OctetAnnotator> logger)
             => _logger = logger;
@@ -26,7 +26,7 @@ namespace ThirdMillennium.Utility.OSDP
             }
         }
         
-        public void Annotate(IExchange input, IAnnotation output)
+        public override void Annotate(IExchange input, IAnnotation output)
         {
             if (input != null)
             {
@@ -35,7 +35,7 @@ namespace ThirdMillennium.Utility.OSDP
             }
         }
 
-        public void Summarise()
+        public override void Summarise()
         {
             var covered = _octets.Count(x => x);
             var coverage = 100 * (double) covered / 256;

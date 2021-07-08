@@ -40,12 +40,6 @@ namespace ThirdMillennium.Utility.OSDP
             return connected;
         }
         
-        /// <summary>
-        ///     The BackgroundService method starts up the circuit using the OnStart method, polls
-        ///     the readers in the for transactions and processes circuit requests using OnService.
-        ///     When the service is cancelled, the circuit is shutdown gracefully on the OnStop
-        ///     method. The service is cancelled by calling the Stop method.
-        /// </summary>
         private void BackgroundService()
         {
             // Attempt to start the background service.
@@ -156,10 +150,6 @@ namespace ThirdMillennium.Utility.OSDP
             _source?.Cancel();
         }
     
-        /// <summary>
-        ///     The ConnectionStateEventHandler notifies subscribes of a change of state of the
-        ///     connection to the circuit. 
-        /// </summary>
         public EventHandler<ConnectionState> ConnectionStateEventHandler { get; set; }
         
         public EventHandler<IFrameProduct> FrameHandler { get; set; }
