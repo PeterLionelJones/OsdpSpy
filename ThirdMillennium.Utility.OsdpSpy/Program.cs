@@ -51,15 +51,19 @@ namespace ThirdMillennium.Utility.OSDP
                 .AddAnnotators()
                 .AddFactories()
                 .AddSingleton(PhysicalConsole.Singleton)
+                .AddSingleton<IBusFrameProducer, BusFrameProducer2>()
+                .AddSingleton<IDeferredLogger, DeferredLogger>()
                 .AddSingleton<IExchangeConsumer, ExchangeLogger>()
                 .AddSingleton<IExchangeLoggerOptions, ListenOptions>()
                 .AddSingleton<IExchangeProducer, ExchangeProducer>()
                 .AddSingleton<IFileFrameProducer, FileFrameProducer>()
                 .AddSingleton<IFrameLogger, FrameLogger>()
+                .AddSingleton<IFrameNotifier, FrameNotifier>()
+                .AddSingleton<IFrameQueue, FrameQueue>()
+                .AddSingleton<IFrameReceiver, FrameReceiver>()
                 .AddSingleton<IKeyStore, KeyStore>()
                 .AddSingleton<IImportOptions, ImportOptions>()
                 .AddSingleton<IListenOptions, ListenOptions>()
-                .AddSingleton<IBusFrameProducer, BusFrameProducer>()
                 .AddSingleton<ISerialDeviceManager, SerialDeviceManager>();
         }
 

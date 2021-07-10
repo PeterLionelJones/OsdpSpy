@@ -1,7 +1,5 @@
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using ThirdMillennium.Protocol;
@@ -9,16 +7,18 @@ using ThirdMillennium.Protocol.OSDP;
 
 namespace ThirdMillennium.Utility.OSDP
 {
-    public class BusFrameProducer : IBusFrameProducer
+    internal class FrameReceiver : ThreadService, IFrameReceiver
     {
-        public BusFrameProducer(
+        public FrameReceiver(
             ISerialDeviceManager mgr, 
             IListenOptions options,
+            IFrameQueue queue,
             IFrameProductFactory factory,
             ILogger<BusFrameProducer> logger)
         {
             _mgr = mgr;
             _options = options;
+            _queue = queue;
             _factory = factory;
             _logger = logger;
         }
@@ -28,17 +28,18 @@ namespace ThirdMillennium.Utility.OSDP
         
         private readonly ISerialDeviceManager _mgr;
         private readonly IListenOptions _options;
+        private readonly IFrameQueue _queue;
         private readonly IFrameProductFactory _factory;
         private readonly ILogger<BusFrameProducer> _logger;
         
         private IChannel _channel;
-        private CancellationTokenSource _source;
-        private CancellationToken _token;
         
         private DateTime _lastFrame = DateTime.UtcNow;
         private ResponseFrame _rx = new ResponseFrame();
         private bool _online;
-
+        private int _newRate;
+        
+        private bool IsSwitchPending { get; set; }
         private bool NoActivity
         {
             get
@@ -52,9 +53,47 @@ namespace ThirdMillennium.Utility.OSDP
 
         private void SwitchBaudRate()
         {
-            SetRate(_channel.BaudRate.NextBaudRate());
+            Switch(_channel.BaudRate.NextBaudRate());
         }
         
+        private void Switch(int rate)
+        {
+            _online = false;
+            _lastFrame = DateTime.UtcNow;
+            _rx = new ResponseFrame();
+            _channel.Reopen(rate);
+        }
+
+        private void Switch()
+        {
+            if (IsSwitchPending)
+            {
+                IsSwitchPending = false;
+                Switch(_newRate);
+            }
+        }
+        
+        private void OnSynchronised()
+        {
+            if (!_online)
+            {
+                _online = true;
+            
+                _logger.LogInformation(
+                    "Synchronised with OSDP Bus at {BaudRate} Baud\n", 
+                    _channel.BaudRate);
+            }
+        }
+
+        private void OnLostSynchronisation()
+        {
+            if (_online)
+            {
+                _online = false;
+                _logger.LogInformation("Lost Synchronisation with OSDP Bus\n");
+            }
+        }
+
         private bool OpenChannel()
         {
             var dev = _mgr.FromPortName(_options.PortName);
@@ -62,21 +101,8 @@ namespace ThirdMillennium.Utility.OSDP
             IsRunning = _channel.Open(dev, _options.BaudRate);
             return IsRunning;
         }
-        
-        private void BackgroundService()
-        {
-            // Attempt to start the background service.
-            if (OnStart())
-            {
-                // Provide service until the service is cancelled.
-                OnService();
-                
-                // Stop the service.
-                OnStop();
-            }
-        }
 
-        private bool OnStart()
+        protected override bool OnStart()
         {
             try
             {
@@ -99,7 +125,7 @@ namespace ThirdMillennium.Utility.OSDP
                 return false;
             }
         }
-
+    
         private void Notify(Frame frame)
         {
             // Decode the received frame.
@@ -110,7 +136,8 @@ namespace ThirdMillennium.Utility.OSDP
             _lastFrame = product.Timestamp;
                             
             // Pump the frame product out to interested parties.
-            FrameHandler?.Invoke(this, product);
+            //FrameHandler?.Invoke(this, product);
+            _queue.Add(product);
         }
 
         private void ReadFrame()
@@ -135,102 +162,38 @@ namespace ThirdMillennium.Utility.OSDP
                 if (complete)
                 {
                     Notify(_rx);
-
                     OnSynchronised();
-                    
-
                     _rx = new ResponseFrame();
                 }
             }
         }
 
-        private void OnService()
+        protected override void OnService()
         {
-            try
-            {
-                // Poll until told otherwise!
-                while (true)
-                {
-                    try
-                    {
-                        _token.ThrowIfCancellationRequested();
-                        
-                        ReadFrame();
+            ReadFrame();
 
-                        if (NoActivity)
-                        {
-                            OnLostSynchronisation();
-                            SwitchBaudRate();
-                        }
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        throw;
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.WriteLine(e);
-                    }
-                }
-            }
-            catch (OperationCanceledException)
+            if (IsSwitchPending)
             {
-                Debug.WriteLine("BackgroundService was cancelled");
+                IsSwitchPending = false;
+                Switch(_newRate);
+            }
+    
+            if (NoActivity)
+            {
+                OnLostSynchronisation();
+                SwitchBaudRate();
             }
         }
-
-        private void OnStop() {}
-
-        private void OnSynchronised()
-        {
-            if (!_online)
-            {
-                _online = true;
-            
-                _logger.LogInformation(
-                    "Synchronised with OSDP Bus at {BaudRate} Baud\n", 
-                    _channel.BaudRate);
-            }
-        }
-
-        private void OnLostSynchronisation()
-        {
-            if (_online)
-            {
-                _online = false;
-                _logger.LogInformation("Lost Synchronisation with OSDP Bus\n");
-            }
-        }
-
-        public bool IsRunning { get; private set; } = true;
-
+        
         public void SetRate(int rate)
         {
             if (!rate.IsValidBaudRate())
                 throw new ArgumentException("Invalid baud rate");
 
-            if (!IsRunning) return;
-
-            _online = false;
-            _lastFrame = DateTime.UtcNow;
-            _rx = new ResponseFrame();
-            _channel.Reopen(rate);
+            IsSwitchPending = true;
+            _newRate = rate;
         }
 
-        public void Start()
-        {
-            _source  = new CancellationTokenSource();
-            _token = _source.Token;
-            Task.Run(BackgroundService, _token);
-        }
-
-        public void Stop()
-        {
-            _source?.Cancel();
-            IsRunning = false;
-        }
-    
         public EventHandler<ConnectionState> ConnectionStateEventHandler { get; set; }
-        public EventHandler<IFrameProduct> FrameHandler { get; set; }
     }
 }

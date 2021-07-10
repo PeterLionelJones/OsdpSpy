@@ -1,6 +1,6 @@
+using System;
 using System.Threading;
 using McMaster.Extensions.CommandLineUtils;
-using ThirdMillennium.Annotations;
 
 namespace ThirdMillennium.Utility.OSDP
 {
@@ -39,7 +39,7 @@ namespace ThirdMillennium.Utility.OSDP
             optionType: CommandOptionType.NoValue)]
         public bool Capture
         {
-            get => _listenOptions.Capture;
+            //get => _listenOptions.Capture;
             set => _listenOptions.Capture = value;
         }
 
@@ -69,7 +69,7 @@ namespace ThirdMillennium.Utility.OSDP
             optionType: CommandOptionType.SingleValue)]
         public string PortName
         {
-            get => _listenOptions.PortName; 
+            //get => _listenOptions.PortName; 
             set => _listenOptions.PortName = value;
         }
 
@@ -112,21 +112,22 @@ namespace ThirdMillennium.Utility.OSDP
             }
           
             // Attempt to start the listener thread.
-            if (!_frames.Start())
-            {
-                console.WriteLine("Failed to start OSDP listener");
-                return - 1;
-            }
+            _frames.Start();
 
             // Tell the user how to end it . . .
-            console.WriteLine("Press Ctrl+C to stop listening\n");
-
-            // Set the Ctrl+C handler.
-            var cancelled = false;
-            console.CancelKeyPress += (_, _) => cancelled = true;
+            console.WriteLine("Press any key to stop listening\n");
 
             // Listen to the OSDP channel for as long as the user wants.
-            while (!cancelled) Thread.Sleep(100);
+            for (var cancelled = false; !cancelled && _frames.IsRunning; )
+            {
+                Thread.Sleep(100);
+
+                if (Console.KeyAvailable)
+                {
+                    Console.ReadKey(true);
+                    cancelled = true;
+                }
+            }
             
             // Summarise the traffic.
             _consumer.Summarise();

@@ -52,13 +52,13 @@ namespace ThirdMillennium.Utility.OSDP
             var verified = session.ClientCryptogram.SequenceEqual(_clientCryptogram);
 
             // Show authentication status and secure channel base key.
-            _output.Annotate("  Authenticating:  {SecureChannelStarted}\n", verified);
+            _output.AppendItem("Authenticating", verified);
             
             // Do we have the makings of a session?
             if (verified)
             {
                 _session[_input.Acu.Frame.Address] = session;
-                _output.Annotate("  Using SCBK:      {SCBK}\n", scbk.ToHexString());
+                _output.AppendItem("SCBK", scbk.ToHexString());
             }
         }
 
@@ -77,7 +77,8 @@ namespace ThirdMillennium.Utility.OSDP
 
             // Was the authentication successful?
             var authenticated = verifiedScrypt && verifiedRmac;
-            _output.Annotate("  Authenticated:   {Authenticated}\n", authenticated);
+            _output.AppendNewLine();
+            _output.AppendItem("Authenticated", authenticated);
             if (authenticated)
             {
                 // Authenticated, so set the initial RMAC.

@@ -13,12 +13,15 @@ namespace ThirdMillennium.Utility.OSDP
         {
             return services
                 .AddSingleton<IAnnotatorCollection<IExchange>, AnnotatorCollection>()
-                .AddAnnotators<ExchangeAnnotator>();
+                .AddAnnotators<ExchangeAnnotator>()
+                .AddSingleton<IReplyDecoderCollection, ReplyDecoderCollection>()
+                .AddSingleton<ICommandDecoderCollection, CommandDecoderCollection>()
+                .AddImplementationsOf<IDecoder>();
         }
 
         private static IServiceCollection AddAnnotators<T>(this IServiceCollection services)
         {
-            foreach (var annotatorType in GetAnnotatorTypes<T>())
+            foreach (var annotatorType in GetSubclassesOf<T>())
             {
                 services.AddSingleton(annotatorType);
             }
@@ -26,19 +29,37 @@ namespace ThirdMillennium.Utility.OSDP
             return services;
         }
 
+        private static IServiceCollection AddImplementationsOf<T>(this IServiceCollection services)
+        {
+            foreach (var replyDecoder in GetImplementationsOf<T>())
+            {
+                services.AddSingleton(replyDecoder);
+            }
+
+            return services;
+        }
+
         public static IEnumerable<T> GetAnnotators<T>(this IServiceProvider provider)
         {
-            return GetAnnotatorTypes<T>()
+            return GetSubclassesOf<T>()
                 .Select(provider.GetService)
                 .Cast<T>();
         }
 
-        private static IEnumerable<Type> GetAnnotatorTypes<T>()
+        private static IEnumerable<Type> GetSubclassesOf<T>()
         {
             return Assembly
                 .GetExecutingAssembly()
                 .GetTypes()
                 .Where(t => t.IsSubclassOf(typeof(T)) && t.IsPublic);
+        }
+
+        public static IEnumerable<Type> GetImplementationsOf<T>()
+        {
+            return Assembly
+                .GetExecutingAssembly()
+                .GetTypes()
+                .Where(t => typeof(T).IsAssignableFrom(t) && t.IsClass);
         }
     }
 }

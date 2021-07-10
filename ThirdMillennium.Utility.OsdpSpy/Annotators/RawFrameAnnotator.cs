@@ -36,7 +36,7 @@ namespace ThirdMillennium.Utility.OSDP
                 // Append the command and the reply.
                 output
                     .Annotate(
-                        "osdp_{AcuCommand} -> osdp_{PdResponse} in {ResponseTime:F3}ms\n\n",
+                        "osdp_{AcuCommand} -> osdp_{PdReply} in {ResponseTime:F3}ms\n\n",
                         input.Acu.Frame.Command.ToString(),
                         input.Pd?.Frame.Reply.ToString(),
                         elapsed)
@@ -44,19 +44,16 @@ namespace ThirdMillennium.Utility.OSDP
                     .AnnotatePdFrame(input.Pd);
             }
 
-            // Add a newline.
-            output.Append("\n", null);
-            
             // Tag a Poll/Ack pair for easy filtering later.
             if (input.IsPollAckPair())
             {
-                output.Annotate("  Poll/Ack Pair:   {PollAckPair}\n", input.IsPollAckPair());
+                output.AppendItem("PollAckPair", input.IsPollAckPair());
             }
             
             // Tag a timeout for easy filtering later.
             if (input.IsNoResponse())
             {
-                output.Annotate("  No Response:      {NoResponse}\n",input.IsNoResponse());
+                output.AppendItem("NoResponse",input.IsNoResponse());
             }
 
             // Set the payloads for the command and the reply.
