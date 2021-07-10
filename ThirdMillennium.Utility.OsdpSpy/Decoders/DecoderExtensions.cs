@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ThirdMillennium.Protocol;
 
 namespace ThirdMillennium.Utility.OSDP
 {
@@ -105,6 +106,25 @@ namespace ThirdMillennium.Utility.OSDP
                 0x07 => "White",
                 _ => $"0x{color:X02} - Reserved for Future Use"
             };
+        }
+
+        public static int ToRawCardLength(this byte[] input)
+        {
+            return input[2] | (input[3] << 8);
+        }
+
+        public static byte[] ToRawCardData(this byte[] input)
+        {
+            var bits = input.ToRawCardLength();
+            var bytes = 1 + (bits - 1) / 8;
+            var data = new byte[bytes];
+            Buffer.BlockCopy(input, 4, data, 0, bytes);
+            return data;
+        }
+
+        public static string ToRawCardString(this byte[] input)
+        {
+            return $"[ {input.ToRawCardLength()} ] {input.ToRawCardData().ToHexString()}";
         }
     }
 }

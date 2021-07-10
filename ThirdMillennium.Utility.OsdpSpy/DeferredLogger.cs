@@ -54,7 +54,7 @@ namespace ThirdMillennium.Utility.OSDP
             logger.LogInformation(item.Message, item.Information);
         }
 
-        public static void LogInformation(this IDeferredLogger l, string m, object p1)
+        public static void LogInformation(this IDeferredLogger l, string m, object p1 = null)
         {
             l.LogInformation(m, new object[] { p1 });
         }
