@@ -38,4 +38,32 @@ namespace ThirdMillennium.Utility.OSDP
             output.AppendItem($"Count{indexString}", input[offset + 4]);
         }
     }
+
+    internal static class BuzzerDecoderExtensions
+    {
+        public static string ToToneCodeString(this byte toneCode)
+        {
+            return toneCode switch
+            {
+                0x00 => "No Tone (Off), Deprecated",
+                0x01 => "Off",
+                0x02 => "Default Tone",
+                _ => $"0x{toneCode:X02} - Reserved for Future Use"
+            };
+        }
+
+        public static int GetEntryCount(this byte[] input, int recordSize)
+        {
+            if (input.Length < recordSize) return 0;
+            if (input.Length % recordSize == 0) return input.Length / recordSize;
+            if (input.Length % 16 != 0) return 0;
+
+            for (var count = 1;; ++count)
+            {
+                var offset = count * recordSize;
+                if (offset >= input.Length) return 0;
+                if (input[offset] == 0x80) return count;
+            }
+        }
+    }
 }

@@ -54,7 +54,7 @@ namespace ThirdMillennium.Utility.OSDP
             
             _annotation = _factory.Create();
 
-            _annotation.Append("**** VALID ACCESS DETECTED ***");
+            _annotation.Append("**** VALID ACCESS DETECTED ****");
 
             _annotation.AppendNewLine();
 
@@ -70,7 +70,7 @@ namespace ThirdMillennium.Utility.OSDP
                     keysBeforeCard.ToKeySummary());
             }
 
-            _annotation.AppendItem("Card", card.Payload.ToRawCardString());
+            _annotation.AppendItem("CardData", card.Payload.ToRawCardString());
 
             if (keysAfterCard.Any())
             {
@@ -79,6 +79,8 @@ namespace ThirdMillennium.Utility.OSDP
                     keysAfterCard.ToKeySummary());
             }
             
+            _annotation.AppendNewLine();
+
             // The Annotation is logged when the ReportState method is called after all the
             // annotations have been run for a given IExchange.
 

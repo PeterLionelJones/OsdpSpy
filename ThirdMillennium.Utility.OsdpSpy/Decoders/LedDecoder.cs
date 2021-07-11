@@ -79,4 +79,44 @@ namespace ThirdMillennium.Utility.OSDP
                 input[offset + 13].ToLedColorString());
         }
     }
+
+    internal static class LedDecoderExtensions
+    {
+        internal static string ToTemporaryControlCodeString(this byte code)
+        {
+            return code switch
+            {
+                0x00 => "NOP",
+                0x01 => "Cancel",
+                0x02 => "Set",
+                _ => $"0x{code:X02} - Invalid Control Code"
+            };
+        }
+
+        internal static string ToPermanentControlCodeString(this byte code)
+        {
+            return code switch
+            {
+                0x00 => "NOP",
+                0x01 => "Cancel",
+                _ => $"0x{code:X02} - Invalid Control Code"
+            };
+        }
+
+        internal static string ToLedColorString(this byte color)
+        {
+            return color switch
+            {
+                0x00 => "Black or Off",
+                0x01 => "Red",
+                0x02 => "Green",
+                0x03 => "Amber",
+                0x04 => "Blue",
+                0x05 => "Magenta",
+                0x06 => "Cyan",
+                0x07 => "White",
+                _ => $"0x{color:X02} - Reserved for Future Use"
+            };
+        }
+    }
 }

@@ -17,4 +17,25 @@ namespace ThirdMillennium.Utility.OSDP
             }
         }
     }
+
+    internal static class KeypadDecoderExtensions
+    {
+        internal static string ToKeyString(this byte key)
+        {
+            return key switch
+            {
+                0x0D => "#",
+                0x41 => "F1",
+                0x42 => "F2",
+                0x43 => "F3",
+                0x44 => "F4",
+                0x45 => "F1 + F2",
+                0x46 => "F2 + F3",
+                0x47 => "F3 + F4",
+                0x48 => "F1 + F4",
+                0x7F => "*",
+                _ => $"{(char) key}"
+            };
+        }
+    }
 }
