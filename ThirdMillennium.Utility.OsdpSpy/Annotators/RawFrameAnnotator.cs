@@ -2,9 +2,9 @@ using ThirdMillennium.Annotations;
 
 namespace ThirdMillennium.Utility.OSDP
 {
-    public class RawFrameAnnotator : ExchangeAnnotator
+    public class RawFrameAnnotator : BaseAnnotator<IExchange>
     {
-        public RawFrameAnnotator(IExchangeLoggerOptions options) : base(0)
+        public RawFrameAnnotator(IExchangeLoggerOptions options)
         {
             _options = options;
         }

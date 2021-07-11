@@ -1,25 +1,23 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using ThirdMillennium.Annotations;
 using ThirdMillennium.Protocol.OSDP;
 
 namespace ThirdMillennium.Utility.OSDP
 {
-    public class ValidAccessAnnotator : ExchangeAnnotator
+    public class ValidAccessAnnotator : AlertingAnnotator<IExchange>
     {
-        public ValidAccessAnnotator(IFactory<IAnnotation> factory, IDeferredLogger logger)
+        public ValidAccessAnnotator(IDeferredLogger logger, IFactory<IAnnotation> factory) 
+            : base(factory)
         {
-            _factory = factory;
             _logger = logger;
             _list = new List<ValidAccessItem>();
         }
 
-        private readonly IFactory<IAnnotation> _factory;
         private readonly IDeferredLogger _logger;
         private readonly List<ValidAccessItem> _list;
-
-        private IAnnotation _annotation;
 
         private const int Green = 0x02; 
         private const int TempOnColorOffset = 5;
@@ -52,73 +50,71 @@ namespace ThirdMillennium.Utility.OSDP
                 .KeysSince(card.Timestamp)
                 .ToKeyArray();
             
-            _annotation = _factory.Create();
-
-            _annotation.Append("**** VALID ACCESS DETECTED ****");
-
-            _annotation.AppendNewLine();
-
-            _annotation.AppendItem(
+            var alert = CreateAlert("OsdpAlert", "Valid Access Detected", "OSDP Alert")
+                .AppendItem(
                 "PreEventWindow", 
                 TenSecondWindow, 
                 "Seconds");
                 
             if (keysBeforeCard.Any())
             {
-                _annotation.AppendItem(
+                alert.AppendItem(
                     "KeysBeforeCard", 
                     keysBeforeCard.ToKeySummary());
             }
 
-            _annotation.AppendItem("CardData", card.Payload.ToRawCardString());
+            alert.AppendItem("CardData", card.Payload.ToRawCardString());
 
             if (keysAfterCard.Any())
             {
-                _annotation.AppendItem(
+                alert.AppendItem(
                     "KeysAfterCard", 
                     keysAfterCard.ToKeySummary());
             }
             
-            _annotation.AppendNewLine();
+            alert.AppendNewLine();
+            
+            LogAlert(alert);
 
-            // The Annotation is logged when the ReportState method is called after all the
-            // annotations have been run for a given IExchange.
+            // The alert Annotation is logged when the ReportState method is called in the base
+            // class after all the annotations have been run for a given IExchange.
 
             _list.Clear();
         }
 
         public override void Annotate(IExchange input, IAnnotation output)
         {
-            if (input.Pd.Frame == null) return;
-
-            var acu = input.Acu.Payload.Plain;
-            
-            if (   acu != null &&
-                   input.Acu.Frame.Command == Command.LED && 
-                   (acu[TempOnColorOffset] == Green || acu[TempOffColorOffset] == Green))
+            try
             {
-                OnAccessGranted();
-            }
+                if (input.Pd?.Frame == null) return;
 
-            var pd = input.Pd.Payload.Plain;
-            if (pd == null) return;
+                var acu = input.Acu.Payload.Plain;
             
-            switch (input.Pd.Frame.Reply)
-            {
-                case Reply.RAW:
-                    _list.Add(new ValidAccessItem(true, pd));
-                    break;
+                if (   acu != null &&
+                       input.Acu.Frame.Command == Command.LED && 
+                       (acu[TempOnColorOffset] == Green || acu[TempOffColorOffset] == Green))
+                {
+                    OnAccessGranted();
+                }
+
+                var pd = input.Pd.Payload.Plain;
+                if (pd == null) return;
+            
+                switch (input.Pd.Frame.Reply)
+                {
+                    case Reply.RAW:
+                        _list.Add(new ValidAccessItem(true, pd));
+                        break;
                 
-                case Reply.KEYPAD:
-                    _list.Add(new ValidAccessItem(false, pd));
-                    break;
+                    case Reply.KEYPAD:
+                        _list.Add(new ValidAccessItem(false, pd));
+                        break;
+                }
             }
-        }
-
-        public override void ReportState()
-        {
-            _annotation?.Log();
-            _annotation = null;
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
         }
     }
 }

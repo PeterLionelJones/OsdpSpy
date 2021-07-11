@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using ThirdMillennium.Annotations;
 using ThirdMillennium.Protocol;
 using ThirdMillennium.Protocol.Core;
 
@@ -51,7 +49,7 @@ namespace ThirdMillennium.Utility.OSDP
                 .AddAnnotators()
                 .AddFactories()
                 .AddSingleton(PhysicalConsole.Singleton)
-                .AddSingleton<IBusFrameProducer, BusFrameProducer2>()
+                .AddSingleton<IBusFrameProducer, BusFrameProducer>()
                 .AddSingleton<IDeferredLogger, DeferredLogger>()
                 .AddSingleton<IExchangeConsumer, ExchangeLogger>()
                 .AddSingleton<IExchangeLoggerOptions, ListenOptions>()

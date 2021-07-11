@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using ThirdMillennium.Annotations;
 using ThirdMillennium.Protocol.OSDP;
 

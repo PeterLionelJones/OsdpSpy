@@ -13,15 +13,19 @@ namespace ThirdMillennium.Utility.OSDP
         {
             return services
                 .AddSingleton<IAnnotatorCollection<IExchange>, AnnotatorCollection>()
-                .AddAnnotators<ExchangeAnnotator>()
+                .AddAnnotators<BaseAnnotator<IExchange>>()
                 .AddSingleton<IReplyDecoderCollection, ReplyDecoderCollection>()
                 .AddSingleton<ICommandDecoderCollection, CommandDecoderCollection>()
+                .AddSingleton<ISecureChannelSink, ReaderAlertAnnotator>()
                 .AddImplementationsOf<IDecoder>();
         }
 
         private static IServiceCollection AddAnnotators<T>(this IServiceCollection services)
         {
-            foreach (var annotatorType in GetSubclassesOf<T>())
+            var annotatorTypes = GetSubclassesOf<T>()
+                .Where(t => t != typeof(AlertingAnnotator<IExchange>));
+            
+            foreach (var annotatorType in annotatorTypes)
             {
                 services.AddSingleton(annotatorType);
             }
@@ -39,9 +43,15 @@ namespace ThirdMillennium.Utility.OSDP
             return services;
         }
 
-        public static IEnumerable<T> GetAnnotators<T>(this IServiceProvider provider)
+        public static IEnumerable<T> GetExtensionAnnotators<T>(this IServiceProvider provider)
         {
             return GetSubclassesOf<T>()
+                .Where(t => 
+                    t != typeof(AlertingAnnotator<IExchange>) &&
+                    t != typeof(RawFrameAnnotator) &&
+                    t != typeof(SecureChannelAnnotator) &&
+                    t != typeof(CommandAnnotator) &&
+                    t != typeof(ReplyAnnotator))
                 .Select(provider.GetService)
                 .Cast<T>();
         }
@@ -61,5 +71,8 @@ namespace ThirdMillennium.Utility.OSDP
                 .GetTypes()
                 .Where(t => typeof(T).IsAssignableFrom(t) && t.IsClass);
         }
+
+        public static IAnnotation CreateOsdpAlert(this AlertingAnnotator<IExchange> annotator, string alertMessage)
+            => annotator.CreateAlert("OsdpAlert", alertMessage, "OSDP Alert");
     }
 }

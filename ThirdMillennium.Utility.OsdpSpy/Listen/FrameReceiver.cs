@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using ThirdMillennium.Protocol;
 using ThirdMillennium.Protocol.OSDP;
@@ -80,7 +79,8 @@ namespace ThirdMillennium.Utility.OSDP
                 _online = true;
             
                 _logger.LogInformation(
-                    "Synchronised with OSDP Bus at {BaudRate} Baud\n", 
+                    "OSDP Alert: {OsdpAlert} at {BaudRate} Baud\n", 
+                    "Synchronised with OSDP Bus",
                     _channel.BaudRate);
             }
         }
@@ -90,7 +90,9 @@ namespace ThirdMillennium.Utility.OSDP
             if (_online)
             {
                 _online = false;
-                _logger.LogInformation("Lost Synchronisation with OSDP Bus\n");
+                _logger.LogInformation(
+                    "OSDP Alert: {OsdpAlert}\n", 
+                    "Lost Synchronisation with OSDP Bus");
             }
         }
 

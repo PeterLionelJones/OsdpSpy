@@ -11,7 +11,7 @@ namespace ThirdMillennium.Utility.OSDP
         public static IAnnotation AnnotateAcuFrame(this IAnnotation a, IFrameProduct product)
         {
             var result = a.Annotate(
-                Pad + "Addr:{AcuAddress} Len:{AcuLength} Seq:{AcuSequence} Check:{AcuCheck}",
+                Pad + "Address: {AcuAddress} Len: {AcuLength} Seq: {AcuSequence} Check: {AcuCheck}",
                 product.Frame.Address,
                 product.Frame.FrameLength,
                 product.Frame.Sequence,
@@ -20,7 +20,7 @@ namespace ThirdMillennium.Utility.OSDP
             if (product.HasSecurityControlBlock())
             {
                 result = result.Annotate(
-                    " Security:{AcuSecurityBlock}", 
+                    " Security: {AcuSecurityBlock}", 
                     product.SecurityControlBlock());
             }
                 
@@ -40,7 +40,7 @@ namespace ThirdMillennium.Utility.OSDP
                     product.Timestamp,
                     product.Frame.FrameData.ToHexString())
                 .Annotate(
-                    Pad + "Addr:{PdAddress} Len:{PdLength} Seq:{PdSequence} Check:{AcuCheck}", 
+                    Pad + "Address: {PdAddress} Len: {PdLength} Seq: {PdSequence} Check: {AcuCheck}", 
                     product.Frame.Address,
                     product.Frame.FrameLength,
                     product.Frame.Sequence,
@@ -49,7 +49,7 @@ namespace ThirdMillennium.Utility.OSDP
             if (product.HasSecurityControlBlock())
             {
                 result = result.Annotate(
-                    " Security:{PDSecurityBlock}", 
+                    " Security: {PdSecurityBlock}", 
                     product.SecurityControlBlock());
             }
 

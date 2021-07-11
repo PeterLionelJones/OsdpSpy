@@ -31,11 +31,12 @@ namespace ThirdMillennium.Utility.OSDP
             var indexString = index == 0 ? "" : $"{index + 1}";
             var offset = index * RecordSize;
             
-            output.AppendItem($"ReaderNumber{indexString}", input[offset]);
-            output.AppendItem($"ToneCode{indexString}", input[offset + 1].ToToneCodeString());
-            output.AppendItem($"OnTime{indexString}", input[offset + 2] / 10.0, "Seconds");
-            output.AppendItem($"OffTime{indexString}", input[offset + 3] / 10.0, "Seconds");
-            output.AppendItem($"Count{indexString}", input[offset + 4]);
+            output
+                .AppendItem($"ReaderNumber{indexString}", input[offset])
+                .AppendItem($"ToneCode{indexString}", input[offset + 1].ToToneCodeString())
+                .AppendItem($"OnTime{indexString}", input[offset + 2] / 10.0, "Seconds")
+                .AppendItem($"OffTime{indexString}", input[offset + 3] / 10.0, "Seconds")
+                .AppendItem($"Count{indexString}", input[offset + 4]);
         }
     }
 

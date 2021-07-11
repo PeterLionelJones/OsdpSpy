@@ -3,7 +3,7 @@ using ThirdMillennium.Protocol.OSDP;
 
 namespace ThirdMillennium.Utility.OSDP
 {
-    public class ComSetDetectionAnnotator : ExchangeAnnotator
+    public class ComSetDetectionAnnotator : BaseAnnotator<IExchange>
     {
         public ComSetDetectionAnnotator(
             IBusFrameProducer frames, 
