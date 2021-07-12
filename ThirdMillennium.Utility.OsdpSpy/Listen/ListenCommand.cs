@@ -34,15 +34,28 @@ namespace ThirdMillennium.Utility.OSDP
         private readonly IExchangeLoggerOptions _loggerOptions;
 
         [Option(
-            "-c|--capture",
+            "-c|--capture", 
+            "Log to osdpcap",
+            CommandOptionType.SingleOrNoValue)]
+        private (bool hasValue, string value) CaptureToOsdpCap
+        {
+            set
+            {
+                _listenOptions.CaptureToOsdpCap = value.hasValue;
+                _listenOptions.OsdpCapDirectory = value.hasValue ? value.value : null;
+            }
+        }
+
+        [Option(
+            "-t|--filetransfer",
             "Capture OSDP files",
             CommandOptionType.SingleOrNoValue)]
         private (bool hasValue, string value) OsdpFileCaptureDirectory
         {
             set
             {
-                _listenOptions.CaptureOsdpFiles = value.hasValue;
-                _listenOptions.OsdpFileCaptureDirectory = value.hasValue ? value.value : null;
+                _listenOptions.CaptureOsdpFileTransfer = value.hasValue;
+                _listenOptions.OsdpFileTransferDirectory = value.hasValue ? value.value : null;
             }
         }
 
@@ -50,7 +63,7 @@ namespace ThirdMillennium.Utility.OSDP
             template: "-e|--elasticsearch",
             description: "Elasticsearch event sink URL",
             optionType: CommandOptionType.SingleValue)]
-        public string ElasticSearchUrl
+        private string ElasticSearchUrl
         {
             set => _listenOptions.ElasticSearchUrl = value;
         }
@@ -59,7 +72,7 @@ namespace ThirdMillennium.Utility.OSDP
             template: "-f|--filter",
             description: "Filter out POLL/ACK pairs",
             optionType: CommandOptionType.NoValue)]
-        public bool Filter
+        private bool Filter
         {
             set => _listenOptions.FilterPollAck = value;
         }
@@ -68,7 +81,7 @@ namespace ThirdMillennium.Utility.OSDP
             template: "-p|--port",
             description: "Port name (COMn: | /dev/tty.usbserial* | /dev/ttyusb*)",
             optionType: CommandOptionType.SingleValue)]
-        public string PortName
+        private string PortName
         {
             set => _listenOptions.PortName = value;
         }
@@ -78,7 +91,7 @@ namespace ThirdMillennium.Utility.OSDP
             description: "Baud rate (9600 | 19200 | 38400 | 57600 | 115200 | 230400)",
             optionType: CommandOptionType.SingleValue)]
         [IsValidBaudRate]
-        public int BaudRate
+        private int BaudRate
         {
             set => _listenOptions.BaudRate = value;
         }
@@ -87,7 +100,7 @@ namespace ThirdMillennium.Utility.OSDP
             template: "-s|--seq",
             description: "SEQ event sink URL",
             optionType: CommandOptionType.SingleValue)]
-        public string SeqUrl
+        private string SeqUrl
         {
             set => _listenOptions.SeqUrl = value;
         }
@@ -104,7 +117,7 @@ namespace ThirdMillennium.Utility.OSDP
             _consumer.Subscribe(_exchanges);
             
             // Are we logging to an osdpcap file?
-            if (_listenOptions.CaptureOsdpFiles)
+            if (_listenOptions.CaptureToOsdpCap)
             {
                 _logger.Subscribe(_frames);
             }

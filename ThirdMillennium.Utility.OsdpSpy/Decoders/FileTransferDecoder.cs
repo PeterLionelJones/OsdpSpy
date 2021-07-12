@@ -35,12 +35,12 @@ namespace ThirdMillennium.Utility.OSDP
 
         internal static int GetFileSize(this byte[] input)
         {
-            return input[1] | (input[2] << 8) | (input[3] << 8) | (input[4] << 8);
+            return input[1] | (input[2] << 8) | (input[3] << 16) | (input[4] << 24);
         }
 
         internal static int GetFileOffset(this byte[] input)
         {
-            return input[5] | (input[6] << 8) | (input[7] << 8) | (input[8] << 8);
+            return input[5] | (input[6] << 8) | (input[7] << 16) | (input[8] << 24);
         }
 
         internal static int GetFragmentSize(this byte[] input)

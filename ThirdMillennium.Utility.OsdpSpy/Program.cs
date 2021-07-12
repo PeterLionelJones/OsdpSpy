@@ -61,6 +61,7 @@ namespace ThirdMillennium.Utility.OSDP
                 .AddSingleton<IFrameReceiver, FrameReceiver>()
                 .AddSingleton<IKeyStore, KeyStore>()
                 .AddSingleton<IFileTransferOptions, FileTransferOptions>()
+                .AddSingleton<IFrameLoggerOptions, FrameLoggerOptions>()
                 .AddSingleton<IImportOptions, ImportOptions>()
                 .AddSingleton<IListenOptions, ListenOptions>()
                 .AddSingleton<ISerialDeviceManager, SerialDeviceManager>();

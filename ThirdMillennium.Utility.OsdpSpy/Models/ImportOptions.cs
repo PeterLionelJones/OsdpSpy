@@ -10,16 +10,16 @@ namespace ThirdMillennium.Utility.OSDP
         public string InputFileName { get; set; }
         public bool FilterPollAck { get; set; }
 
-        public bool CaptureOsdpFiles
+        public bool CaptureOsdpFileTransfer
         {
-            get => _file.CaptureOsdpFiles; 
-            set => _file.CaptureOsdpFiles = value;
+            get => _file.CaptureOsdpFileTransfer; 
+            set => _file.CaptureOsdpFileTransfer = value;
         }
 
-        public string OsdpFileCaptureDirectory
+        public string OsdpFileTransferDirectory
         {
-            get => _file.OsdpFileCaptureDirectory; 
-            set => _file.OsdpFileCaptureDirectory = value;
+            get => _file.OsdpFileTransferDirectory; 
+            set => _file.OsdpFileTransferDirectory = value;
         }
     }
 }

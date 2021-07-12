@@ -10,8 +10,10 @@ namespace ThirdMillennium.Utility.OSDP
 
         private int _offset;
         private int _remaining;
+        private DateTime _start;
         
         public int Address { get; }
+        public TimeSpan Elapsed { get; private set; }
         
         public byte[] Data { get; private set; }
 
@@ -21,13 +23,14 @@ namespace ThirdMillennium.Utility.OSDP
             return false;
         }
         
-        public bool AddFragment(int size, int offset, byte[] fragment)
+        public bool AddFragment(int size, int offset, byte[] fragment, DateTime timestamp)
         {
             try
             {
                 // Start of transfer?
                 if (offset == 0 || Data == null)
                 {
+                    _start = timestamp;
                     Data = new byte[size];
                     _offset = 0;
                     _remaining = size;
@@ -50,6 +53,7 @@ namespace ThirdMillennium.Utility.OSDP
                 
                 _offset += fragment.Length;
                 _remaining -= correctedLength;
+                Elapsed = timestamp - _start;
 
                 return _remaining switch
                 {

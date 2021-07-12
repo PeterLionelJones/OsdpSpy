@@ -2,28 +2,48 @@ namespace ThirdMillennium.Utility.OSDP
 {
     public class ListenOptions : IListenOptions, IExchangeLoggerOptions
     {
-        public ListenOptions(IFileTransferOptions file)
-            => _file = file;
+        public ListenOptions(IFileTransferOptions file, IFrameLoggerOptions frame)
+        {
+            _file = file;
+            _frame = frame;
+        }
 
         private readonly IFileTransferOptions _file;
+        private readonly IFrameLoggerOptions _frame;
         
-        public bool AutoConfigure { get; set;  }
         public string ElasticSearchUrl { get; set;  }
         public bool FilterPollAck { get; set; }
         public string PortName { get; set; }
         public int BaudRate { get; set; }
         public string SeqUrl { get; set; }
 
-        public bool CaptureOsdpFiles
+        public bool CaptureOsdpFileTransfer
         {
-            get => _file.CaptureOsdpFiles; 
-            set => _file.CaptureOsdpFiles = value;
+            get => _file.CaptureOsdpFileTransfer; 
+            set => _file.CaptureOsdpFileTransfer = value;
         }
 
-        public string OsdpFileCaptureDirectory
+        public string OsdpFileTransferDirectory
         {
-            get => _file.OsdpFileCaptureDirectory; 
-            set => _file.OsdpFileCaptureDirectory = value;
+            get => _file.OsdpFileTransferDirectory; 
+            set => _file.OsdpFileTransferDirectory = value;
         }
+
+        public bool CaptureToOsdpCap
+        {
+            get; 
+            set;
+        }
+        public string OsdpCapDirectory 
+        { 
+            get => _frame.OsdpCapDirectory; 
+            set => _frame.OsdpCapDirectory = value; 
+        }
+    }
+
+    public class FrameLoggerOptions : IFrameLoggerOptions
+    {
+        public bool CaptureToOsdpCap { get; set; }
+        public string OsdpCapDirectory { get; set; }
     }
 }

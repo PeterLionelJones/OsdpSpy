@@ -8,8 +8,14 @@ namespace ThirdMillennium.Utility.OSDP
 {
     internal static class FileTransferAnnotatorExtensions
     {
-        internal static IAnnotation AppendFile(this IAnnotation output, byte[] file)
-            => output.AppendFile(file.Divide());
+        internal static IAnnotation AppendFile(
+            this IAnnotation output, 
+            byte[] file,
+            bool truncate = true, 
+            int truncatedLength = 1024)
+        {
+            return output.AppendFile(file.Divide(true, truncatedLength));
+        }
 
         private static IAnnotation AppendFile(
             this IAnnotation output, 
@@ -47,11 +53,13 @@ namespace ThirdMillennium.Utility.OSDP
             }
         }
 
-        private static List<byte[]> Divide(this byte[] data)
+        private static List<byte[]> Divide(this byte[] input, bool truncate = true, int truncatedLength = 1024)
         {
+            var data = truncate ? input.Truncate(truncatedLength) : input;
+            
             const int BlockSize = 32;
             var segmentList = new List<byte[]>();
-            var blocks = 1 + (data.Length - 1) / BlockSize;
+            var blocks = (data.Length + BlockSize - 1) / BlockSize;
             var remaining = data.Length;
 
             for (var i = 0; i < blocks; ++i)
@@ -64,6 +72,19 @@ namespace ThirdMillennium.Utility.OSDP
             }
 
             return segmentList;
+        }
+
+        private static byte[] Truncate(this byte[] input, int truncatedLength = 1024)
+        {
+            var output = input;
+            
+            if (input.Length > truncatedLength)
+            {
+                output = new byte[truncatedLength];
+                Buffer.BlockCopy(input, 0, output, 0, truncatedLength);
+            }
+
+            return output;
         }
     }
 }

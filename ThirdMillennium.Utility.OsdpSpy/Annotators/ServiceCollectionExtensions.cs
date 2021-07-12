@@ -64,7 +64,7 @@ namespace ThirdMillennium.Utility.OSDP
                 .Where(t => t.IsSubclassOf(typeof(T)) && t.IsPublic);
         }
 
-        public static IEnumerable<Type> GetImplementationsOf<T>()
+        private static IEnumerable<Type> GetImplementationsOf<T>()
         {
             return Assembly
                 .GetExecutingAssembly()

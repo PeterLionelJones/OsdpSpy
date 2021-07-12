@@ -43,16 +43,17 @@ namespace ThirdMillennium.Utility.OSDP
 
             var reader = FindReader(input.Acu.Frame.Address);
 
-            if (reader.AddFragment(fileSize, fileOffset, fragment))
+            if (reader.AddFragment(fileSize, fileOffset, fragment, input.Acu.Timestamp))
             {
                 var alert = this
                     .CreateOsdpAlert("Captured File from osdp_FILETRANSFER Commands")
                     .AppendItem("FileSize", fileSize, "Bytes")
+                    .AppendItem("FileTransferTime", reader.Elapsed)
                     .AppendFile(reader.Data);
 
-                if (_options.CaptureOsdpFiles)
+                if (_options.CaptureOsdpFileTransfer)
                 {
-                    var filename = reader.Data.SaveFile(_options.OsdpFileCaptureDirectory);
+                    var filename = reader.Data.SaveFile(_options.OsdpFileTransferDirectory);
                     alert = alert.AppendItem("SavedTo", filename);
                 }
 

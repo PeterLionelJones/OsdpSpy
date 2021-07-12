@@ -31,10 +31,18 @@ namespace ThirdMillennium.Utility.OSDP
             if (options.SeqUrl != null) 
                 result.Append($"\n  - SeqUrl = {options.SeqUrl}");
 
-            if (options.CaptureOsdpFiles)
+            if (options.CaptureToOsdpCap)
             {
-                result.Append($"\n  - Capture OSDP Files = {options.CaptureOsdpFiles.AsOnOff()}");
-                result.Append($"\n  - OSDP File Directory = {options.OsdpFileCaptureDirectory}");
+                result
+                    .Append($"\n  - Capture to osdpcap File = {options.CaptureToOsdpCap.AsOnOff()}")
+                    .Append($"\n  - osdpcap File Directory = {options.OsdpCapDirectory}");
+            }
+
+            if (options.CaptureOsdpFileTransfer)
+            {
+                result
+                    .Append($"\n  - Capture OSDP File Transfer = {options.CaptureOsdpFileTransfer.AsOnOff()}")
+                    .Append($"\n  - OSDP File Transfer Directory = {options.OsdpFileTransferDirectory}");
             }
 
             return result.ToString();
