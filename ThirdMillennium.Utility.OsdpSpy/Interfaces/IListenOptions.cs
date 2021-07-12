@@ -1,9 +1,8 @@
 namespace ThirdMillennium.Utility.OSDP
 {
-    public interface IListenOptions
+    public interface IListenOptions : IFileTransferOptions
     {
         bool AutoConfigure { get; set; }
-        bool Capture { get; set; }
         string ElasticSearchUrl { get; set; }
         bool FilterPollAck { get; set; }
         string PortName { get; set; }

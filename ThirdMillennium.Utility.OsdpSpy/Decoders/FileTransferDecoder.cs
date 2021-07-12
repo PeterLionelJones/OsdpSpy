@@ -13,10 +13,10 @@ namespace ThirdMillennium.Utility.OSDP
         {
             output
                 .AppendItem("FileTransferType", input[0].ToFileTransferTypeString())
-                .AppendItem("FileSize", input.ToFileSize())
-                .AppendItem("FileOffset", input.ToFileOffset())
-                .AppendItem("FragmentSize", input.ToFragmentSize())
-                .AppendItem("Fragment", input.ToFragment().ToHexString());
+                .AppendItem("FileSize", input.GetFileSize())
+                .AppendItem("FileOffset", input.GetFileOffset())
+                .AppendItem("FragmentSize", input.GetFragmentSize())
+                .AppendItem("Fragment", input.GetFragment().ToHexString());
         }
     }
 
@@ -33,22 +33,22 @@ namespace ThirdMillennium.Utility.OSDP
             };
         }
 
-        internal static int ToFileSize(this byte[] input)
+        internal static int GetFileSize(this byte[] input)
         {
             return input[1] | (input[2] << 8) | (input[3] << 8) | (input[4] << 8);
         }
 
-        internal static int ToFileOffset(this byte[] input)
+        internal static int GetFileOffset(this byte[] input)
         {
             return input[5] | (input[6] << 8) | (input[7] << 8) | (input[8] << 8);
         }
 
-        internal static int ToFragmentSize(this byte[] input)
+        internal static int GetFragmentSize(this byte[] input)
         {
             return input[9] | (input[10] << 8);
         }
 
-        internal static byte[] ToFragment(this byte[] input)
+        internal static byte[] GetFragment(this byte[] input)
         {
             var fragment = new byte[input.Length - 11];
             Buffer.BlockCopy(input, 11, fragment, 0, fragment.Length);

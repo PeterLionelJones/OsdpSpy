@@ -31,6 +31,12 @@ namespace ThirdMillennium.Utility.OSDP
             if (options.SeqUrl != null) 
                 result.Append($"\n  - SeqUrl = {options.SeqUrl}");
 
+            if (options.CaptureOsdpFiles)
+            {
+                result.Append($"\n  - Capture OSDP Files = {options.CaptureOsdpFiles.AsOnOff()}");
+                result.Append($"\n  - OSDP File Directory = {options.OsdpFileCaptureDirectory}");
+            }
+
             return result.ToString();
         }
 

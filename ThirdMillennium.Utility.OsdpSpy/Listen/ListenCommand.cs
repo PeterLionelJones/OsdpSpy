@@ -34,13 +34,16 @@ namespace ThirdMillennium.Utility.OSDP
         private readonly IExchangeLoggerOptions _loggerOptions;
 
         [Option(
-            template: "-c|--capture", 
-            description: "Capture to osdpcap file", 
-            optionType: CommandOptionType.NoValue)]
-        public bool Capture
+            "-c|--capture",
+            "Capture OSDP files",
+            CommandOptionType.SingleOrNoValue)]
+        private (bool hasValue, string value) OsdpFileCaptureDirectory
         {
-            //get => _listenOptions.Capture;
-            set => _listenOptions.Capture = value;
+            set
+            {
+                _listenOptions.CaptureOsdpFiles = value.hasValue;
+                _listenOptions.OsdpFileCaptureDirectory = value.hasValue ? value.value : null;
+            }
         }
 
         [Option(
@@ -49,7 +52,6 @@ namespace ThirdMillennium.Utility.OSDP
             optionType: CommandOptionType.SingleValue)]
         public string ElasticSearchUrl
         {
-            get => _listenOptions.ElasticSearchUrl; 
             set => _listenOptions.ElasticSearchUrl = value;
         }
 
@@ -59,7 +61,6 @@ namespace ThirdMillennium.Utility.OSDP
             optionType: CommandOptionType.NoValue)]
         public bool Filter
         {
-            get => _listenOptions.FilterPollAck;
             set => _listenOptions.FilterPollAck = value;
         }
 
@@ -69,7 +70,6 @@ namespace ThirdMillennium.Utility.OSDP
             optionType: CommandOptionType.SingleValue)]
         public string PortName
         {
-            //get => _listenOptions.PortName; 
             set => _listenOptions.PortName = value;
         }
 
@@ -80,7 +80,6 @@ namespace ThirdMillennium.Utility.OSDP
         [IsValidBaudRate]
         public int BaudRate
         {
-            get => _listenOptions.BaudRate; 
             set => _listenOptions.BaudRate = value;
         }
 
@@ -90,7 +89,6 @@ namespace ThirdMillennium.Utility.OSDP
             optionType: CommandOptionType.SingleValue)]
         public string SeqUrl
         {
-            get => _listenOptions.SeqUrl; 
             set => _listenOptions.SeqUrl = value;
         }
 
@@ -106,7 +104,7 @@ namespace ThirdMillennium.Utility.OSDP
             _consumer.Subscribe(_exchanges);
             
             // Are we logging to an osdpcap file?
-            if (_listenOptions.Capture)
+            if (_listenOptions.CaptureOsdpFiles)
             {
                 _logger.Subscribe(_frames);
             }
