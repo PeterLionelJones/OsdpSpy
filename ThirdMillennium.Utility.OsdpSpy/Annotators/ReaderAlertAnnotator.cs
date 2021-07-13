@@ -28,11 +28,10 @@ namespace ThirdMillennium.Utility.OSDP
 
         public void OnAuthenticationSychronised(int address)
         {
-            this.CreateOsdpAlert(
-                    _state[address] == State.AuthenticatingDefaultScbk
-                        ? "Secure Channel Session Established with Default SCBK"
-                        : "Secure Channel Session Established with SCBK")
-                .Log();
+            LogAlert(this.CreateOsdpAlert(
+                _state[address] == State.AuthenticatingDefaultScbk
+                    ? "Secure Channel Session Established with Default SCBK"
+                    : "Secure Channel Session Established with SCBK"));
 
             _state[address] = State.Authenticated;
         }

@@ -16,7 +16,7 @@ namespace ThirdMillennium.Utility.OSDP
             Add(provider.GetRequiredService<ReplyAnnotator>());
 
             // Add the other annotators found in the assembly.
-            AddRange(provider.GetExtensionAnnotators<BaseAnnotator<IExchange>>());
+            AddRange(provider.GetExtensionAnnotators<Annotator<IExchange>>());
         }
     }
 }

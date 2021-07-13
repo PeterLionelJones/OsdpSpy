@@ -2,5 +2,5 @@ using ThirdMillennium.Annotations;
 
 namespace ThirdMillennium.Utility.OSDP
 {
-    //public class ExchangeAnnotator : BaseAnnotator<IExchange> {}
+    //public class ExchangeAnnotator : Annotator<IExchange> {}
 }

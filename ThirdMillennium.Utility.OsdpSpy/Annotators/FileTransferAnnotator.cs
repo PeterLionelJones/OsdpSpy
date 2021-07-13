@@ -57,7 +57,7 @@ namespace ThirdMillennium.Utility.OSDP
                     alert = alert.AppendItem("SavedTo", filename);
                 }
 
-                alert.AppendNewLine().Log();
+                LogAlert(alert);
             }
         }
     }

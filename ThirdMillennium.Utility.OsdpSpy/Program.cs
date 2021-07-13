@@ -50,7 +50,6 @@ namespace ThirdMillennium.Utility.OSDP
                 .AddFactories()
                 .AddSingleton(PhysicalConsole.Singleton)
                 .AddSingleton<IBusFrameProducer, BusFrameProducer>()
-                .AddSingleton<IDeferredLogger, DeferredLogger>()
                 .AddSingleton<IExchangeConsumer, ExchangeLogger>()
                 .AddSingleton<IExchangeLoggerOptions, ListenOptions>()
                 .AddSingleton<IExchangeProducer, ExchangeProducer>()

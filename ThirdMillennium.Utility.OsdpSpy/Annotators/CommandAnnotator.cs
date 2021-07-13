@@ -3,7 +3,7 @@ using ThirdMillennium.Protocol;
 
 namespace ThirdMillennium.Utility.OSDP
 {
-    public class CommandAnnotator : BaseAnnotator<IExchange>
+    public class CommandAnnotator : Annotator<IExchange>
     {
         public CommandAnnotator(ICommandDecoderCollection decoder)
         {

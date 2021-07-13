@@ -24,4 +24,8 @@
       <PackageReference Include="ThirdMillennium.Protocol.OSDP" Version="0.4.11" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\..\Libraries\NETStandard\ThirdMillennium.Annotations\ThirdMillennium.Annotations\ThirdMillennium.Annotations.csproj" />
+    </ItemGroup>
+
 </Project>

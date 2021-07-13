@@ -9,14 +9,12 @@ namespace ThirdMillennium.Utility.OSDP
 {
     public class ValidAccessAnnotator : AlertingAnnotator<IExchange>
     {
-        public ValidAccessAnnotator(IDeferredLogger logger, IFactory<IAnnotation> factory) 
+        public ValidAccessAnnotator(IFactory<IAnnotation> factory) 
             : base(factory)
         {
-            _logger = logger;
             _list = new List<ValidAccessItem>();
         }
 
-        private readonly IDeferredLogger _logger;
         private readonly List<ValidAccessItem> _list;
 
         private const int Green = 0x02; 
@@ -71,8 +69,6 @@ namespace ThirdMillennium.Utility.OSDP
                     "KeysAfterCard", 
                     keysAfterCard.ToKeySummary());
             }
-            
-            alert.AppendNewLine();
             
             LogAlert(alert);
 

@@ -13,7 +13,7 @@ namespace ThirdMillennium.Utility.OSDP
         {
             return services
                 .AddSingleton<IAnnotatorCollection<IExchange>, AnnotatorCollection>()
-                .AddAnnotators<BaseAnnotator<IExchange>>()
+                .AddAnnotators<Annotator<IExchange>>()
                 .AddSingleton<IReplyDecoderCollection, ReplyDecoderCollection>()
                 .AddSingleton<ICommandDecoderCollection, CommandDecoderCollection>()
                 .AddSingleton<ISecureChannelSink, ReaderAlertAnnotator>()

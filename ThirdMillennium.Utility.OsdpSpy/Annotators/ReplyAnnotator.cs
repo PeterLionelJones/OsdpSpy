@@ -3,7 +3,7 @@ using ThirdMillennium.Protocol;
 
 namespace ThirdMillennium.Utility.OSDP
 {
-    public class ReplyAnnotator : BaseAnnotator<IExchange>
+    public class ReplyAnnotator : Annotator<IExchange>
     {
         public ReplyAnnotator(IReplyDecoderCollection decoder)
         {

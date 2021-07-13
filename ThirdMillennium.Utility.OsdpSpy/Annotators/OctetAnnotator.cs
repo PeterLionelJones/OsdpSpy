@@ -5,7 +5,7 @@ using ThirdMillennium.Annotations;
 
 namespace ThirdMillennium.Utility.OSDP
 {
-    public class OctetAnnotator : BaseAnnotator<IExchange>
+    public class OctetAnnotator : Annotator<IExchange>
     {
         public OctetAnnotator(ILogger<OctetAnnotator> logger)
             => _logger = logger;

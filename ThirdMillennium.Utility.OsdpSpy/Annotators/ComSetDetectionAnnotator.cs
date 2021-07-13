@@ -3,18 +3,16 @@ using ThirdMillennium.Protocol.OSDP;
 
 namespace ThirdMillennium.Utility.OSDP
 {
-    public class ComSetDetectionAnnotator : BaseAnnotator<IExchange>
+    public class ComSetDetectionAnnotator : AlertingAnnotator<IExchange>
     {
         public ComSetDetectionAnnotator(
             IBusFrameProducer frames, 
-            IDeferredLogger logger)
+            IFactory<IAnnotation> factory) : base(factory)
         {
             _frames = frames;
-            _logger = logger;
         }
 
         private readonly IBusFrameProducer _frames;
-        private readonly IDeferredLogger _logger;
         
         public override void Annotate(IExchange input, IAnnotation output)
         {
@@ -27,16 +25,12 @@ namespace ThirdMillennium.Utility.OSDP
             var rate = input.Acu.Payload.Plain.ToBaudRate();
             if (!rate.IsValidBaudRate()) return;
             
-            // Notify the event sink.
-            _logger.LogInformation("Switching to {BaudRate} Baud\n", rate);
+            // Raise an alert.
+            LogAlert(this.CreateOsdpAlert("Switching to New Baud Rate")
+                .AppendItem("NewBaudRate", rate));
             
             // Switch the rate.
             _frames.SetRate(rate);
-        }
-
-        public override void ReportState()
-        {
-            _logger.Flush();
         }
     }
 
