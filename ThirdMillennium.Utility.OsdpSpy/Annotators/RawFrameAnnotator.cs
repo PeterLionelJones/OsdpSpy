@@ -47,13 +47,17 @@ namespace ThirdMillennium.Utility.OSDP
             // Tag a Poll/Ack pair for easy filtering later.
             if (input.IsPollAckPair())
             {
-                output.AppendItem("PollAckPair", input.IsPollAckPair());
+                output
+                    .AppendNewLine()
+                    .AppendItem("PollAckPair", input.IsPollAckPair());
             }
             
             // Tag a timeout for easy filtering later.
             if (input.IsNoResponse())
             {
-                output.AppendItem("NoResponse",input.IsNoResponse());
+                output
+                    .AppendNewLine()
+                    .AppendItem("NoResponse",input.IsNoResponse());
             }
 
             // Set the payloads for the command and the reply.

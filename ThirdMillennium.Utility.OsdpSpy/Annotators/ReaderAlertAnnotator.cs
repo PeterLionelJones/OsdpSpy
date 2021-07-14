@@ -1,6 +1,4 @@
-using System;
 using ThirdMillennium.Annotations;
-using ThirdMillennium.Protocol;
 
 namespace ThirdMillennium.Utility.OSDP
 {
@@ -28,10 +26,11 @@ namespace ThirdMillennium.Utility.OSDP
 
         public void OnAuthenticationSychronised(int address)
         {
-            LogAlert(this.CreateOsdpAlert(
-                _state[address] == State.AuthenticatingDefaultScbk
-                    ? "Secure Channel Session Established with Default SCBK"
-                    : "Secure Channel Session Established with SCBK"));
+            this.CreateOsdpAlert(
+                    _state[address] == State.AuthenticatingDefaultScbk
+                        ? "Secure Channel Session Established with Default SCBK"
+                        : "Secure Channel Session Established with SCBK")
+                .AndLogTo(this);
 
             _state[address] = State.Authenticated;
         }

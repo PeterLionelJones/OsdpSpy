@@ -47,8 +47,10 @@ namespace ThirdMillennium.Utility.OSDP
             {
                 var alert = this
                     .CreateOsdpAlert("Captured File from osdp_FILETRANSFER Commands")
+                    .AppendItem("TriggeredBy", input.Sequence)
                     .AppendItem("FileSize", fileSize, "Bytes")
                     .AppendItem("FileTransferTime", reader.Elapsed)
+                    .AppendItem("TransferRate", fileSize/reader.Elapsed.TotalSeconds)
                     .AppendFile(reader.Data);
 
                 if (_options.CaptureOsdpFileTransfer)
@@ -57,7 +59,7 @@ namespace ThirdMillennium.Utility.OSDP
                     alert = alert.AppendItem("SavedTo", filename);
                 }
 
-                LogAlert(alert);
+                alert.AndLogTo(this);
             }
         }
     }

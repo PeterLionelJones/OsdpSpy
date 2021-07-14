@@ -23,7 +23,7 @@ namespace ThirdMillennium.Utility.OSDP
         private const int TenSecondWindow = 10;
 
 
-        private void OnAccessGranted()
+        private void OnAccessGranted(IExchange input)
         {
             var tenSecondsAgo = DateTime.UtcNow - TimeSpan.FromSeconds(TenSecondWindow);
             
@@ -48,7 +48,8 @@ namespace ThirdMillennium.Utility.OSDP
                 .KeysSince(card.Timestamp)
                 .ToKeyArray();
             
-            var alert = CreateAlert("OsdpAlert", "Valid Access Detected", "OSDP Alert")
+            var alert = this.CreateOsdpAlert("Valid Access Detected")
+                .AppendItem("TriggeredBy", input.Sequence)
                 .AppendItem(
                 "PreEventWindow", 
                 TenSecondWindow, 
@@ -70,7 +71,7 @@ namespace ThirdMillennium.Utility.OSDP
                     keysAfterCard.ToKeySummary());
             }
             
-            LogAlert(alert);
+            alert.AndLogTo(this);
 
             // The alert Annotation is logged when the ReportState method is called in the base
             // class after all the annotations have been run for a given IExchange.
@@ -90,7 +91,7 @@ namespace ThirdMillennium.Utility.OSDP
                        input.Acu.Frame.Command == Command.LED && 
                        (acu[TempOnColorOffset] == Green || acu[TempOffColorOffset] == Green))
                 {
-                    OnAccessGranted();
+                    OnAccessGranted(input);
                 }
 
                 var pd = input.Pd.Payload.Plain;

@@ -1,3 +1,4 @@
+using System.Linq;
 using ThirdMillennium.Annotations;
 using ThirdMillennium.Protocol.OSDP;
 
@@ -26,8 +27,10 @@ namespace ThirdMillennium.Utility.OSDP
             if (!rate.IsValidBaudRate()) return;
             
             // Raise an alert.
-            LogAlert(this.CreateOsdpAlert("Switching to New Baud Rate")
-                .AppendItem("NewBaudRate", rate));
+            this.CreateOsdpAlert("Switching to New Baud Rate")
+                .AppendItem("TriggeredBy", input.Sequence)
+                .AppendItem("NewBaudRate", rate)
+                .AndLogTo(this);
             
             // Switch the rate.
             _frames.SetRate(rate);
@@ -43,16 +46,8 @@ namespace ThirdMillennium.Utility.OSDP
 
         internal static bool IsValidBaudRate(this int rate)
         {
-            return rate switch
-            {
-                9600 => true,
-                19200 => true,
-                38400 => true,
-                57600 => true,
-                115200 => true,
-                230400 => true,
-                _ => false
-            };
+            var rates = new[] {9600, 19200, 38400, 57600, 115200, 230400};
+            return rates.Any(x => x == rate);
         }
     }
 }

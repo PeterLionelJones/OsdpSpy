@@ -12,8 +12,10 @@ namespace ThirdMillennium.Utility.OSDP
             if (input.Acu.Frame.Command != Command.KEYSET) return;
             if (input.Acu.Payload.Plain == null) return;
 
-            LogAlert(this.CreateOsdpAlert("SCBK Set with osdp_KEYSET")
-                .AppendItem("Scbk", input.Acu.Payload.Plain.ToScbk()));
+            this.CreateOsdpAlert("SCBK Set with osdp_KEYSET")
+                .AppendItem("TriggeredBy", input.Sequence)
+                .AppendItem("Scbk", input.Acu.Payload.Plain.ToScbk())
+                .AndLogTo(this);
         }
     }
 }
