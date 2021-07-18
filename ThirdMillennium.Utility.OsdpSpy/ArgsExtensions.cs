@@ -20,5 +20,8 @@ namespace ThirdMillennium.Utility.OSDP
 
         public static string SeqUrl(this string[] args)
             => args.GetOption(new[] {"listen"}, new[] {"-s", "--seq"});
+
+        public static string ElasticsearchUrl(this string[] args)
+            => args.GetOption(new[] {"listen"}, new[] {"-e", "--elasticsearch"});
     }
 }

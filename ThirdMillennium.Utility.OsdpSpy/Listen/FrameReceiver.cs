@@ -39,6 +39,7 @@ namespace ThirdMillennium.Utility.OSDP
         private int _newRate;
         
         private bool IsSwitchPending { get; set; }
+        
         private bool NoActivity
         {
             get
@@ -54,24 +55,20 @@ namespace ThirdMillennium.Utility.OSDP
         {
             Switch(_channel.BaudRate.NextBaudRate());
         }
-        
+
         private void Switch(int rate)
         {
+            _logger.LogInformation(
+                "OSDP Alert: {OsdpAlert} to {BaudRate} Baud\n", 
+                "Switching Baud Rate",
+                _channel.BaudRate);
+            
             _online = false;
             _lastFrame = DateTime.UtcNow;
             _rx = new ResponseFrame();
             _channel.Reopen(rate);
         }
 
-        private void Switch()
-        {
-            if (IsSwitchPending)
-            {
-                IsSwitchPending = false;
-                Switch(_newRate);
-            }
-        }
-        
         private void OnSynchronised()
         {
             if (!_online)
@@ -100,7 +97,13 @@ namespace ThirdMillennium.Utility.OSDP
         {
             var dev = _mgr.FromPortName(_options.PortName);
             _channel = _mgr.CreateChannel();
-            IsRunning = _channel.Open(dev, _options.BaudRate);
+            IsRunning = _channel.Open(dev, _options.ToBaudRate());
+
+            _logger.LogInformation(
+                "OSDP Alert: {OsdpAlert} to {BaudRate} Baud\n", 
+                "Switching Baud Rate",
+                _channel.BaudRate);
+
             return IsRunning;
         }
 
@@ -172,15 +175,18 @@ namespace ThirdMillennium.Utility.OSDP
 
         protected override void OnService()
         {
+            // Read a frame.
             ReadFrame();
 
+            // Has a new baud rate n=been requested?
             if (IsSwitchPending)
             {
                 IsSwitchPending = false;
                 Switch(_newRate);
             }
     
-            if (NoActivity)
+            // Hunt for a new baud rate?
+            if (_options.CanScanBaudRates() && NoActivity)
             {
                 OnLostSynchronisation();
                 SwitchBaudRate();

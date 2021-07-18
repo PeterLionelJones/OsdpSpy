@@ -30,13 +30,26 @@ namespace ThirdMillennium.Utility.OSDP
         {
             var indexString = index == 0 ? "" : $"{index + 1}";
             var offset = index * RecordSize;
+
+            var reader = input[offset];
+            var toneCode = input[offset+1];
+            var on = input[offset + 2];
+            var off = input[offset + 3];
+            var count = input[offset + 4];
             
             output
-                .AppendItem($"ReaderNumber{indexString}", input[offset])
-                .AppendItem($"ToneCode{indexString}", input[offset + 1].ToToneCodeString())
-                .AppendItem($"OnTime{indexString}", input[offset + 2] / 10.0, "Seconds")
-                .AppendItem($"OffTime{indexString}", input[offset + 3] / 10.0, "Seconds")
-                .AppendItem($"Count{indexString}", input[offset + 4]);
+                .AppendItem($"ReaderNumber{indexString}", reader)
+                .AppendItem($"ToneCode{indexString}", toneCode.ToToneCodeString())
+                .AppendItem($"OnTime{indexString}", on / 10.0, "Seconds")
+                .AppendItem($"OffTime{indexString}", off / 10.0, "Seconds")
+                .AppendItem($"Count{indexString}", count);
+
+            if (on == 0 && toneCode != 1)
+            {
+                output.AppendItem(
+                    "NonCompliance", 
+                    "The On Time must be non-zero unless the tone code is 0x01");
+            }
         }
     }
 

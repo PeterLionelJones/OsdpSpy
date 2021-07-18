@@ -19,13 +19,14 @@ namespace ThirdMillennium.Utility.OSDP
                 {
                     var r = Convert.ToInt32(rate);
                     var rates = new[] { 9600, 19200, 38400, 57600, 115200, 230400 };
-                    return rates.Contains(r);
+                    return  rates.Contains(r);
                 }
                 return false;
             }
             catch (Exception)
             {
-                return false;
+                var rate = value as string;
+                return rate.ToLower() == "auto";
             }
         }
     }

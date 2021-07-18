@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Serilog.Sinks.Elasticsearch;
 using ThirdMillennium.Protocol;
 using ThirdMillennium.Protocol.Core;
 
@@ -20,13 +22,8 @@ namespace ThirdMillennium.Utility.OSDP
         {
             try
             {
-                // Get any logging options that we may need.
-                var seqUrl = args.SeqUrl();
-                
-                // Configure logging for this command.
-                var logger = new LoggerConfiguration().WriteTo.Console();
-                if (seqUrl != null) logger = logger.WriteTo.Seq(seqUrl);
-                Log.Logger = logger.CreateLogger();
+                // Create the logger for this application.
+                Log.Logger = CreateLogger(args);
 
                 // Configure dependency injection, logging and start the command.
                 return await new HostBuilder()
@@ -39,6 +36,35 @@ namespace ThirdMillennium.Utility.OSDP
                 Console.WriteLine(e.Message);
                 return -1;
             }
+        }
+
+        private static ILogger CreateLogger(string[] args)
+        {
+            // Get any logging options that we may need.
+            var seqUrl = args.SeqUrl();
+            var elasticsearchUrl = args.ElasticsearchUrl();
+                
+            // Configure logging for this command.
+            var logger = new LoggerConfiguration().WriteTo.Console();
+
+            if (seqUrl != null)
+            {
+                logger = logger.WriteTo.Seq(seqUrl);
+            }
+
+            if (elasticsearchUrl != null)
+            {
+                var name = Assembly.GetExecutingAssembly().GetName().Name.ToLower().Replace(".", "-");
+
+                logger = logger.WriteTo.Elasticsearch(
+                    new ElasticsearchSinkOptions(new Uri(elasticsearchUrl) ){
+                        AutoRegisterTemplate = true,
+                        AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6,
+                        IndexFormat = $"osdpspy-{DateTime.UtcNow:yyyy-MM}"
+                    });
+            }
+            
+            return logger.CreateLogger();
         }
 
         private static void ConfigureServices(

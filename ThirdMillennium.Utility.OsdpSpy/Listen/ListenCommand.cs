@@ -16,7 +16,8 @@ namespace ThirdMillennium.Utility.OSDP
             IExchangeProducer exchanges,
             IListenOptions listenOptions, 
             IExchangeConsumer consumer,
-            IExchangeLoggerOptions loggerOptions)
+            IExchangeLoggerOptions loggerOptions,
+            IKeyStore keyStore)
         {
             _frames = frames;
             _logger = logger;
@@ -24,6 +25,7 @@ namespace ThirdMillennium.Utility.OSDP
             _listenOptions = listenOptions;
             _consumer = consumer;
             _loggerOptions = loggerOptions;
+            _keyStore = keyStore;
         }
 
         private readonly IBusFrameProducer _frames;
@@ -32,6 +34,7 @@ namespace ThirdMillennium.Utility.OSDP
         private readonly IListenOptions _listenOptions;
         private readonly IExchangeConsumer _consumer;
         private readonly IExchangeLoggerOptions _loggerOptions;
+        private readonly IKeyStore _keyStore;
 
         [Option(
             "-c|--capture", 
@@ -88,10 +91,10 @@ namespace ThirdMillennium.Utility.OSDP
 
         [Option(
             template: "-r|--rate",
-            description: "Baud rate (9600 | 19200 | 38400 | 57600 | 115200 | 230400)",
+            description: "Baud rate (auto | 9600 | 19200 | 38400 | 57600 | 115200 | 230400)",
             optionType: CommandOptionType.SingleValue)]
         [IsValidBaudRate]
-        private int BaudRate
+        private string BaudRate
         {
             set => _listenOptions.BaudRate = value;
         }
@@ -110,6 +113,7 @@ namespace ThirdMillennium.Utility.OSDP
         {
             // Tell the user what we are up to.
             console.LogParameters(_listenOptions, "Starting Listen Command");
+            _keyStore.List();
             
             // Feed frames into the exchange producer and on to the exchange consumer.
             _loggerOptions.FilterPollAck = _listenOptions.FilterPollAck;

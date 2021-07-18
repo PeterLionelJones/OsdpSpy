@@ -18,5 +18,8 @@ namespace ThirdMillennium.Utility.OSDP
             // Add the other annotators found in the assembly.
             AddRange(provider.GetExtensionAnnotators<Annotator<IExchange>>());
         }
+
+        public override bool IncludeInput(IExchange input, IAnnotation annotation)
+            => base.IncludeInput(input, annotation) || annotation.Contains("NonCompliance");
     }
 }

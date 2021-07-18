@@ -25,7 +25,7 @@ namespace ThirdMillennium.Utility.OSDP
             if (options.PortName != null)
                 result.Append($"\n  - PortName = {options.PortName}");
         
-            if (options.BaudRate != -1)
+            if (options.BaudRate != null)
                 result.Append($"\n  - Rate = {options.BaudRate}");
         
             if (options.SeqUrl != null) 

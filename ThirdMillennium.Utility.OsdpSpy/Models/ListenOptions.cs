@@ -14,7 +14,7 @@ namespace ThirdMillennium.Utility.OSDP
         public string ElasticSearchUrl { get; set;  }
         public bool FilterPollAck { get; set; }
         public string PortName { get; set; }
-        public int BaudRate { get; set; }
+        public string BaudRate { get; set; }
         public string SeqUrl { get; set; }
 
         public bool CaptureOsdpFileTransfer

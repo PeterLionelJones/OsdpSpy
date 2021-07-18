@@ -20,6 +20,8 @@ namespace ThirdMillennium.Utility.OSDP
         private const int Green = 0x02; 
         private const int TempOnColorOffset = 5;
         private const int TempOffColorOffset = 6;
+        private const int PermOnColorOffset = 12;
+        private const int PermOffColorOffset = 13;
         private const int TenSecondWindow = 10;
 
 
@@ -89,7 +91,8 @@ namespace ThirdMillennium.Utility.OSDP
             
                 if (   acu != null &&
                        input.Acu.Frame.Command == Command.LED && 
-                       (acu[TempOnColorOffset] == Green || acu[TempOffColorOffset] == Green))
+                       (   acu[TempOnColorOffset] == Green || acu[TempOffColorOffset] == Green || 
+                           acu[PermOnColorOffset] == Green || acu[PermOffColorOffset] == Green)   )
                 {
                     OnAccessGranted(input);
                 }

@@ -1,5 +1,6 @@
 using ThirdMillennium.Annotations;
 using ThirdMillennium.Protocol;
+using ThirdMillennium.Protocol.OSDP;
 
 namespace ThirdMillennium.Utility.OSDP
 {
@@ -15,6 +16,12 @@ namespace ThirdMillennium.Utility.OSDP
         public override void Annotate(IExchange input, IAnnotation output)
         {
             if (input.Pd?.Payload == null) return;
+
+            if (input.Pd.Frame.Reply == Reply.NAK && input.Pd.Payload.Cipher?.Length == 1)
+            {
+                input.Pd.Payload.Plain = input.Pd.Payload.Cipher;
+                input.Pd.Payload.Cipher = null;
+            }
 
             output.AppendNewLine();
             

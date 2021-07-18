@@ -17,7 +17,7 @@ namespace ThirdMillennium.Utility.OSDP
             {
                 output.AppendItem(
                     "NonCompliance", 
-                    "Invalid payload for osdp_BUZ command");
+                    "Invalid payload for osdp_LED command");
             }
 
             for (var i = 0; i < entries; ++i)
@@ -98,7 +98,7 @@ namespace ThirdMillennium.Utility.OSDP
             return code switch
             {
                 0x00 => "NOP",
-                0x01 => "Cancel",
+                0x01 => "Set",
                 _ => $"0x{code:X02} - Invalid Control Code"
             };
         }

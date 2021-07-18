@@ -33,45 +33,54 @@ namespace ThirdMillennium.Utility.OSDP
 
         private void OnChallenge()
         {
-            // Make sure the security block is selecting a valid key.
-            if (_input.Acu.Frame.SecurityBlock[2] > 1) return;
-            if (_input.Pd.Frame.SecurityBlock[2] > 1) return;
-
-            // Get the data from this exchange.
-            Buffer.BlockCopy(_input.Acu.Frame.Data, 0, _rndA, 0, 8);
-            Buffer.BlockCopy(_input.Pd.Frame.Data, 0, _client, 0, 8);
-            Buffer.BlockCopy(_input.Pd.Frame.Data, 8, _rndB, 0, 8);
-            Buffer.BlockCopy(_input.Pd.Frame.Data, 16, _clientCryptogram, 0, 16);
-
-            // What secure channel base key are we using?
-            var useDefaultScbk = _input.Acu.Frame.SecurityBlock[2] == 0;
-            var scbk = useDefaultScbk
-                ? _keys.DefaultBaseKey
-                : _keys.Find(_client);
-
-            // Do we have a valid secure channel base key?
-            if (scbk == null) return;
-
-            // Notify interested parties.
-            _sink.OnAuthenticating(_input.Acu.Frame.Address, useDefaultScbk, scbk);
-
-            // Create a new session.
-            var session = new Session();
-            session.Generate(scbk, _rndA, _rndB);
-
-            // Verify the client cryptogram.
-            var verified = session.ClientCryptogram.SequenceEqual(_clientCryptogram);
-
-            // Show authentication status and secure channel base key.
-            _output
-                .AppendNewLine()
-                .AppendItem("Authenticating", verified);
-
-            // Do we have the makings of a session?
-            if (verified)
+            try
             {
-                _session[_input.Acu.Frame.Address] = session;
-                _output.AppendItem("Scbk", scbk.ToHexString());
+                // Make sure the security block is selecting a valid key.
+                if (_input.Acu.Frame.SecurityBlock[2] > 1) return;
+                if (_input.Pd?.Frame?.SecurityBlock == null) return;
+                if (_input.Pd.Frame.SecurityBlock[2] > 1) return;
+
+                // Get the data from this exchange.
+                Buffer.BlockCopy(_input.Acu.Frame.Data, 0, _rndA, 0, 8);
+                Buffer.BlockCopy(_input.Pd.Frame.Data, 0, _client, 0, 8);
+                Buffer.BlockCopy(_input.Pd.Frame.Data, 8, _rndB, 0, 8);
+                Buffer.BlockCopy(_input.Pd.Frame.Data, 16, _clientCryptogram, 0, 16);
+
+                // What secure channel base key are we using?
+                var useDefaultScbk = _input.Acu.Frame.SecurityBlock[2] == 0;
+                var scbk = useDefaultScbk
+                    ? _keys.DefaultBaseKey
+                    : _keys.Find(_client);
+
+                // Do we have a valid secure channel base key?
+                if (scbk == null) return;
+
+                // Notify interested parties.
+                _sink.OnAuthenticating(_input.Acu.Frame.Address, useDefaultScbk, scbk);
+
+                // Create a new session.
+                var session = new Session();
+                session.Generate(scbk, _rndA, _rndB);
+
+                // Verify the client cryptogram.
+                var verified = session.ClientCryptogram.SequenceEqual(_clientCryptogram);
+
+                // Show authentication status and secure channel base key.
+                _output
+                    .AppendNewLine()
+                    .AppendItem("Authenticating", verified);
+
+                // Do we have the makings of a session?
+                if (verified)
+                {
+                    _session[_input.Acu.Frame.Address] = session;
+                    _output.AppendItem("Scbk", scbk.ToHexString());
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
             }
         }
 
