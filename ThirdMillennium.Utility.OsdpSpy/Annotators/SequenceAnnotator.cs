@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Linq;
 using ThirdMillennium.Annotations;
 using ThirdMillennium.Protocol;
@@ -13,6 +14,11 @@ namespace ThirdMillennium.Utility.OSDP
         
         public override void Annotate(IExchange input, IAnnotation output)
         {
+            if (input.Acu.Frame.Command == Command.CHLNG && input.Pd?.Frame?.Data?[0] == 0x06)
+            {
+                Debug.WriteLine("Fail Case Detected");
+            }
+            
             var address = input.Acu.Frame.Address;
             var previous = _lastExchange[address];
 
@@ -23,11 +29,7 @@ namespace ThirdMillennium.Utility.OSDP
                 return;
             }
 
-            var validSequence = 
-                IsRetry(previous, input) || 
-                IsValidSequence(previous, input);
-
-            if (!validSequence)
+            if (!IsValidSequence(previous, input))
             {
                 output
                     .AppendItem("NonCompliance", "Incorrect ACU Frame Sequence Number")
@@ -49,8 +51,10 @@ namespace ThirdMillennium.Utility.OSDP
         private static bool IsValidSequence(IExchange previous, IExchange current)
         {
             var isRetry = IsRetry(previous.Acu.Frame, current.Acu.Frame);
-            var isValidSequence = 
-                IsValidSequence(previous.Acu.Frame.Address, current.Acu.Frame.Address);
+            
+            var isValidSequence = IsValidSequence(
+                previous.Acu.Frame.Sequence, 
+                current.Acu.Frame.Sequence);
             
             return isRetry || isValidSequence;
         }
