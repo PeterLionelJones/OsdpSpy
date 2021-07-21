@@ -107,7 +107,7 @@ namespace ThirdMillennium.Utility.OSDP
         {
             return color switch
             {
-                0x00 => "Black or Off",
+                0x00 => "Black",
                 0x01 => "Red",
                 0x02 => "Green",
                 0x03 => "Amber",

@@ -148,7 +148,7 @@ namespace ThirdMillennium.Utility.OSDP
         private void ReadFrame()
         {
             var available = _channel.BytesToRead;
-            if (available == 0) return;
+            if (available <= 0) return;
 
             if (available > 100)
             {
