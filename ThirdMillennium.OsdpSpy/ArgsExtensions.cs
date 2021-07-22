@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 
 namespace ThirdMillennium.OsdpSpy
@@ -6,16 +7,23 @@ namespace ThirdMillennium.OsdpSpy
     {
         private static string GetOption(this string[] args, string[] verbs, string[] switches)
         {
-            var validVerb = verbs.Any(x => x.ToLower() == args[0].ToLower());
-            if (!validVerb) return null;
-
-            for (var i = 1; i < args.Length - 1; ++i)
+            try
             {
-                var validSwitch = switches.Any(x => x == args[i]);
-                if (validSwitch) return args[i + 1];
-            }
+                var validVerb = verbs.Any(x => x.ToLower() == args[0].ToLower());
+                if (!validVerb) return null;
 
-            return null;
+                for (var i = 1; i < args.Length - 1; ++i)
+                {
+                    var validSwitch = switches.Any(x => x == args[i]);
+                    if (validSwitch) return args[i + 1];
+                }
+
+                return null;
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return null;
+            }
         }
 
         public static string SeqUrl(this string[] args)

@@ -12,7 +12,7 @@ using ThirdMillennium.Protocol.Core;
 namespace ThirdMillennium.OsdpSpy
 {
     [HelpOption]
-    [Command(Name = "osdpspy", Description = "OSDP Utility Program"),
+    [Command(Name = "osdpspy", Description = "\nosdpspy Protocol Analysis Tool"), 
         Subcommand(typeof(ImportCommand)),
         Subcommand(typeof(ListenCommand)),
         Subcommand(typeof(ListPortsCommand))]
@@ -54,8 +54,6 @@ namespace ThirdMillennium.OsdpSpy
 
             if (elasticsearchUrl != null)
             {
-                var name = Assembly.GetExecutingAssembly().GetName().Name.ToLower().Replace(".", "-");
-
                 logger = logger.WriteTo.Elasticsearch(
                     new ElasticsearchSinkOptions(new Uri(elasticsearchUrl) ){
                         AutoRegisterTemplate = true,
@@ -94,6 +92,10 @@ namespace ThirdMillennium.OsdpSpy
 
         // ReSharper disable once UnusedParameter.Local
         // ReSharper disable once UnusedMember.Local
-        private static int OnExecute(IConsole console) => -1;
+        private int OnExecute(CommandLineApplication app)
+        {
+            app.ShowHelp();
+            return 1;
+        }
     }
 }
