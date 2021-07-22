@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThirdMillennium.OsdpSpy", "ThirdMillennium.OsdpSpy\ThirdMillennium.OsdpSpy.csproj", "{42E3582E-4ABD-48B5-A9FD-8A612DD4AF4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThirdMillennium.Utility.OsdpSpy.Tests", "ThirdMillennium.Utility.OsdpSpy.Tests\ThirdMillennium.Utility.OsdpSpy.Tests.csproj", "{046DBFBA-7CAD-4C1E-A9F6-C20A419190D6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThirdMillennium.OsdpSpy.Tests", "ThirdMillennium.OsdpSpy.Tests\ThirdMillennium.OsdpSpy.Tests.csproj", "{046DBFBA-7CAD-4C1E-A9F6-C20A419190D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
