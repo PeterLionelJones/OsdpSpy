@@ -19,6 +19,7 @@ namespace ThirdMillennium.OsdpSpy
 
         private bool FileTransferError()
         {
+            Debug.WriteLine("  FileTransferError()");
             Data = null;
             return false;
         }
@@ -27,6 +28,8 @@ namespace ThirdMillennium.OsdpSpy
         {
             try
             {
+                Debug.WriteLine($"  AddFragment(size:{size}, offset:{offset}, ... , timestamp:{timestamp}");
+                
                 // Start of transfer?
                 if (offset == 0 || Data == null)
                 {
@@ -36,12 +39,11 @@ namespace ThirdMillennium.OsdpSpy
                     _remaining = size;
                 }
 
-                if (offset != _offset) 
-                    return FileTransferError();
+                if (offset != _offset) return FileTransferError();
                 
-                Debug.WriteLine($"_offset = {_offset}, _remaining = {_remaining}, fragment.Length = {fragment.Length}");
+                Debug.WriteLine($"  Before: _offset = {_offset}, _remaining = {_remaining}, fragment.Length = {fragment.Length}");
 
-                // The may contain padding from cryptographic operations!
+                // The fragment may contain padding from cryptographic operations!
                 var correctedLength = _remaining < fragment.Length 
                     ? _remaining 
                     : fragment.Length;
@@ -54,6 +56,8 @@ namespace ThirdMillennium.OsdpSpy
                 _offset += fragment.Length;
                 _remaining -= correctedLength;
                 Elapsed = timestamp - _start;
+                
+                Debug.WriteLine($"    After: _remaining = {_remaining}");
 
                 return _remaining switch
                 {

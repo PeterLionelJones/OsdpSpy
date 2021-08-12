@@ -50,7 +50,7 @@ namespace ThirdMillennium.OsdpSpy
 
         internal static byte[] GetFragment(this byte[] input)
         {
-            var fragment = new byte[input.Length - 11];
+            var fragment = new byte[input.GetFragmentSize()];
             Buffer.BlockCopy(input, 11, fragment, 0, fragment.Length);
             return fragment;
         }

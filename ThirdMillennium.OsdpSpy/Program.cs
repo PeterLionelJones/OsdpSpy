@@ -38,6 +38,17 @@ namespace ThirdMillennium.OsdpSpy
             }
         }
 
+        [Option("-v|--version")]
+        private bool ReportVersion { get; }
+
+        private string GetVersion()
+        {
+            var version = Assembly.GetEntryAssembly().GetName().Version;
+            return $"{version.Major}.{version.Minor}.{version.Build}";
+        }
+
+        private string Version => GetVersion(); 
+
         private static ILogger CreateLogger(string[] args)
         {
             // Get any logging options that we may need.
@@ -94,6 +105,13 @@ namespace ThirdMillennium.OsdpSpy
         // ReSharper disable once UnusedMember.Local
         private int OnExecute(CommandLineApplication app)
         {
+            if (ReportVersion)
+            {
+                var console = app.GetRequiredService<IConsole>();
+                console.WriteLine(Version);
+                return 0;
+            }
+            
             app.ShowHelp();
             return 1;
         }

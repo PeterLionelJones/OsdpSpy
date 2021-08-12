@@ -8,17 +8,13 @@ namespace ThirdMillennium.OsdpSpy
 {
     public class SequenceAnnotator : Annotator<IExchange>
     {
-        private const int ReaderCount = 126;
+        // Allow the configuration address.
+        private const int ReaderCount = 128;
 
         private readonly IExchange[] _lastExchange = new IExchange[ReaderCount];
         
         public override void Annotate(IExchange input, IAnnotation output)
         {
-            if (input.Acu.Frame.Command == Command.CHLNG && input.Pd?.Frame?.Data?[0] == 0x06)
-            {
-                Debug.WriteLine("Fail Case Detected");
-            }
-            
             var address = input.Acu.Frame.Address;
             var previous = _lastExchange[address];
 

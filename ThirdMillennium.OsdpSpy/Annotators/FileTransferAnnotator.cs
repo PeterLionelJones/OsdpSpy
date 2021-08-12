@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using ThirdMillennium.Annotations;
 using ThirdMillennium.Protocol.OSDP;
@@ -20,10 +21,14 @@ namespace ThirdMillennium.OsdpSpy
 
         private FileTransferReader FindReader(int address)
         {
+            Debug.WriteLine($"  FindReader({address})");
+            
             var reader = _readers.FirstOrDefault(r => r.Address == address);
 
             if (reader == null)
             {
+                Debug.WriteLine($"    New File Transfer Reader for Address {address}");
+                
                 reader = new FileTransferReader(address);
                 _readers.Add(reader);
             }
@@ -36,15 +41,19 @@ namespace ThirdMillennium.OsdpSpy
             if (input.Acu.Frame.Command != Command.FILETRANSFER) return;
             if (input.Acu.Payload.Plain == null) return;
 
+            Debug.WriteLine("FileTransferAnnotator.Annotate");
+            
             var payload = input.Acu.Payload.Plain;
             var fileSize = payload.GetFileSize();
             var fileOffset = payload.GetFileOffset();
             var fragment = payload.GetFragment();
-
+            
             var reader = FindReader(input.Acu.Frame.Address);
 
             if (reader.AddFragment(fileSize, fileOffset, fragment, input.Acu.Timestamp))
             {
+                Debug.WriteLine("  Logging File Transfer");
+                
                 var alert = this
                     .CreateOsdpAlert("Captured File from osdp_FILETRANSFER Commands")
                     .AppendItem("TriggeredBy", input.Sequence)

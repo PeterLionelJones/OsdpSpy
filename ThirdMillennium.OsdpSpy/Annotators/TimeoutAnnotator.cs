@@ -14,6 +14,8 @@ namespace ThirdMillennium.OsdpSpy
         
         public double TimeoutRate => _total == 0 ? 0 : _timeouts * 100.00 / _total;
         public long TimeoutsPerHour => (long) (_timeouts / (DateTime.UtcNow - _start).TotalHours);
+        public long ExchangesPerHour => (long) (_total / (DateTime.UtcNow - _start).TotalHours);
+        public long PollFrequency => ExchangesPerHour / 3600;
 
         public override void Annotate(IExchange input, IAnnotation output)
         {
@@ -35,6 +37,8 @@ namespace ThirdMillennium.OsdpSpy
         private void TimeoutAlert()
         {
             this.CreateOsdpAlert("Timeout Update")
+                .AppendItem("ExchangesPerHour", ExchangesPerHour)
+                .AppendItem("PollFrequency", PollFrequency)
                 .AppendItem("Timeouts", _timeouts)
                 .AppendItem("TotalExchanges", _total)
                 .AppendItem("TimeoutRate", TimeoutRate, "%")

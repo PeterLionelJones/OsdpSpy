@@ -73,7 +73,13 @@ namespace ThirdMillennium.OsdpSpy
                 .Where(t => typeof(T).IsAssignableFrom(t) && t.IsClass);
         }
 
-        public static IAnnotation CreateOsdpAlert(this AlertingAnnotator<IExchange> annotator, string alertMessage)
-            => annotator.CreateAlert("OsdpAlert", alertMessage, "OSDP Alert");
+        public static IAnnotation CreateOsdpAlert(
+            this AlertingAnnotator<IExchange> annotator,
+            string alertMessage)
+        {
+            return annotator.CreateAlert(
+                "OsdpAlert", alertMessage, 
+                "OSDP Alert");
+        }
     }
 }
