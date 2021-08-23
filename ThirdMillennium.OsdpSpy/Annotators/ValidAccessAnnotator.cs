@@ -17,11 +17,18 @@ namespace ThirdMillennium.OsdpSpy
 
         private readonly List<ValidAccessItem> _list;
 
-        private const int Green = 0x02; 
+        private const int Green = 0x02;
+
+        private const int TempSet = 0x02;
+        private const int TempControlCodeOffset = 2;
         private const int TempOnColorOffset = 5;
         private const int TempOffColorOffset = 6;
+        
+        private const int PermSet = 0x01;
+        private const int PermControlCodeOffset = 10;
         private const int PermOnColorOffset = 12;
         private const int PermOffColorOffset = 13;
+        
         private const int TenSecondWindow = 10;
 
 
@@ -88,15 +95,22 @@ namespace ThirdMillennium.OsdpSpy
                 if (input.Pd?.Frame == null) return;
 
                 var acu = input.Acu.Payload.Plain;
-            
-                if (   acu != null &&
-                       input.Acu.Frame.Command == Command.LED && 
-                       (   acu[TempOnColorOffset] == Green || acu[TempOffColorOffset] == Green || 
-                           acu[PermOnColorOffset] == Green || acu[PermOffColorOffset] == Green)   )
+                if (acu != null && input.Acu.Frame.Command == Command.LED)
                 {
-                    OnAccessGranted(input);
-                }
+                    var tempGreen = 
+                        acu[TempControlCodeOffset] == TempSet &&
+                        (acu[TempOnColorOffset] == Green || acu[TempOffColorOffset] == Green);
 
+                    var permGreen = 
+                        acu[PermControlCodeOffset] == PermSet &&
+                        (acu[PermOnColorOffset] == Green || acu[PermOffColorOffset] == Green);
+            
+                    if (tempGreen || permGreen)
+                    {
+                        OnAccessGranted(input);
+                    }
+                }
+                
                 var pd = input.Pd.Payload.Plain;
                 if (pd == null) return;
             
