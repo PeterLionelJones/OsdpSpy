@@ -20,7 +20,7 @@ namespace ThirdMillennium.OsdpSpy
         private readonly ISecureChannelSink _sink;
         private readonly IKeyStore _keys;
 
-        private const int ReaderCount = 126;
+        private const int ReaderCount = 128;
 
         private IExchange _input;
         private IAnnotation _output;
@@ -145,10 +145,27 @@ namespace ThirdMillennium.OsdpSpy
             _keys.Store(_client, key);
         }
 
+        private void OnSetCommunication()
+        {
+            OnProcess();
+
+            if (_input.Pd?.Payload?.Plain == null) return;
+            if (_session[Frame.ConfigurationAddress] == null) return;
+
+            var address = _input.Acu.Frame.Address;
+
+            if (address == Frame.ConfigurationAddress)
+            {
+                var newAddress = _input.Pd.Payload.Plain.ToNewAddress();
+                _session[newAddress] = _session[Frame.ConfigurationAddress];
+                _session[Frame.ConfigurationAddress] = null;
+            }
+        }
+
         public override void Annotate(IExchange input, IAnnotation output)
         {
             // Ignore the configuration address for secure channel.
-            if (input.Acu.Frame.Address == Frame.ConfigurationAddress) return;
+            //if (input.Acu.Frame.Address == Frame.ConfigurationAddress) return;
 
             // Update the input and output.
             _input = input;
@@ -169,6 +186,10 @@ namespace ThirdMillennium.OsdpSpy
                 
                 case Command.KEYSET:
                     OnKeyset();
+                    break;
+                
+                case Command.COMSET:
+                    OnSetCommunication();
                     break;
                 
                 default:

@@ -42,6 +42,13 @@ namespace ThirdMillennium.OsdpSpy
             }
             
             _lastExchange[address] = input;
+
+            if (input.Acu.Frame.Command == Command.COMSET &&
+                input.Acu.Frame.Address == Frame.ConfigurationAddress)
+            {
+                var newAddress = input.Pd.Payload.Plain.ToNewAddress();
+                _lastExchange[newAddress] = input;
+            }
         }
 
         private static bool IsValidSequence(IExchange previous, IExchange current)

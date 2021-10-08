@@ -14,8 +14,8 @@ namespace ThirdMillennium.OsdpSpy
             Authenticated
         }
 
-        private const int ReaderCount = 126;
-        private readonly State[] _state = new State[126];
+        private const int ReaderCount = 128;
+        private readonly State[] _state = new State[ReaderCount];
 
         public void OnAuthenticating(int address, bool isDefault, byte[] scbk)
         {
