@@ -1,6 +1,5 @@
-using System.Diagnostics;
 using System.Linq;
-using ThirdMillennium.Annotations;
+using OsdpSpy.Annotations;
 using ThirdMillennium.Protocol;
 using ThirdMillennium.Protocol.OSDP;
 

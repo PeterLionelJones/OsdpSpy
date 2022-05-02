@@ -1,5 +1,5 @@
 using System.Linq;
-using ThirdMillennium.Annotations;
+using OsdpSpy.Annotations;
 using ThirdMillennium.Protocol.OSDP;
 
 namespace ThirdMillennium.OsdpSpy

@@ -1,4 +1,4 @@
-using ThirdMillennium.Annotations;
+using OsdpSpy.Annotations;
 using ThirdMillennium.Protocol;
 
 namespace ThirdMillennium.OsdpSpy

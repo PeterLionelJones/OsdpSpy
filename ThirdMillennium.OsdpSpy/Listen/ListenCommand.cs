@@ -47,6 +47,8 @@ namespace ThirdMillennium.OsdpSpy
                 _listenOptions.CaptureToOsdpCap = value.hasValue;
                 _listenOptions.OsdpCapDirectory = value.hasValue ? value.value : null;
             }
+
+            get => (_listenOptions.CaptureToOsdpCap, _listenOptions.OsdpCapDirectory);
         }
 
         [Option(
@@ -60,6 +62,8 @@ namespace ThirdMillennium.OsdpSpy
                 _listenOptions.CaptureOsdpFileTransfer = value.hasValue;
                 _listenOptions.OsdpFileTransferDirectory = value.hasValue ? value.value : null;
             }
+            
+            get => (_listenOptions.CaptureOsdpFileTransfer, _listenOptions.OsdpFileTransferDirectory);
         }
 
         [Option(
@@ -69,6 +73,7 @@ namespace ThirdMillennium.OsdpSpy
         private string ElasticSearchUrl
         {
             set => _listenOptions.ElasticSearchUrl = value;
+            get => _listenOptions.ElasticSearchUrl;
         }
 
         [Option(
@@ -78,6 +83,7 @@ namespace ThirdMillennium.OsdpSpy
         private bool Filter
         {
             set => _listenOptions.FilterPollAck = value;
+            get => _listenOptions.FilterPollAck;
         }
 
         [Option(
@@ -87,6 +93,7 @@ namespace ThirdMillennium.OsdpSpy
         private string PortName
         {
             set => _listenOptions.PortName = value;
+            get => _listenOptions.PortName;
         }
 
         [Option(
@@ -97,6 +104,7 @@ namespace ThirdMillennium.OsdpSpy
         private string BaudRate
         {
             set => _listenOptions.BaudRate = value;
+            get => _listenOptions.BaudRate;
         }
 
         [Option(
@@ -106,6 +114,7 @@ namespace ThirdMillennium.OsdpSpy
         private string SeqUrl
         {
             set => _listenOptions.SeqUrl = value;
+            get => _listenOptions.SeqUrl;
         }
 
         // ReSharper disable once UnusedMember.Local

@@ -64,12 +64,12 @@ namespace ThirdMillennium.OsdpSpy
                 Padding = PaddingMode.None,
                 Key = key
             };
-
+        
             // Decrypt the input data
             var decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
             var output = new byte[16];
             decryptor.TransformBlock(input, 0, 16, output, 0);
-
+        
             // Done !!
             return output;
         }
@@ -108,7 +108,7 @@ namespace ThirdMillennium.OsdpSpy
                 Padding = PaddingMode.None,
                 Key = key
             };
-
+        
             // Encrypt the data.
             var output = new byte[16];
             var encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);

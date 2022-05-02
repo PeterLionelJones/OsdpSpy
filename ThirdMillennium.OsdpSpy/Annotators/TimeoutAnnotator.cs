@@ -1,5 +1,5 @@
 using System;
-using ThirdMillennium.Annotations;
+using OsdpSpy.Annotations;
 
 namespace ThirdMillennium.OsdpSpy
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using ThirdMillennium.Annotations;
+using OsdpSpy.Annotations;
 using ThirdMillennium.Protocol.OSDP;
 
 namespace ThirdMillennium.OsdpSpy

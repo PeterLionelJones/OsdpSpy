@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using ThirdMillennium.Annotations;
+using OsdpSpy.Annotations;
 
 namespace ThirdMillennium.OsdpSpy
 {

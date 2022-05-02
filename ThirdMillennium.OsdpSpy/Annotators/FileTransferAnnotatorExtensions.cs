@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using ThirdMillennium.Annotations;
+using OsdpSpy.Annotations;
 using ThirdMillennium.Protocol;
 
 namespace ThirdMillennium.OsdpSpy
