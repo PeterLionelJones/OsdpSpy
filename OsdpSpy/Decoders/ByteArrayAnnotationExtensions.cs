@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics;
 using OsdpSpy.Annotations;
-using ThirdMillennium.Protocol;
+using OsdpSpy.Extensions;
 
 namespace OsdpSpy.Decoders
 {

@@ -1,6 +1,5 @@
 using OsdpSpy.Abstractions;
 using OsdpSpy.Annotations;
-using ThirdMillennium.Protocol;
 
 namespace OsdpSpy.Extensions
 {

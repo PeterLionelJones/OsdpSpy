@@ -1,7 +1,7 @@
 using OsdpSpy.Abstractions;
 using OsdpSpy.Annotations;
 using OsdpSpy.Decoders;
-using ThirdMillennium.Protocol;
+using OsdpSpy.Extensions;
 
 namespace OsdpSpy.Annotators
 {

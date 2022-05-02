@@ -6,7 +6,6 @@ using OsdpSpy.Decoders;
 using OsdpSpy.Extensions;
 using OsdpSpy.Listen;
 using OsdpSpy.Osdp;
-using ThirdMillennium.Protocol;
 
 namespace OsdpSpy.Annotators
 {

@@ -10,10 +10,9 @@ using OsdpSpy.Import;
 using OsdpSpy.List;
 using OsdpSpy.Listen;
 using OsdpSpy.Models;
+using OsdpSpy.Serial;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
-using ThirdMillennium.Protocol;
-using ThirdMillennium.Protocol.Core;
 
 namespace OsdpSpy
 {

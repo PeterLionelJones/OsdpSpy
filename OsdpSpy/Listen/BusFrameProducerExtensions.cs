@@ -1,4 +1,4 @@
-using ThirdMillennium.Protocol;
+using OsdpSpy.Serial;
 
 namespace OsdpSpy.Listen
 {

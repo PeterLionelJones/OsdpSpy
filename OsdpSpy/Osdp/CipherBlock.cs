@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using OsdpSpy.Extensions;
-using ThirdMillennium.Protocol;
 
 namespace OsdpSpy.Osdp
 {
@@ -485,9 +484,7 @@ namespace OsdpSpy.Osdp
         ///     A string containing a text representation of this cipher block.
         /// </returns>
         public override string ToString()
-        {
-            return Data.ToHexString();
-        }
+            => BitConverter.ToString(Data).Replace('-', ' ');
     }
 }
 

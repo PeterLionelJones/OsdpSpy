@@ -1,5 +1,5 @@
 using McMaster.Extensions.CommandLineUtils;
-using ThirdMillennium.Protocol;
+using OsdpSpy.Serial;
 
 namespace OsdpSpy.List
 {

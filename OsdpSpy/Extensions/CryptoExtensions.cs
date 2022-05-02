@@ -55,15 +55,13 @@ namespace OsdpSpy.Extensions
         
         public static byte[] DecryptEcb(this byte[] input, byte[] key)
         {
-            // Set up the decryption parameters.
-            using var aesAlg = new AesManaged
-            {
-                Mode = CipherMode.ECB,
-                BlockSize = 128,
-                KeySize = 128,
-                Padding = PaddingMode.None,
-                Key = key
-            };
+            // Set up the encryption parameters.
+            using var aesAlg = Aes.Create();
+            aesAlg.Mode = CipherMode.ECB;
+            aesAlg.KeySize = 128;
+            aesAlg.Key = key;
+            aesAlg.IV = new byte[16];
+            aesAlg.Padding = PaddingMode.None;
         
             // Decrypt the input data
             var decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
@@ -100,14 +98,13 @@ namespace OsdpSpy.Extensions
         public static byte[] EncryptEcb(this byte[] input, byte[] key)
         {
             // Set up the encryption parameters.
-            using var aesAlg = new AesManaged
-            {
-                Mode = CipherMode.ECB,
-                BlockSize = 128,
-                KeySize = 128,
-                Padding = PaddingMode.None,
-                Key = key
-            };
+            using var aesAlg = Aes.Create();
+            aesAlg.Mode = CipherMode.ECB;
+            aesAlg.KeySize = 128;
+            aesAlg.Key = key;
+            aesAlg.IV = new byte[16];
+            aesAlg.Padding = PaddingMode.None;
+
         
             // Encrypt the data.
             var output = new byte[16];

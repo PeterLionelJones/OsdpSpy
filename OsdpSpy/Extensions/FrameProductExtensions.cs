@@ -3,7 +3,6 @@ using System.Text;
 using OsdpSpy.Abstractions;
 using OsdpSpy.Import;
 using OsdpSpy.Osdp;
-using ThirdMillennium.Protocol;
 
 namespace OsdpSpy.Extensions
 {

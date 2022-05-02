@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using ThirdMillennium.Protocol;
+using OsdpSpy.Serial;
 
 namespace OsdpSpy.Osdp
 {
@@ -731,7 +731,9 @@ namespace OsdpSpy.Osdp
         public override string ToString() 
         { 
             // Get the basic trace to dump.
-            var result = FrameData.ToHexString(FrameLength);
+            var result = BitConverter
+	            .ToString(FrameData, FrameLength)
+	            .Replace('-', ' ');
 
             // If this is a transmission frame we are done.
             if (IsCp) return result;

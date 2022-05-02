@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using OsdpSpy.Abstractions;
 using OsdpSpy.Annotators;
 using OsdpSpy.Osdp;
-using ThirdMillennium.Protocol;
+using OsdpSpy.Serial;
 
 namespace OsdpSpy.Listen
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using ThirdMillennium.Protocol;
+using OsdpSpy.Serial;
 
 namespace OsdpSpy.Osdp
 {

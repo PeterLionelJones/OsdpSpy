@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using OsdpSpy.Annotations;
-using ThirdMillennium.Protocol;
+using OsdpSpy.Extensions;
 
 namespace OsdpSpy.Annotators
 {

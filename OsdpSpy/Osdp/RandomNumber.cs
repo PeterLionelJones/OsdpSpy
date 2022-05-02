@@ -1,5 +1,5 @@
-﻿using System.Security.Cryptography;
-using ThirdMillennium.Protocol;
+﻿using System;
+using System.Security.Cryptography;
 
 namespace OsdpSpy.Osdp
 {
@@ -13,10 +13,7 @@ namespace OsdpSpy.Osdp
         ///     The RandomNumber constructor generates an 8-byte random number.
         /// </summary>
         public RandomNumber()
-        {
-            Data = new byte[8];
-            new RNGCryptoServiceProvider().GetBytes(Data);
-        }
+            => Data = RandomNumberGenerator.GetBytes(8);
 
         /// <summary>
         ///     The Data property contains the 8-byte random number.
@@ -30,7 +27,8 @@ namespace OsdpSpy.Osdp
         /// <returns>
         ///     The text representation of the random number.
         /// </returns>
-        public override string ToString() => Data.ToHexString();
+        public override string ToString() 
+            => BitConverter.ToString(Data).Replace('-', ' ');
     }
 }
 
