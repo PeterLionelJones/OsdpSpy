@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using McMaster.Extensions.CommandLineUtils;
+using OsdpSpy.Extensions;
 
 namespace OsdpSpy
 {
@@ -72,9 +73,7 @@ namespace OsdpSpy
             _console.WriteLine("Available Secure Channel Base Keys:");
             foreach (var key in _keys)
             {
-                var uidString = BitConverter.ToString(key.Uid).Replace('-', ' ');
-                var keyString = BitConverter.ToString(key.Key).Replace('-', ' ');
-                _console.WriteLine($"  {uidString} -> {keyString}");
+                _console.WriteLine($"  {key.Uid.ToHexString()} -> {key.Key.ToHexString()}");
             }
             _console.WriteLine();
         }
