@@ -6,6 +6,7 @@
         <RootNamespace>ThirdMillennium.Utility.OSDP</RootNamespace>
         <LangVersion>9</LangVersion>
         <PackageVersion>0.0.6</PackageVersion>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>osdpspy</ToolCommandName>
         <PackageOutputPath>./nupkg</PackageOutputPath>
