@@ -9,7 +9,7 @@ namespace OsdpSpy.Attributes
         public IsValidBaudRateAttribute() : base(Msg) {}
 
         private const string Msg =
-            "Specify a valid baud rate: 9600 | 19200 | 38400 | 57600 | 115200 | 230400";
+            "Specify a valid baud rate: auto | 9600 | 19200 | 38400 | 57600 | 115200 | 230400";
 
         public override bool IsValid(object value)
         {
