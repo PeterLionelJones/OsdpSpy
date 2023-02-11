@@ -49,7 +49,7 @@ namespace OsdpSpy.Annotators
         internal static bool IsValidBaudRate(this int rate)
         {
             var rates = new[] {9600, 19200, 38400, 57600, 115200, 230400};
-            return rates.Any(x => x == rate) || (rate <= rates.Length && rate > 0);
+            return rates.Any(x => x == rate);
         }
     }
 }
