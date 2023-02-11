@@ -30,6 +30,11 @@ namespace OsdpSpy.Listen
             _token = _source.Token;
             _notifier.Start(_token);
             _receiver.Start(_token);
+
+            _receiver.ConnectionStateEventHandler += (source, state) =>
+            {
+                if (state == ConnectionState.ConnectFailed) Stop();
+            };
         }
 
         public void Stop()
