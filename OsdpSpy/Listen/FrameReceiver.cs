@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 using OsdpSpy.Abstractions;
 using OsdpSpy.Annotators;
+using OsdpSpy.Extensions;
 using OsdpSpy.Osdp;
 using OsdpSpy.Serial;
 

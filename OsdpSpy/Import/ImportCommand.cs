@@ -30,7 +30,7 @@ namespace OsdpSpy.Import
             template: "-f|--filter",
             description: "Filter out POLL/ACK pairs",
             optionType: CommandOptionType.NoValue)]
-        public bool Filter
+        private bool Filter
         {
             get => _importOptions.FilterPollAck;
             set => _importOptions.FilterPollAck = value;
@@ -40,7 +40,7 @@ namespace OsdpSpy.Import
             template: "-i|--input",
             description: "Input osdppcap file name",
             optionType: CommandOptionType.SingleValue)]
-        public string InputFileName
+        private string InputFileName
         {
             get => _importOptions.InputFileName; 
             set => _importOptions.InputFileName = value;
@@ -53,15 +53,15 @@ namespace OsdpSpy.Import
             console.WriteLine($"\nImporting {_importOptions.InputFileName}\n");
             
             // Feed frames into the exchange producer and on to the exchange consumer.
-            _loggerOptions.FilterPollAck = _importOptions.FilterPollAck;
+            _loggerOptions.FilterPollAck = Filter;
             _exchanges.Subscribe(_frames);
             _consumer.Subscribe(_exchanges);
 
             // Attempt to process the input file.
-            var result =_frames.Process(_importOptions.InputFileName);
+            var result =_frames.Process(InputFileName);
             
             // Summarise the findings.
-            //_summariser.Summarise();
+            _consumer.Summarise();
 
             // Disconnect the feeds.
             _exchanges.Unsubscribe();
