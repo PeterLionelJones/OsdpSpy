@@ -20,7 +20,6 @@
         <Authors>Peter Lionel Jones</Authors>
         <Copyright>Copyright (c) 2023 Peter Lionel Jones</Copyright>
         <PackageProjectUrl>https://github.com/PeterLionelJones/OsdpSpy</PackageProjectUrl>
-        <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/PeterLionelJones/OsdpSpy</RepositoryUrl>
     </PropertyGroup>
 
