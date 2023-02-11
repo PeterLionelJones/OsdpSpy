@@ -2,12 +2,13 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using McMaster.Extensions.CommandLineUtils;
 
 namespace OsdpSpy.Listen
 {
     public class ThreadService : IThreadService
     {
-        protected CancellationToken Token { get; private set; }
+        private CancellationToken _token;
 
         private async Task ServiceThreadAsync()
         {
@@ -20,7 +21,7 @@ namespace OsdpSpy.Listen
                 {
                     try
                     {
-                        Token.ThrowIfCancellationRequested();
+                        _token.ThrowIfCancellationRequested();
                         await OnServiceAsync();
                     }
                     catch (OperationCanceledException)
@@ -45,8 +46,8 @@ namespace OsdpSpy.Listen
 
         public void Start(CancellationToken token)
         {
-            Token = token;
-            Task.Run(async () => await ServiceThreadAsync(), Token);
+            _token = token;
+            Task.Run(async () => await ServiceThreadAsync(), _token);
         }
 
         protected virtual bool OnStart()
@@ -60,7 +61,7 @@ namespace OsdpSpy.Listen
         protected virtual async Task OnServiceAsync()
         {
             OnService();
-            await Task.Delay(1, Token);
+            await Task.Delay(1, _token);
         }
         
         protected virtual void OnStop() {}
