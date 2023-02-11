@@ -105,7 +105,14 @@ namespace OsdpSpy.Listen
         [IsValidBaudRate]
         private string BaudRate
         {
-            set => _listenOptions.BaudRate = value;
+            set
+            {
+                var rates = new[] {9600, 19200, 38400, 57600, 115200, 230400};
+                var r = int.Parse(value);
+                if (r <= rates.Length)
+                    value = rates[r - 1].ToString();
+                _listenOptions.BaudRate = value;
+            }
             get => _listenOptions.BaudRate;
         }
 
