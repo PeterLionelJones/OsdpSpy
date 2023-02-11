@@ -2,7 +2,7 @@
 
 ## Introduction
 
-OSDPSPY is a verbose logging tool that dissects OSDP traffic wit the following features:
+OSDPSPY is a verbose logging tool that dissects OSDP traffic with the following features:
 
 - Listens to the RS485 bus and decodes the frames received
 - Logs to console by default
