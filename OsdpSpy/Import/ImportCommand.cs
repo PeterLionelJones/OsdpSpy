@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using McMaster.Extensions.CommandLineUtils;
 using OsdpSpy.Abstractions;
 
@@ -49,8 +51,22 @@ namespace OsdpSpy.Import
         // ReSharper disable once UnusedMember.Local
         private int OnExecute(IConsole console)
         {
+            // Make sure a file was specified.
+            if (String.IsNullOrEmpty(InputFileName))
+            {
+                console.WriteLine("Input file not specified");
+                return -1;
+            }
+
+            // Make sure we have a valid file to process.
+            if (!File.Exists(InputFileName))
+            {
+                console.WriteLine($"{InputFileName} does not exist");
+                return -1;
+            }
+            
             // Tell the user what we are up to.
-            console.WriteLine($"\nImporting {_importOptions.InputFileName}\n");
+            console.WriteLine($"\nImporting {InputFileName}\n");
             
             // Feed frames into the exchange producer and on to the exchange consumer.
             _loggerOptions.FilterPollAck = Filter;
@@ -59,7 +75,7 @@ namespace OsdpSpy.Import
 
             // Attempt to process the input file.
             var result =_frames.Process(InputFileName);
-            
+
             // Summarise the findings.
             _consumer.Summarise();
 
