@@ -19,7 +19,7 @@ namespace OsdpSpy.Attributes
                 {
                     var r = Convert.ToInt32(rate);
                     var rates = new[] { 9600, 19200, 38400, 57600, 115200, 230400 };
-                    return  rates.Contains(r);
+                    return  rates.Contains(r) || (r <= rates.Length && r > 0);
                 }
                 return false;
             }
