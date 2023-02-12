@@ -1,6 +1,9 @@
 using System;
 using System.Linq;
 
+using System.Runtime.CompilerServices;
+[assembly: InternalsVisibleTo("OsdpSpy.Tests")]
+
 namespace OsdpSpy
 {
     internal static class ArgsExtensions

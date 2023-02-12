@@ -5,8 +5,19 @@ namespace OsdpSpy.Models
 {
     public class Exchange : IExchange
     {
-        public long Sequence { get; set; }
-        public IFrameProduct Acu { get; set; }
+        private Exchange() {}
+
+        public static IExchange Create(long sequence, IFrameProduct acu)
+        {
+            return new Exchange
+            {
+                Sequence = sequence,
+                Acu = acu
+            };
+        }
+        
+        public long Sequence { get; private init; }
+        public IFrameProduct Acu { get; private init; }
         public IFrameProduct Pd { get; private set; }
 
         public void AddReceived(IFrameProduct rx)

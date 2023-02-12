@@ -6,17 +6,23 @@ namespace OsdpSpy.Models
 {
     public class FrameProduct : IFrameProduct
     {
-        public FrameProduct(DateTime timestamp, Frame frame)
+        private FrameProduct() {}
+        
+        public static IFrameProduct Create(DateTime timestamp, Frame frame)
         {
-            Timestamp = timestamp;
-            Frame = frame;
-            Payload = new Payload();
+            return new FrameProduct
+            {
+                Timestamp = timestamp,
+                Frame = frame,
+                Payload = new Payload()
+            };
         }
 
-        public FrameProduct(Frame frame) : this(DateTime.UtcNow, frame) {}
-
-        public DateTime Timestamp { get; }
-        public Frame Frame { get; }
-        public IPayload Payload { get; }
+        public static IFrameProduct Create(Frame frame)
+            => Create(DateTime.UtcNow, frame);
+        
+        public DateTime Timestamp { get; private init; }
+        public Frame Frame { get; private init; }
+        public IPayload Payload { get; private init; }
     }
 }

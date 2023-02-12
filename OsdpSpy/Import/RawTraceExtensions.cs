@@ -10,7 +10,7 @@ namespace OsdpSpy.Import
         public static IFrameProduct ToFrameProduct(this IRawTrace raw)
         {
             var frame = raw.ToFrame();
-            return frame == null ? null : new FrameProduct(raw.ToTimestamp(), frame);
+            return frame == null ? null : FrameProduct.Create(raw.ToTimestamp(), frame);
         }
 
         private static DateTime ToTimestamp(this IRawTrace raw)
