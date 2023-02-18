@@ -1,7 +1,40 @@
+# OS junk files
+[Tt]humbs.db
+*.DS_Store
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Temporary Files
+~.*
+~$*
+
+# IDE Files
+.vscode/
+.vs/
 .idea/
-bin/
-obj/
-/packages/
+_ReSharper*/
+*.resharper
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# NuGet packages
+!.nuget/*
+[Pp]ackages/*
+![Pp]ackages/repositories.config
+
+# Outputs
+[Bb]in
+[Dd]ebug*/
+[Rr]elease*/
+[Oo]bj/
+
 riderModule.iml
-/_ReSharper.Caches/
-OsdpSpy.sln.DotSettings
+Publish/

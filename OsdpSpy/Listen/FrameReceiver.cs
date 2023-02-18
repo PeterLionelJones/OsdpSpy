@@ -1,8 +1,10 @@
 using System;
 using System.Diagnostics;
+using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
 using OsdpSpy.Abstractions;
 using OsdpSpy.Annotators;
+using OsdpSpy.Extensions;
 using OsdpSpy.Osdp;
 using OsdpSpy.Serial;
 
@@ -11,12 +13,14 @@ namespace OsdpSpy.Listen
     internal class FrameReceiver : ThreadService, IFrameReceiver
     {
         public FrameReceiver(
+            IConsole console,
             ISerialDeviceManager mgr, 
             IListenOptions options,
             IFrameQueue queue,
             IFrameProductFactory factory,
             ILogger<BusFrameProducer> logger)
         {
+            _console = console;
             _mgr = mgr;
             _options = options;
             _queue = queue;
@@ -26,7 +30,8 @@ namespace OsdpSpy.Listen
 
         private const int OfflineTimeout = 1000;
         private const int OnlineTimeout = 10000;
-        
+
+        private readonly IConsole _console;
         private readonly ISerialDeviceManager _mgr;
         private readonly IListenOptions _options;
         private readonly IFrameQueue _queue;
@@ -99,37 +104,43 @@ namespace OsdpSpy.Listen
             var dev = _mgr.FromPortName(_options.PortName);
             _channel = _mgr.CreateChannel();
             IsRunning = _channel.Open(dev, _options.ToBaudRate());
-
-            _logger.LogInformation(
-                "OSDP Alert: {OsdpAlert} to {BaudRate} Baud\n", 
-                "Switching Baud Rate",
-                _channel.BaudRate);
+            
+            if (IsRunning)
+            {
+                _logger.LogInformation(
+                    "OSDP Alert: {OsdpAlert} to {BaudRate} Baud\n", 
+                    "Switching Baud Rate",
+                    _channel.BaudRate);
+            }
 
             return IsRunning;
         }
 
         protected override bool OnStart()
         {
+            var connected = false;
+            
             try
             {
                 // Notify consumers that we are trying to connect to the channel.
                 ConnectionStateEventHandler?.Invoke(this, ConnectionState.Connecting);
             
                 // Attempt to open the specified channel and make sure there is OSDP activity.
-                var connected = OpenChannel();
+                connected = OpenChannel();
             
                 // Notify consumers the result of attempting to open the channel.
                 ConnectionStateEventHandler?.Invoke(this, connected 
                     ? ConnectionState.Connected 
                     : ConnectionState.ConnectFailed);
-            
-                // Are we open for business?
-                return connected;
             }
             catch (Exception)
             {
-                return false;
+                connected = false;
             }
+            
+            if (!connected) _console.WriteLine($"Unable to open {_options.PortName}");
+
+            return connected;
         }
     
         private void Notify(Frame frame)
@@ -142,7 +153,6 @@ namespace OsdpSpy.Listen
             _lastFrame = product.Timestamp;
                             
             // Pump the frame product out to interested parties.
-            //FrameHandler?.Invoke(this, product);
             _queue.Add(product);
         }
 
