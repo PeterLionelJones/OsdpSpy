@@ -1,7 +1,6 @@
-namespace OsdpSpy.Abstractions
+namespace OsdpSpy.Abstractions;
+
+public interface IExchangeLoggerOptions
 {
-    public interface IExchangeLoggerOptions
-    {
-        bool FilterPollAck { get; set; }
-    }
+    bool FilterPollAck { get; set; }
 }

@@ -1,8 +1,7 @@
-namespace OsdpSpy.Abstractions
+namespace OsdpSpy.Abstractions;
+
+public interface IFrameLoggerOptions
 {
-    public interface IFrameLoggerOptions
-    {
-        bool CaptureToOsdpCap { get; set; }
-        string OsdpCapDirectory { get; set; }
-    }
+    bool CaptureToOsdpCap { get; set; }
+    string OsdpCapDirectory { get; set; }
 }

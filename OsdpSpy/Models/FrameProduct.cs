@@ -10,6 +10,9 @@ namespace OsdpSpy.Models
         
         public static IFrameProduct Create(DateTime timestamp, Frame frame)
         {
+            if (frame == null)
+                throw new ArgumentNullException();
+            
             return new FrameProduct
             {
                 Timestamp = timestamp,

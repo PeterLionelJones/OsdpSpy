@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace OsdpSpy.Tests;
 
-public class ArgsExtensions
+public class ArgsExtensionsTests
 {
     [Test]
     [TestCase(new string[0], null)]

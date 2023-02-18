@@ -1,12 +1,11 @@
 using System;
 using OsdpSpy.Osdp;
 
-namespace OsdpSpy.Abstractions
+namespace OsdpSpy.Abstractions;
+
+public interface IFrameProduct
 {
-    public interface IFrameProduct
-    {
-        DateTime Timestamp { get; }
-        Frame Frame { get; }
-        IPayload Payload { get; }
-    }
+    DateTime Timestamp { get; }
+    Frame Frame { get; }
+    IPayload Payload { get; }
 }

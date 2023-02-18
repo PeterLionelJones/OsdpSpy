@@ -30,21 +30,23 @@ namespace OsdpSpy
             else
             {
                 // Make sure we have an exchange to complete.
-                if (_current != null)
-                {
-                    // Complete the exchange.
-                    _current.AddReceived(product);
+                if (_current == null) return;
+                
+                // Complete the exchange.
+                _current.AddReceived(product);
                     
-                    // The exchange has been completed.
-                    ExchangeHandler?.Invoke(this, _current);
-                    _current = null;
-                }
+                // The exchange has been completed.
+                ExchangeHandler?.Invoke(this, _current);
+                _current = null;
             }
         }
 
         public void Subscribe(IFrameProducer frameProducer)
         {
-            if (_input != null) Unsubscribe();
+            if (frameProducer == null)
+                throw new ArgumentNullException();
+            
+            Unsubscribe();
             
             _input = frameProducer;
             _input.FrameHandler += OnFrame;

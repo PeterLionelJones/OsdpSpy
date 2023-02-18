@@ -1,8 +1,7 @@
-namespace OsdpSpy.Abstractions
+namespace OsdpSpy.Abstractions;
+
+public interface IFrameConsumer
 {
-    public interface IFrameConsumer
-    {
-        void Subscribe(IFrameProducer input);
-        void Unsubscribe();
-    }
+    void Subscribe(IFrameProducer input);
+    void Unsubscribe();
 }

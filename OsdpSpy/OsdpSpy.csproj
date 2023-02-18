@@ -4,7 +4,7 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>OsdpSpy</RootNamespace>
-        <LangVersion>9</LangVersion>
+        <LangVersion>10</LangVersion>
         <PackageVersion>0.0.13</PackageVersion>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>

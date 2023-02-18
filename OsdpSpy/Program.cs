@@ -17,10 +17,10 @@ using Serilog.Sinks.Elasticsearch;
 namespace OsdpSpy
 {
     [HelpOption]
-    [Command(Name = "osdpspy", Description = "\nosdpspy Protocol Analysis Tool"), 
-        Subcommand(typeof(ImportCommand)),
-        Subcommand(typeof(ListenCommand)),
-        Subcommand(typeof(ListPortsCommand))]
+    [Command(Name = "osdpspy", Description = "\nosdpspy Protocol Analysis Tool")]
+    [Subcommand(typeof(ImportCommand))]
+    [Subcommand(typeof(ListenCommand))]
+    [Subcommand(typeof(ListPortsCommand))]
     internal class Program
     {
         private static async Task<int> Main(string[] args)
@@ -44,15 +44,15 @@ namespace OsdpSpy
         }
 
         [Option("-v|--version")]
-        private bool ReportVersion { get; }
+        private static bool ReportVersion { get; }
 
-        private string GetVersion()
+        private static string GetVersion()
         {
             var version = Assembly.GetEntryAssembly().GetName().Version;
             return $"{version.Major}.{version.Minor}.{version.Build}";
         }
 
-        private string Version => GetVersion(); 
+        private static string Version => GetVersion(); 
 
         private static ILogger CreateLogger(string[] args)
         {
@@ -108,7 +108,7 @@ namespace OsdpSpy
 
         // ReSharper disable once UnusedParameter.Local
         // ReSharper disable once UnusedMember.Local
-        private int OnExecute(CommandLineApplication app)
+        private static int OnExecute(CommandLineApplication app)
         {
             if (ReportVersion)
             {

@@ -1,9 +1,8 @@
 using System;
 
-namespace OsdpSpy.Abstractions
+namespace OsdpSpy.Abstractions;
+
+public interface IExchangeProducer : IFrameConsumer
 {
-    public interface IExchangeProducer : IFrameConsumer
-    {
-        EventHandler<IExchange> ExchangeHandler { get; set; }
-    }
+    EventHandler<IExchange> ExchangeHandler { get; set; }
 }

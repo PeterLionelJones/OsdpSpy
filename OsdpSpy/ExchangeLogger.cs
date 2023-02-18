@@ -1,44 +1,47 @@
+using System;
 using OsdpSpy.Abstractions;
 using OsdpSpy.Annotations;
 
-namespace OsdpSpy
+namespace OsdpSpy;
+
+public class ExchangeLogger : IExchangeConsumer
 {
-    public class ExchangeLogger : IExchangeConsumer
+    public ExchangeLogger(IAnnotatorCollection<IExchange> annotators)
     {
-        public ExchangeLogger(IAnnotatorCollection<IExchange> annotators)
-        {
-            _annotators = annotators;
-        }
+        _annotators = annotators;
+    }
 
-        private readonly IAnnotatorCollection<IExchange> _annotators;
+    private readonly IAnnotatorCollection<IExchange> _annotators;
         
-        private IExchangeProducer _input;
+    private IExchangeProducer _input;
         
-        private void OnExchange(object sender, IExchange input)
-        {
-            _annotators.Annotate(input);
-            _annotators.ReportState();
-        }
+    private void OnExchange(object sender, IExchange input)
+    {
+        _annotators.Annotate(input);
+        _annotators.ReportState();
+    }
 
-        public void Summarise()
-        {
-            _annotators.Summarise();
-        }
+    public void Summarise()
+    {
+        _annotators.Summarise();
+    }
         
-        public void Subscribe(IExchangeProducer input)
-        {
-            if (_input != null) Unsubscribe();
+    public void Subscribe(IExchangeProducer input)
+    {
+        if (input == null)
+            throw new ArgumentNullException();
+        
+        Unsubscribe();
             
-            _input = input;
-            _input.ExchangeHandler += OnExchange;
-        }
+        _input = input;
+        _input.ExchangeHandler += OnExchange;
+    }
 
-        public void Unsubscribe()
-        {
-            if (_input == null) return;
+    public void Unsubscribe()
+    {
+        if (_input == null) return;
 
-            _input.ExchangeHandler -= OnExchange;
-            _input = null;
-        }
+        _input.ExchangeHandler -= OnExchange;
+        _input = null;
     }
 }

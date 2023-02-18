@@ -1,9 +1,8 @@
-namespace OsdpSpy.Abstractions
+namespace OsdpSpy.Abstractions;
+
+public interface IExchangeConsumer
 {
-    public interface IExchangeConsumer
-    {
-        void Summarise();
-        void Subscribe(IExchangeProducer input);
-        void Unsubscribe();
-    }
+    void Summarise();
+    void Subscribe(IExchangeProducer input);
+    void Unsubscribe();
 }

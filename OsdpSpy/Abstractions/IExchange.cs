@@ -1,10 +1,9 @@
-namespace OsdpSpy.Abstractions
+namespace OsdpSpy.Abstractions;
+
+public interface IExchange
 {
-    public interface IExchange
-    {
-        long Sequence { get; }
-        IFrameProduct Acu { get; }
-        IFrameProduct Pd { get; }
-        void AddReceived(IFrameProduct rx);
-    }
+    long Sequence { get; }
+    IFrameProduct Acu { get; }
+    IFrameProduct Pd { get; }
+    void AddReceived(IFrameProduct rx);
 }

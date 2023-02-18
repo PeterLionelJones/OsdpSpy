@@ -1,8 +1,7 @@
-namespace OsdpSpy.Abstractions
+namespace OsdpSpy.Abstractions;
+
+public interface IFileTransferOptions
 {
-    public interface IFileTransferOptions
-    {
-        bool CaptureOsdpFileTransfer { get; set; }
-        string OsdpFileTransferDirectory { get; set; }
-    }
+    bool CaptureOsdpFileTransfer { get; set; }
+    string OsdpFileTransferDirectory { get; set; }
 }

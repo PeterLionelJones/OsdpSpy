@@ -1,8 +1,7 @@
-namespace OsdpSpy.Abstractions
+namespace OsdpSpy.Abstractions;
+
+public interface IPayload
 {
-    public interface IPayload
-    {
-        public byte[] Cipher { get; set; }
-        public byte[] Plain { get; set; }
-    }
+    public byte[] Cipher { get; set; }
+    public byte[] Plain { get; set; }
 }

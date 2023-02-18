@@ -1,9 +1,8 @@
 using System;
 
-namespace OsdpSpy.Abstractions
+namespace OsdpSpy.Abstractions;
+
+public interface IFrameProducer
 {
-    public interface IFrameProducer
-    {
-        EventHandler<IFrameProduct> FrameHandler { get; set; }
-    }
+    EventHandler<IFrameProduct> FrameHandler { get; set; }
 }
