@@ -1,8 +1,7 @@
 using System;
-using OsdpSpy.Abstractions;
 using OsdpSpy.Osdp;
 
-namespace OsdpSpy
+namespace OsdpSpy.Abstractions
 {
     public interface IFrameProductFactory
     {

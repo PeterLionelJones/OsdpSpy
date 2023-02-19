@@ -1,9 +1,6 @@
-using OsdpSpy.Abstractions;
+namespace OsdpSpy.Abstractions;
 
-namespace OsdpSpy
+public interface IExchangeFactory
 {
-    public interface IExchangeFactory
-    {
-        IExchange Create(long seq, IFrameProduct tx);
-    }
+    IExchange Create(long seq, IFrameProduct tx);
 }

@@ -20,7 +20,7 @@ namespace OsdpSpy
     [Command(Name = "osdpspy", Description = "\nosdpspy Protocol Analysis Tool")]
     [Subcommand(typeof(ImportCommand))]
     [Subcommand(typeof(ListenCommand))]
-    [Subcommand(typeof(ListPortsCommand))]
+    [Subcommand(typeof(ListCommand))]
     internal class Program
     {
         private static async Task<int> Main(string[] args)

@@ -732,7 +732,7 @@ namespace OsdpSpy.Osdp
         { 
             // Get the basic trace to dump.
             var result = BitConverter
-	            .ToString(FrameData, FrameLength)
+	            .ToString(FrameData)
 	            .Replace('-', ' ');
 
             // If this is a transmission frame we are done.

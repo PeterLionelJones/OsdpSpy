@@ -40,7 +40,7 @@ namespace OsdpSpy.Import
 
         [Option(
             template: "-i|--input",
-            description: "Input osdppcap file name",
+            description: "Input osdpcap file name",
             optionType: CommandOptionType.SingleValue)]
         private string InputFileName
         {

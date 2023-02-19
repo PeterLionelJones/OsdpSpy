@@ -31,7 +31,7 @@ namespace OsdpSpy.Annotations
 
         public override void ReportState()
         {
-            while (_queue.Count > 0)
+            while (!_queue.IsEmpty)
             {
                 if (!_queue.TryDequeue(out var alert)) return;
                 alert.Log();

@@ -2,9 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using McMaster.Extensions.CommandLineUtils;
-using OsdpSpy.Extensions;
+using OsdpSpy.Abstractions;
+
+[assembly:InternalsVisibleTo("OsdpSpy.Tests")]
 
 namespace OsdpSpy
 {
@@ -18,7 +21,7 @@ namespace OsdpSpy
         }
 
         private readonly IConsole _console;
-        private List<KeyItem> _keys = new List<KeyItem>();
+        private List<KeyItem> _keyItems = new List<KeyItem>();
         
         public byte[] DefaultBaseKey => new byte[]
         {
@@ -31,28 +34,35 @@ namespace OsdpSpy
                 Environment.SpecialFolder.LocalApplicationData), 
                 "osdpspyKeyStore.json");
 
+        internal List<KeyItem> KeyItemList => _keyItems;
+        public void Clear()
+        {
+            _keyItems = new List<KeyItem>();
+            Save();
+        }
+
         private void Load()
         {
             if (File.Exists(SettingsFileName))
             {
                 var json = File.ReadAllText(SettingsFileName);
-                _keys = JsonSerializer.Deserialize<List<KeyItem>>(json);
+                _keyItems = JsonSerializer.Deserialize<List<KeyItem>>(json);
             }
         }
 
         private void Save()
         {
-            var json = JsonSerializer.Serialize(_keys);
+            var json = JsonSerializer.Serialize(_keyItems);
             File.WriteAllText(SettingsFileName, json);
         }
         
         public void Store(byte[] uid, byte[] key)
         {
-            var item = _keys.FirstOrDefault(x => x.Uid.SequenceEqual(uid));
+            var item = _keyItems.FirstOrDefault(x => x.Uid.SequenceEqual(uid));
 
             if (item == null)
             {
-                _keys.Add(new KeyItem {Uid = uid, Key = key});
+                _keyItems.Add(new KeyItem {Uid = uid, Key = key});
             }
             else
             {
@@ -64,16 +74,16 @@ namespace OsdpSpy
 
         public byte[] Find(byte[] uid)
         {
-            var item = _keys.FirstOrDefault(x => x.Uid.SequenceEqual(uid));
+            var item = _keyItems.FirstOrDefault(x => x.Uid.SequenceEqual(uid));
             return item?.Key;
         }
 
         public void List()
         {
             _console.WriteLine("Available Secure Channel Base Keys:");
-            foreach (var key in _keys)
+            foreach (var keyItem in _keyItems)
             {
-                _console.WriteLine($"  {key.Uid.ToHexString()} -> {key.Key.ToHexString()}");
+                _console.WriteLine($"  {keyItem}");
             }
             _console.WriteLine();
         }

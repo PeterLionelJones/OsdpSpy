@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using OsdpSpy.Abstractions;
 using OsdpSpy.Annotations;
 
 namespace OsdpSpy
