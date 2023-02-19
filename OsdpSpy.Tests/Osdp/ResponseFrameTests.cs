@@ -121,5 +121,4 @@ public class ResponseFrameTests
         Assert.IsTrue(testObject.IsComplete);
         Assert.That(traceString.Contains("RX:"));
     }
-
 }
