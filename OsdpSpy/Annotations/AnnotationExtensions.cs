@@ -48,10 +48,9 @@ namespace OsdpSpy.Annotations
         
         public static void AndLogTo<T>(
             this IAnnotation annotation,
-            AlertingAnnotator<T> annotator)
+            IAlertingAnnotator<T> annotator)
         {
             annotator.LogAlert(annotation);
         }
-
     }
 }
