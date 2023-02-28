@@ -1,4 +1,7 @@
 using System.Collections.Concurrent;
+using System.Runtime.CompilerServices;
+
+[assembly:InternalsVisibleTo("OsdpSpy.Tests.Annotations")]
 
 namespace OsdpSpy.Annotations
 {
@@ -12,6 +15,8 @@ namespace OsdpSpy.Annotations
 
         private readonly ConcurrentQueue<IAnnotation> _queue;
         private readonly IFactory<IAnnotation> _factory;
+
+        internal ConcurrentQueue<IAnnotation> InternalQueue => _queue;
 
         public IAnnotation CreateAlert(
             string alertName, 
@@ -28,11 +33,13 @@ namespace OsdpSpy.Annotations
 
         public override void ReportState()
         {
-            while (!_queue.IsEmpty)
+            do
             {
-                if (!_queue.TryDequeue(out var alert)) return;
-                alert.Log();
-            }
+                if (_queue.TryDequeue(out var alert))
+                {
+                    alert.Log();
+                }
+            } while (!_queue.IsEmpty);
         }
     }
 }

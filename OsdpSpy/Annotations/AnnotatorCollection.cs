@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Logging;
+
+[assembly:InternalsVisibleTo("OsdpSpy.Tests.Annotations")]
 
 namespace OsdpSpy.Annotations
 {
@@ -16,7 +19,7 @@ namespace OsdpSpy.Annotations
 
         private readonly IFactory<IAnnotation> _factory;
 
-        protected void AddRange(IEnumerable<IAnnotator<T>> annotators)
+        protected internal void AddRange(IEnumerable<IAnnotator<T>> annotators)
         {
             foreach (var annotator in annotators)
             {
@@ -24,7 +27,7 @@ namespace OsdpSpy.Annotations
             }
         }
 
-        private void RunAnnotator(IAnnotator<T> annotator, T input, IAnnotation annotation)
+        private static void RunAnnotator(IAnnotator<T> annotator, T input, IAnnotation annotation)
         {
             try
             {
