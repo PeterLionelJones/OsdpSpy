@@ -13,9 +13,6 @@ namespace OsdpSpy.Annotations
         private readonly ConcurrentQueue<IAnnotation> _queue;
         private readonly IFactory<IAnnotation> _factory;
 
-        public IAnnotation CreateInformation()
-            => _factory.Create();
-        
         public IAnnotation CreateAlert(
             string alertName, 
             string alertMessage, 
