@@ -3,7 +3,6 @@ using OsdpSpy.Abstractions;
 using OsdpSpy.Annotations;
 using OsdpSpy.Decoders;
 using OsdpSpy.Osdp;
-using OsdpSpy.Serial;
 
 namespace OsdpSpy.Annotators;
 
