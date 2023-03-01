@@ -54,7 +54,7 @@ public class ResponseFrame : Frame, IReceiver
     /// that can be logged to a console. 
     /// </summary>
     public override string TraceString 
-        => IsCp 
+        => IsAcu 
             ? base.TraceString 
             : $"{base.TraceString}\nResponse Time = {ElapsedWithPrecision:F}mS";
 

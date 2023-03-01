@@ -12,7 +12,7 @@ namespace OsdpSpy.Extensions
             => product.Frame.Sequence;
         
         public static string CheckMethod(this IFrameProduct product)
-            => product.Frame.UseCRC16 ? "CRC16" : "Checksum";
+            => product.Frame.UseCrc16 ? "CRC16" : "Checksum";
 
         public static bool HasSecurityControlBlock(this IFrameProduct product)
             => product.Frame.SecurityBlock != null;
@@ -22,7 +22,7 @@ namespace OsdpSpy.Extensions
 
         private static bool IsCipher(this IFrameProduct product)
         {
-            return product.Frame.IsCp 
+            return product.Frame.IsAcu 
                 ? product.HasSecurityControlBlock() && 
                   !product.Frame.Command.IsSecureChannelCommand() 
                 : product.HasSecurityControlBlock() && 

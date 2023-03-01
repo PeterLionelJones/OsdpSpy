@@ -15,7 +15,7 @@ namespace OsdpSpy
 
         private void OnFrame(object sender, IFrameProduct product)
         {
-            if (product.Frame.IsCp)
+            if (product.Frame.IsAcu)
             {
                 // If we have an outstanding exchange then there was a timeout.
                 if (_current != null)
