@@ -1,8 +1,5 @@
 # OSDPSPY: An Analysis Tool for OSDP
 
-
-[README.md](./OsdpSpy/README.md)
-
 ## Introduction
 
 OSDPSPY is a verbose logging tool that dissects OSDP traffic with the following features:
@@ -14,7 +11,7 @@ OSDPSPY is a verbose logging tool that dissects OSDP traffic with the following 
 - Can log to Seq
 - Can capture a secure channel key exchange and decrypt secure channel traffic
 
-OSDPSPY can be run on any machine that supports .NET 6: Windows, MacOS and Linux. 
+OSDPSPY can be run on any machine that supports .NET 6: Windows, MacOS and Linux.
 
 ## Installing OSDPSPY
 
@@ -27,6 +24,6 @@ OSDPSPY can be run on any machine that supports .NET 6: Windows, MacOS and Linux
 ## The Origin of OSDPSPY
 
 OSDPSPY was originally developed to support my MSc Cybersecurity dissertation and the practical uses
-of the tool can be found in this document: [Securing an OT Device](./Documentation/Securing%20an%20OT%20Device.pdf)
+of the tool can be found in this document: [Securing an OT Device](https://github.com/PeterLionelJones/SecuringAnOTDevice/blob/main/Securing%20an%20OT%20Device.pdf)
 
 The document also describes the structure of this software as it was originally implemented.
