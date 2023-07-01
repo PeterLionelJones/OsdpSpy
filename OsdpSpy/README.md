@@ -24,6 +24,6 @@ OSDPSPY can be run on any machine that supports .NET 6: Windows, MacOS and Linux
 ## The Origin of OSDPSPY
 
 OSDPSPY was originally developed to support my MSc Cybersecurity dissertation and the practical uses
-of the tool can be found in this document: [Securing an OT Device](./Documentation/Securing%20an%20OT%20Device.pdf)
+of the tool can be found in this document: [Securing an OT Device](../Documentation/Securing%20an%20OT%20Device.pdf)
 
 The document also describes the structure of this software as it was originally implemented.
