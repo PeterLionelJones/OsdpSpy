@@ -1,5 +1,8 @@
 # OSDPSPY: An Analysis Tool for OSDP
 
+
+[README.md](./OsdpSpy/README.md)
+
 ## Introduction
 
 OSDPSPY is a verbose logging tool that dissects OSDP traffic with the following features:
