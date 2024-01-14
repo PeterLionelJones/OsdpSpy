@@ -1,20 +1,19 @@
 using OsdpSpy.Annotations;
 using OsdpSpy.Osdp;
 
-namespace OsdpSpy.Decoders
+namespace OsdpSpy.Decoders;
+
+public class ChallengeDecoder : ICommandDecoder
 {
-    public class ChallengeDecoder : ICommandDecoder
+    public Command Command => Command.CHLNG;
+
+    public void Decode(byte[] input, IAnnotation output)
     {
-        public Command Command => Command.CHLNG;
+        output.AppendByteArray("RndA", input);
 
-        public void Decode(byte[] input, IAnnotation output)
+        if (input.Length != 8)
         {
-            output.AppendByteArray("RndA", input);
-
-            if (input.Length != 8)
-            {
-                output.AppendItem("NonCompliance", "Invalid Payload");
-            }
+            output.AppendItem("NonCompliance", "Invalid Payload");
         }
     }
 }

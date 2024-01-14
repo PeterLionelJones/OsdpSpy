@@ -1,9 +1,8 @@
 using OsdpSpy.Abstractions;
 
-namespace OsdpSpy.Import
+namespace OsdpSpy.Import;
+
+public interface IFileFrameProducer : IFrameProducer
 {
-    public interface IFileFrameProducer : IFrameProducer
-    {
-        bool Process(string filename);
-    }
+    bool Process(string filename);
 }

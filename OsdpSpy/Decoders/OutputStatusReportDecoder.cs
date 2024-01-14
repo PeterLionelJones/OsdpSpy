@@ -1,33 +1,32 @@
 using OsdpSpy.Annotations;
 using OsdpSpy.Osdp;
 
-namespace OsdpSpy.Decoders
-{
-    public class OutputStatusReportDecoder : IReplyDecoder
-    {
-        public Reply Reply => Reply.OSTATR;
+namespace OsdpSpy.Decoders;
 
-        public void Decode(byte[] input, IAnnotation output)
+public class OutputStatusReportDecoder : IReplyDecoder
+{
+    public Reply Reply => Reply.OSTATR;
+
+    public void Decode(byte[] input, IAnnotation output)
+    {
+        for (var i = 0; i < input.Length && input[i] != 0x80; ++i)
         {
-            for (var i = 0; i < input.Length && input[i] != 0x80; ++i)
-            {
-                output.AppendItem(
-                    $"OutputStatus{i + 1}", 
-                    input[i].ToInputStatusString()); 
-            }
+            output.AppendItem(
+                $"OutputStatus{i + 1}", 
+                input[i].ToInputStatusString()); 
         }
     }
+}
     
-    internal static class OutputStatusReportDecoderExtensions
+internal static class OutputStatusReportDecoderExtensions
+{
+    internal static string ToOutputStatusString(this byte status)
     {
-        internal static string ToOutputStatusString(this byte status)
-        {
-            return status switch 
-            { 
-                0 => "0 - Inactive", 
-                1 => "1 - Active", 
-                _ => $"{status} - Unspecified"
-            };
-        }
+        return status switch 
+        { 
+            0 => "0 - Inactive", 
+            1 => "1 - Active", 
+            _ => $"{status} - Unspecified"
+        };
     }
 }

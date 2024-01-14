@@ -1,9 +1,8 @@
 using OsdpSpy.Annotations;
 
-namespace OsdpSpy.Decoders
+namespace OsdpSpy.Decoders;
+
+public interface IDecoder
 {
-    public interface IDecoder
-    {
-        void Decode(byte[] input, IAnnotation output);
-    }
+    void Decode(byte[] input, IAnnotation output);
 }

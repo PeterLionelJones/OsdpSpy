@@ -1,9 +1,8 @@
 using OsdpSpy.Osdp;
 
-namespace OsdpSpy.Decoders
+namespace OsdpSpy.Decoders;
+
+public interface ICommandDecoder : IDecoder
 {
-    public interface ICommandDecoder : IDecoder
-    {
-        Command Command { get; }
-    }
+    Command Command { get; }
 }

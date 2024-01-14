@@ -4,45 +4,44 @@ using System.IO;
 using Newtonsoft.Json;
 using OsdpSpy.Abstractions;
 
-namespace OsdpSpy.Import
+namespace OsdpSpy.Import;
+
+public class FileFrameProducer : IFileFrameProducer
 {
-    public class FileFrameProducer : IFileFrameProducer
+    private void ProcessRecord(string record)
     {
-        private void ProcessRecord(string record)
+        var raw = JsonConvert.DeserializeObject<RawTrace>(record);
+        var product = raw.ToFrameProduct();
+        if (product != null)
         {
-            var raw = JsonConvert.DeserializeObject<RawTrace>(record);
-            var product = raw.ToFrameProduct();
-            if (product != null)
-            {
-                FrameHandler?.Invoke(this, product);
-            }
+            FrameHandler?.Invoke(this, product);
         }
+    }
         
-        public EventHandler<IFrameProduct> FrameHandler { get; set; }
+    public EventHandler<IFrameProduct> FrameHandler { get; set; }
         
-        public bool Process(string filename)
+    public bool Process(string filename)
+    {
+        try
         {
-            try
-            {
-                // Make sure the file exists.
-                if (!File.Exists(filename)) return false;
+            // Make sure the file exists.
+            if (!File.Exists(filename)) return false;
 
-                // Process each line of the file.
-                var sr = new StreamReader(filename);
-                while (sr.Peek() >= 0)
-                {
-                    // Process the record.
-                    ProcessRecord(sr.ReadLine());
-                }
-
-                // All of the records have been processed.
-                return true;
-            }
-            catch (Exception e)
+            // Process each line of the file.
+            var sr = new StreamReader(filename);
+            while (sr.Peek() >= 0)
             {
-                Debug.WriteLine(e);
-                return false;
+                // Process the record.
+                ProcessRecord(sr.ReadLine());
             }
+
+            // All of the records have been processed.
+            return true;
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e);
+            return false;
         }
     }
 }

@@ -1,23 +1,22 @@
 using OsdpSpy.Annotations;
 using OsdpSpy.Osdp;
 
-namespace OsdpSpy.Decoders
+namespace OsdpSpy.Decoders;
+
+public class ClientCryptogramDecoder : IReplyDecoder
 {
-    public class ClientCryptogramDecoder : IReplyDecoder
+    public Reply Reply => Reply.CCRYPT;
+
+    public void Decode(byte[] input, IAnnotation output)
     {
-        public Reply Reply => Reply.CCRYPT;
+        output
+            .AppendByteArray("ClientId", input, 0, 8)
+            .AppendByteArray("RndB", input, 8, 8)
+            .AppendByteArray("ClientCryptogram", input, 16, 16);
 
-        public void Decode(byte[] input, IAnnotation output)
+        if (input.Length != 32)
         {
-            output
-                .AppendByteArray("ClientId", input, 0, 8)
-                .AppendByteArray("RndB", input, 8, 8)
-                .AppendByteArray("ClientCryptogram", input, 16, 16);
-
-            if (input.Length != 32)
-            {
-                output.AppendItem("NonCompliance", "Invalid Payload");
-            }
+            output.AppendItem("NonCompliance", "Invalid Payload");
         }
     }
 }

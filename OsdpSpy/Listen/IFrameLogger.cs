@@ -1,6 +1,5 @@
 using OsdpSpy.Abstractions;
 
-namespace OsdpSpy.Listen
-{
-    public interface IFrameLogger : IFrameConsumer {}
-}
+namespace OsdpSpy.Listen;
+
+public interface IFrameLogger : IFrameConsumer {}

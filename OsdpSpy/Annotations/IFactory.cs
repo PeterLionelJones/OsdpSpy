@@ -1,7 +1,6 @@
-namespace OsdpSpy.Annotations
+namespace OsdpSpy.Annotations;
+
+public interface IFactory<out T>
 {
-    public interface IFactory<out T>
-    {
-        T Create();
-    }
+    T Create();
 }

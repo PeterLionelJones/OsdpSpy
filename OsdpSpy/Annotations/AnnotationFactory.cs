@@ -1,9 +1,8 @@
 using System;
 
-namespace OsdpSpy.Annotations
+namespace OsdpSpy.Annotations;
+
+public class AnnotationFactory : Factory<IAnnotation>
 {
-    public class AnnotationFactory : Factory<IAnnotation>
-    {
-        public AnnotationFactory(IServiceProvider services) : base(services) {}
-    }
+    public AnnotationFactory(IServiceProvider services) : base(services) {}
 }

@@ -3,14 +3,13 @@ using OsdpSpy.Abstractions;
 using OsdpSpy.Models;
 using OsdpSpy.Osdp;
 
-namespace OsdpSpy
-{
-    public class FrameProductFactory : IFrameProductFactory
-    {
-        public IFrameProduct Create(Frame frame)
-            => FrameProduct.Create(frame);
+namespace OsdpSpy;
 
-        public IFrameProduct Create(DateTime timestamp, Frame frame)
-            => FrameProduct.Create(timestamp, frame);
-    }
+public class FrameProductFactory : IFrameProductFactory
+{
+    public IFrameProduct Create(Frame frame)
+        => FrameProduct.Create(frame);
+
+    public IFrameProduct Create(DateTime timestamp, Frame frame)
+        => FrameProduct.Create(timestamp, frame);
 }

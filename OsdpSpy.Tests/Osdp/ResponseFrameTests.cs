@@ -57,7 +57,7 @@ public class ResponseFrameTests
     }
     
     [Test]
-    public void AddByte_CorrupteFrameData_ThrowsExceptionInternally()
+    public void AddByte_CorruptedFrameData_ThrowsExceptionInternally()
     {
         var testObject = new ResponseFrame();
         var clobbered = false;

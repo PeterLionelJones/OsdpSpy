@@ -1,9 +1,8 @@
 using OsdpSpy.Osdp;
 
-namespace OsdpSpy.Decoders
+namespace OsdpSpy.Decoders;
+
+public interface IReplyDecoder : IDecoder
 {
-    public interface IReplyDecoder : IDecoder
-    {
-        Reply Reply { get; }
-    }
+    Reply Reply { get; }
 }

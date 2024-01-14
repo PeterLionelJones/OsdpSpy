@@ -1,9 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
 
         <IsPackable>false</IsPackable>
+
+        <LangVersion>12</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -15,6 +17,15 @@
 
     <ItemGroup>
       <ProjectReference Include="..\OsdpSpy\OsdpSpy.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Annotators\" />
+      <Folder Include="Clear\" />
+      <Folder Include="Decoders\" />
+      <Folder Include="Import\" />
+      <Folder Include="List\" />
+      <Folder Include="Serial\" />
     </ItemGroup>
 
 </Project>

@@ -8,10 +8,10 @@ namespace OsdpSpy.Tests;
 [TestFixture]
 public class KeyStoreTests
 {
-    private readonly byte[] _uid1 =  { 0x87, 0x11, 0xCD, 0x07, 0xD3, 0xD3, 0xF5, 0xAA, 0x93, 0x4D };
-    private readonly byte[] _uid2 =  { 0xC2, 0xDD, 0x55, 0xDE, 0x2D, 0x08, 0x59, 0x30, 0x72, 0x9D };
-    private readonly byte[] _uid3 =  { 0xA4, 0x06, 0xC5, 0x5A, 0x8D, 0xE0, 0xE4, 0x5A, 0x8A, 0xAF };
-    private readonly byte[] _uid4 =  { 0xEE, 0xCC, 0x06, 0x5F, 0x72, 0xD9, 0x37, 0xE2, 0x15, 0x7D };
+    private readonly byte[] _uid1 = { 0x87, 0x11, 0xCD, 0x07, 0xD3, 0xD3, 0xF5, 0xAA, 0x93, 0x4D };
+    private readonly byte[] _uid2 = { 0xC2, 0xDD, 0x55, 0xDE, 0x2D, 0x08, 0x59, 0x30, 0x72, 0x9D };
+    private readonly byte[] _uid3 = { 0xA4, 0x06, 0xC5, 0x5A, 0x8D, 0xE0, 0xE4, 0x5A, 0x8A, 0xAF };
+    private readonly byte[] _uid4 = { 0xEE, 0xCC, 0x06, 0x5F, 0x72, 0xD9, 0x37, 0xE2, 0x15, 0x7D };
 
     private readonly byte[] _key1 =
     {
@@ -37,89 +37,86 @@ public class KeyStoreTests
         0xAE, 0x5B, 0x52, 0x50, 0x40, 0xBB, 0x41, 0x4A
     };
 
-    [Test]
-    public void Clear_ClearList_ListIsClear()
-    {
-        var console = new Mock<IConsole>();
-        
-        var testObject = new KeyStore(console.Object);
-        testObject.Clear();
+    private KeyStore _unit;
 
-        var testObject2 = new KeyStore(console.Object);
-        
-        Assert.IsNotNull(testObject.KeyItemList);
-        Assert.That(testObject.KeyItemList.Count == 0);
-        Assert.IsNotNull(testObject2.KeyItemList);
-        Assert.That(testObject2.KeyItemList.Count == 0);
+    [SetUp]
+    public void SetUp()
+    {
+        var consoleMock = new Mock<IConsole>();
+        _unit = new KeyStore(consoleMock.Object);
+    }
+
+    [Test]
+    public void Constructor_Constructed_ListIsClear()
+    {
+        Assert.IsNotNull(_unit.KeyItemList);
+        Assert.That(_unit.KeyItemList.Count == 0);
+    }
+
+    [Test]
+    public void Clear_ClearEmptyList_ListIsClear()
+    {
+        _unit.Clear();
+
+        Assert.IsNotNull(_unit.KeyItemList);
+        Assert.That(_unit.KeyItemList.Count == 0);
     }
 
     [Test]
     public void Store_StoreKeyList_KeyListStoredCorrectly()
     {
-        var console = new Mock<IConsole>();
+        _unit.Clear();
+        _unit.Store(_uid1, _key1);        
+        _unit.Store(_uid2, _key2);        
+        _unit.Store(_uid3, _key3);        
+        _unit.Store(_uid4, _key4);        
         
-        var testObject = new KeyStore(console.Object);
-        testObject.Clear();
-        testObject.Store(_uid1, _key1);        
-        testObject.Store(_uid2, _key2);        
-        testObject.Store(_uid3, _key3);        
-        testObject.Store(_uid4, _key4);        
-        
-        Assert.IsNotNull(testObject.KeyItemList);
-        Assert.That(testObject.KeyItemList.Count == 4);
+        Assert.IsNotNull(_unit.KeyItemList);
+        Assert.That(_unit.KeyItemList.Count == 4);
     }
 
     [Test]
     public void Store_StoreSameTwice_KeyListStoredCorrectly()
     {
-        var console = new Mock<IConsole>();
+        _unit.Clear();
+        _unit.Store(_uid1, _key1);        
+        _unit.Store(_uid1, _key1);        
         
-        var testObject = new KeyStore(console.Object);
-        testObject.Clear();
-        testObject.Store(_uid1, _key1);        
-        testObject.Store(_uid1, _key1);        
-        
-        Assert.IsNotNull(testObject.KeyItemList);
-        Assert.That(testObject.KeyItemList.Count == 1);
+        Assert.IsNotNull(_unit.KeyItemList);
+        Assert.That(_unit.KeyItemList.Count == 1);
     }
 
     [Test]
     public void Store_StoreDefaulBaseKey_KeyListStoredCorrectly()
     {
-        var console = new Mock<IConsole>();
+        _unit.Clear();
+        _unit.Store(_uid1, _unit.DefaultBaseKey);
+        var defaultKey = _unit.Find(_uid1);
+        _unit.Store(_uid1, _key1);
+        var key1 = _unit.Find(_uid1);
         
-        var testObject = new KeyStore(console.Object);
-        testObject.Clear();
-        testObject.Store(_uid1, testObject.DefaultBaseKey);
-        var defaultKey = testObject.Find(_uid1);
-        testObject.Store(_uid1, _key1);
-        var key1 = testObject.Find(_uid1);
-        
-        Assert.IsNotNull(testObject.KeyItemList);
-        Assert.That(testObject.KeyItemList.Count == 1);
-        Assert.That(defaultKey.SequenceEqual(testObject.DefaultBaseKey));
+        Assert.IsNotNull(_unit.KeyItemList);
+        Assert.That(_unit.KeyItemList.Count == 1);
+        Assert.That(defaultKey.SequenceEqual(_unit.DefaultBaseKey));
         Assert.That(key1.SequenceEqual(_key1));
     }
 
     [Test]
     public void Find_LoadDatabaseAndFind_FindsAllKeyItems()
     {
-        var console = new Mock<IConsole>();
-        
-        var testObject = new KeyStore(console.Object);
-        testObject.Clear();
-        testObject.Store(_uid1, _key1);        
-        testObject.Store(_uid2, _key2);        
-        testObject.Store(_uid3, _key3);        
-        testObject.Store(_uid4, _key4);
+        _unit.Clear();
+        _unit.Store(_uid1, _key1);        
+        _unit.Store(_uid2, _key2);        
+        _unit.Store(_uid3, _key3);        
+        _unit.Store(_uid4, _key4);
 
-        var retrievedKey1 = testObject.Find(_uid1);
-        var retrievedKey2 = testObject.Find(_uid2);
-        var retrievedKey3 = testObject.Find(_uid3);
-        var retrievedKey4 = testObject.Find(_uid4);
+        var retrievedKey1 = _unit.Find(_uid1);
+        var retrievedKey2 = _unit.Find(_uid2);
+        var retrievedKey3 = _unit.Find(_uid3);
+        var retrievedKey4 = _unit.Find(_uid4);
         
-        Assert.IsNotNull(testObject.KeyItemList);
-        Assert.That(testObject.KeyItemList.Count == 4);
+        Assert.IsNotNull(_unit.KeyItemList);
+        Assert.That(_unit.KeyItemList.Count == 4);
         Assert.That(retrievedKey1.SequenceEqual(_key1));
         Assert.That(retrievedKey2.SequenceEqual(_key2));
         Assert.That(retrievedKey3.SequenceEqual(_key3));
@@ -129,35 +126,32 @@ public class KeyStoreTests
     [Test]
     public void Find_LookForMissingUid_FindsAllKeyItems()
     {
-        var console = new Mock<IConsole>();
-        
-        var testObject = new KeyStore(console.Object);
-        testObject.Clear();
-        testObject.Store(_uid1, _key1);        
-        testObject.Store(_uid2, _key2);        
-        testObject.Store(_uid3, _key3);        
+        _unit.Clear();
+        _unit.Store(_uid1, _key1);        
+        _unit.Store(_uid2, _key2);        
+        _unit.Store(_uid3, _key3);        
 
-        var retrievedKey4 = testObject.Find(_uid4);
+        var retrievedKey4 = _unit.Find(_uid4);
         
-        Assert.IsNotNull(testObject.KeyItemList);
-        Assert.That(testObject.KeyItemList.Count == 3);
+        Assert.IsNotNull(_unit.KeyItemList);
+        Assert.That(_unit.KeyItemList.Count == 3);
         Assert.IsNull(retrievedKey4);
     }
 
     [Test]
     public void List_LoadDatabaseAndList_OutputGoesToConsole()
     {
-        var console = new Mock<IConsole>();
-        console.Setup(foo => foo.Out.WriteLine(It.IsAny<string>()));
+        var consoleMock = new Mock<IConsole>();
+        consoleMock.Setup(foo => foo.Out.WriteLine(It.IsAny<string>()));
+        var console = consoleMock.Object;
+        _unit = new KeyStore(console);
 
-        var testObject = new KeyStore(console.Object);
-        testObject.Clear();
-        testObject.Store(_uid1, _key1);        
-        testObject.Store(_uid2, _key2);        
-        testObject.Store(_uid3, _key3);        
-        testObject.Store(_uid4, _key4);
-
-        testObject.List();
+        _unit.Clear();
+        _unit.Store(_uid1, _key1);        
+        _unit.Store(_uid2, _key2);        
+        _unit.Store(_uid3, _key3);        
+        _unit.Store(_uid4, _key4);
+        _unit.List();
 
         Assert.Pass();
     }
