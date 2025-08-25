@@ -3,36 +3,35 @@ using System.IO;
 using OsdpSpy.Abstractions;
 using OsdpSpy.Extensions;
 
-namespace OsdpSpy.Listen
+namespace OsdpSpy.Listen;
+
+public class FrameLogger : IFrameLogger
 {
-    public class FrameLogger : IFrameLogger
+    private IFrameProducer _input;
+    private StreamWriter _output;
+
+    private void OnFrame(object sender, IFrameProduct frame)
     {
-        private IFrameProducer _input;
-        private StreamWriter _output;
+        _output ??= new StreamWriter(
+            DateTime.UtcNow.ToOsdpCaptureFileName(),
+            append: true);
 
-        private void OnFrame(object sender, IFrameProduct frame)
-        {
-            _output ??= new StreamWriter(
-                DateTime.UtcNow.ToOsdpCaptureFileName(),
-                append: true);
-
-            _output.WriteLine(frame.ToJson());
-        }
+        _output.WriteLine(frame.ToJson());
+    }
         
-        public void Subscribe(IFrameProducer input)
-        {
-            _input = input;
-            _input.FrameHandler += OnFrame;
-        }
+    public void Subscribe(IFrameProducer input)
+    {
+        _input = input;
+        _input.FrameHandler += OnFrame;
+    }
 
-        public void Unsubscribe()
-        {
-            _input.FrameHandler -= OnFrame;
-            _input = null;
+    public void Unsubscribe()
+    {
+        _input.FrameHandler -= OnFrame;
+        _input = null;
 
-            _output.Close();
-            _output.Dispose();
-            _output = null;
-        }
+        _output.Close();
+        _output.Dispose();
+        _output = null;
     }
 }

@@ -1,10 +1,9 @@
 using OsdpSpy.Abstractions;
 
-namespace OsdpSpy.Models
+namespace OsdpSpy.Models;
+
+public class Payload : IPayload
 {
-    public class Payload : IPayload
-    {
-        public byte[] Cipher { get; set; }
-        public byte[] Plain { get; set; }
-    }
+    public byte[] Cipher { get; set; }
+    public byte[] Plain { get; set; }
 }

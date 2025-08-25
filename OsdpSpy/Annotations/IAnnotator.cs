@@ -1,10 +1,9 @@
-namespace OsdpSpy.Annotations
+namespace OsdpSpy.Annotations;
+
+public interface IAnnotator<in T>
 {
-    public interface IAnnotator<in T>
-    {
-        void Annotate(T input, IAnnotation output);
-        bool IncludeInput(T input);
-        void ReportState();
-        void Summarise();
-    }
+    void Annotate(T input, IAnnotation output);
+    bool IncludeInput(T input);
+    void ReportState();
+    void Summarise();
 }

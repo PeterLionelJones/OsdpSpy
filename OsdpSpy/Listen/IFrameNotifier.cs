@@ -1,10 +1,9 @@
 using System;
 using OsdpSpy.Abstractions;
 
-namespace OsdpSpy.Listen
+namespace OsdpSpy.Listen;
+
+public interface IFrameNotifier : IThreadService
 {
-    public interface IFrameNotifier : IThreadService
-    {
-        EventHandler<IFrameProduct> FrameHandler { get; set; }
-    }
+    EventHandler<IFrameProduct> FrameHandler { get; set; }
 }

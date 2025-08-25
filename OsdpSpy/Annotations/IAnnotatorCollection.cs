@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 
-namespace OsdpSpy.Annotations
+namespace OsdpSpy.Annotations;
+
+public interface IAnnotatorCollection<T> : ICollection<IAnnotator<T>>
 {
-    public interface IAnnotatorCollection<T> : ICollection<IAnnotator<T>>
-    {
-        void Annotate(T input);
-        bool IncludeInput(T input, IAnnotation annotation);
-        void ReportState();
-        void Summarise();
-    }
+    void Annotate(T input);
+    bool IncludeInput(T input, IAnnotation annotation);
+    void ReportState();
+    void Summarise();
 }

@@ -1,9 +1,8 @@
-namespace OsdpSpy.Annotators
+namespace OsdpSpy.Annotators;
+
+public interface ISecureChannelSink
 {
-    public interface ISecureChannelSink
-    {
-        void OnAuthenticating(int address, bool isDefault, byte[] scbk);
-        void OnAuthenticationSychronised(int address);
-        void OnAuthenticationLost(int address);
-    }
+    void OnAuthenticating(int address, bool isDefault, byte[] scbk);
+    void OnAuthenticationSychronised(int address);
+    void OnAuthenticationLost(int address);
 }

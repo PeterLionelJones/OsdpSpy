@@ -14,111 +14,110 @@ using OsdpSpy.Serial;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
 
-namespace OsdpSpy
+namespace OsdpSpy;
+
+[HelpOption]
+[Command(Name = "osdpspy", Description = "\nosdpspy Protocol Analysis Tool")]
+[Subcommand(typeof(ImportCommand))]
+[Subcommand(typeof(ListenCommand))]
+[Subcommand(typeof(ListCommand))]
+internal class Program
 {
-    [HelpOption]
-    [Command(Name = "osdpspy", Description = "\nosdpspy Protocol Analysis Tool")]
-    [Subcommand(typeof(ImportCommand))]
-    [Subcommand(typeof(ListenCommand))]
-    [Subcommand(typeof(ListCommand))]
-    internal class Program
+    private static async Task<int> Main(string[] args)
     {
-        private static async Task<int> Main(string[] args)
+        try
         {
-            try
-            {
-                // Create the logger for this application.
-                Log.Logger = CreateLogger(args);
+            // Create the logger for this application.
+            Log.Logger = CreateLogger(args);
 
-                // Configure dependency injection, logging and start the command.
-                return await new HostBuilder()
-                    .ConfigureLogging((_, b) => b.AddSerilog(dispose: true))
-                    .ConfigureServices(ConfigureServices)
-                    .RunCommandLineApplicationAsync<Program>(args);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return -1;
-            }
+            // Configure dependency injection, logging and start the command.
+            return await new HostBuilder()
+                .ConfigureLogging((_, b) => b.AddSerilog(dispose: true))
+                .ConfigureServices(ConfigureServices)
+                .RunCommandLineApplicationAsync<Program>(args);
         }
-
-        [Option("-v|--version")]
-        private static bool ReportVersion { get; }
-
-        private static string GetVersion()
+        catch (Exception e)
         {
-            var version = Assembly.GetEntryAssembly().GetName().Version;
-            return $"{version.Major}.{version.Minor}.{version.Build}";
+            Console.WriteLine(e.Message);
+            return -1;
         }
+    }
 
-        private static string Version => GetVersion(); 
+    [Option("-v|--version")]
+    private static bool ReportVersion { get; }
 
-        private static ILogger CreateLogger(string[] args)
-        {
-            // Get any logging options that we may need.
-            var seqUrl = args.SeqUrl();
-            var elasticsearchUrl = args.ElasticsearchUrl();
+    private static string GetVersion()
+    {
+        var version = Assembly.GetEntryAssembly().GetName().Version;
+        return $"{version.Major}.{version.Minor}.{version.Build}";
+    }
+
+    private static string Version => GetVersion(); 
+
+    private static ILogger CreateLogger(string[] args)
+    {
+        // Get any logging options that we may need.
+        var seqUrl = args.SeqUrl();
+        var elasticsearchUrl = args.ElasticsearchUrl();
                 
-            // Configure logging for this command.
-            var logger = new LoggerConfiguration().WriteTo.Console();
+        // Configure logging for this command.
+        var logger = new LoggerConfiguration().WriteTo.Console();
 
-            if (seqUrl != null)
-            {
-                logger = logger.WriteTo.Seq(seqUrl);
-            }
-
-            if (elasticsearchUrl != null)
-            {
-                logger = logger.WriteTo.Elasticsearch(
-                    new ElasticsearchSinkOptions(new Uri(elasticsearchUrl) ){
-                        AutoRegisterTemplate = true,
-                        AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6,
-                        IndexFormat = $"osdpspy-{DateTime.UtcNow:yyyy-MM}"
-                    });
-            }
-            
-            return logger.CreateLogger();
-        }
-
-        private static void ConfigureServices(
-            HostBuilderContext context,
-            IServiceCollection services)
+        if (seqUrl != null)
         {
-            services
-                .AddAnnotators()
-                .AddFactories()
-                .AddSingleton(PhysicalConsole.Singleton)
-                .AddSingleton<IBusFrameProducer, BusFrameProducer>()
-                .AddSingleton<IExchangeConsumer, ExchangeLogger>()
-                .AddSingleton<IExchangeLoggerOptions, ListenOptions>()
-                .AddSingleton<IExchangeProducer, ExchangeProducer>()
-                .AddSingleton<IFileFrameProducer, FileFrameProducer>()
-                .AddSingleton<IFrameLogger, FrameLogger>()
-                .AddSingleton<IFrameNotifier, FrameNotifier>()
-                .AddSingleton<IFrameQueue, FrameQueue>()
-                .AddSingleton<IFrameReceiver, FrameReceiver>()
-                .AddSingleton<IKeyStore, KeyStore>()
-                .AddSingleton<IFileTransferOptions, FileTransferOptions>()
-                .AddSingleton<IFrameLoggerOptions, FrameLoggerOptions>()
-                .AddSingleton<IImportOptions, ImportOptions>()
-                .AddSingleton<IListenOptions, ListenOptions>()
-                .AddSingleton<ISerialDeviceManager, SerialDeviceManager>();
+            logger = logger.WriteTo.Seq(seqUrl);
         }
 
-        // ReSharper disable once UnusedParameter.Local
-        // ReSharper disable once UnusedMember.Local
-        private static int OnExecute(CommandLineApplication app)
+        if (elasticsearchUrl != null)
         {
-            if (ReportVersion)
-            {
-                var console = app.GetRequiredService<IConsole>();
-                console.WriteLine(Version);
-                return 0;
-            }
-            
-            app.ShowHelp();
-            return 1;
+            logger = logger.WriteTo.Elasticsearch(
+                new ElasticsearchSinkOptions(new Uri(elasticsearchUrl) ){
+                    AutoRegisterTemplate = true,
+                    AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6,
+                    IndexFormat = $"osdpspy-{DateTime.UtcNow:yyyy-MM}"
+                });
         }
+            
+        return logger.CreateLogger();
+    }
+
+    private static void ConfigureServices(
+        HostBuilderContext context,
+        IServiceCollection services)
+    {
+        services
+            .AddAnnotators()
+            .AddFactories()
+            .AddSingleton(PhysicalConsole.Singleton)
+            .AddSingleton<IBusFrameProducer, BusFrameProducer>()
+            .AddSingleton<IExchangeConsumer, ExchangeLogger>()
+            .AddSingleton<IExchangeLoggerOptions, ListenOptions>()
+            .AddSingleton<IExchangeProducer, ExchangeProducer>()
+            .AddSingleton<IFileFrameProducer, FileFrameProducer>()
+            .AddSingleton<IFrameLogger, FrameLogger>()
+            .AddSingleton<IFrameNotifier, FrameNotifier>()
+            .AddSingleton<IFrameQueue, FrameQueue>()
+            .AddSingleton<IFrameReceiver, FrameReceiver>()
+            .AddSingleton<IKeyStore, KeyStore>()
+            .AddSingleton<IFileTransferOptions, FileTransferOptions>()
+            .AddSingleton<IFrameLoggerOptions, FrameLoggerOptions>()
+            .AddSingleton<IImportOptions, ImportOptions>()
+            .AddSingleton<IListenOptions, ListenOptions>()
+            .AddSingleton<ISerialDeviceManager, SerialDeviceManager>();
+    }
+
+    // ReSharper disable once UnusedParameter.Local
+    // ReSharper disable once UnusedMember.Local
+    private static int OnExecute(CommandLineApplication app)
+    {
+        if (ReportVersion)
+        {
+            var console = app.GetRequiredService<IConsole>();
+            console.WriteLine(Version);
+            return 0;
+        }
+            
+        app.ShowHelp();
+        return 1;
     }
 }

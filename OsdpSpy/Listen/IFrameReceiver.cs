@@ -1,11 +1,10 @@
 using System;
 using OsdpSpy.Osdp;
 
-namespace OsdpSpy.Listen
+namespace OsdpSpy.Listen;
+
+public interface IFrameReceiver : IThreadService
 {
-    public interface IFrameReceiver : IThreadService
-    {
-        void SetRate(int rate);
-        EventHandler<ConnectionState> ConnectionStateEventHandler { get; set; }
-    }
+    void SetRate(int rate);
+    EventHandler<ConnectionState> ConnectionStateEventHandler { get; set; }
 }

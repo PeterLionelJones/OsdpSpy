@@ -1,12 +1,11 @@
 using System;
 using OsdpSpy.Abstractions;
 
-namespace OsdpSpy.Listen
+namespace OsdpSpy.Listen;
+
+public interface IFrameQueue
 {
-    public interface IFrameQueue
-    {
-        void Add(IFrameProduct product);
-        void Flush();
-        public EventHandler<IFrameProduct> FrameHandler { get; set; }
-    }
+    void Add(IFrameProduct product);
+    void Flush();
+    public EventHandler<IFrameProduct> FrameHandler { get; set; }
 }

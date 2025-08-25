@@ -8,70 +8,69 @@ using Microsoft.Extensions.Logging;
 
 [assembly:InternalsVisibleTo("OsdpSpy.Tests.Annotations")]
 
-namespace OsdpSpy.Annotations
+namespace OsdpSpy.Annotations;
+
+public class AnnotatorCollection<T> : Collection<IAnnotator<T>>, IAnnotatorCollection<T>
 {
-    public class AnnotatorCollection<T> : Collection<IAnnotator<T>>, IAnnotatorCollection<T>
+    protected AnnotatorCollection(IFactory<IAnnotation> factory)
     {
-        protected AnnotatorCollection(IFactory<IAnnotation> factory)
+        _factory = factory;
+    }
+
+    private readonly IFactory<IAnnotation> _factory;
+
+    protected internal void AddRange(IEnumerable<IAnnotator<T>> annotators)
+    {
+        foreach (var annotator in annotators)
         {
-            _factory = factory;
+            Add(annotator);
         }
+    }
 
-        private readonly IFactory<IAnnotation> _factory;
-
-        protected internal void AddRange(IEnumerable<IAnnotator<T>> annotators)
+    private static void RunAnnotator(IAnnotator<T> annotator, T input, IAnnotation annotation)
+    {
+        try
         {
-            foreach (var annotator in annotators)
-            {
-                Add(annotator);
-            }
+            annotator.Annotate(input, annotation);
         }
-
-        private static void RunAnnotator(IAnnotator<T> annotator, T input, IAnnotation annotation)
+        catch (Exception e)
         {
-            try
-            {
-                annotator.Annotate(input, annotation);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-            }
+            Debug.WriteLine(e);
         }
+    }
 
-        public void Annotate(T input)
-        {
-            var annotation = _factory.Create();
+    public void Annotate(T input)
+    {
+        var annotation = _factory.Create();
             
-            foreach (var annotator in this)
-            {
-                RunAnnotator(annotator, input, annotation);
-            }
+        foreach (var annotator in this)
+        {
+            RunAnnotator(annotator, input, annotation);
+        }
 
-            annotation.AppendNewLine();
+        annotation.AppendNewLine();
                 
-            if (IncludeInput(input, annotation)) annotation.Log();
-        }
+        if (IncludeInput(input, annotation)) annotation.Log();
+    }
 
-        public virtual bool IncludeInput(T input, IAnnotation annotation)
-        {
-            return this.All(annotator => annotator.IncludeInput(input));
-        }
+    public virtual bool IncludeInput(T input, IAnnotation annotation)
+    {
+        return this.All(annotator => annotator.IncludeInput(input));
+    }
 
-        public void ReportState()
+    public void ReportState()
+    {
+        foreach (var annotator in this)
         {
-            foreach (var annotator in this)
-            {
-                annotator.ReportState();
-            }
+            annotator.ReportState();
         }
+    }
 
-        public void Summarise()
+    public void Summarise()
+    {
+        foreach (var annotator in this)
         {
-            foreach (var annotator in this)
-            {
-                annotator.Summarise();
-            }
+            annotator.Summarise();
         }
     }
 }

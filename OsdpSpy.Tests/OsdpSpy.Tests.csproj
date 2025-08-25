@@ -19,4 +19,13 @@
       <ProjectReference Include="..\OsdpSpy\OsdpSpy.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Annotators\" />
+      <Folder Include="Clear\" />
+      <Folder Include="Decoders\" />
+      <Folder Include="Import\" />
+      <Folder Include="List\" />
+      <Folder Include="Serial\" />
+    </ItemGroup>
+
 </Project>

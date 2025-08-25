@@ -1,20 +1,19 @@
 using OsdpSpy.Annotations;
 using OsdpSpy.Osdp;
 
-namespace OsdpSpy.Decoders
+namespace OsdpSpy.Decoders;
+
+public class ServerCryptogramDecoder : ICommandDecoder
 {
-    public class ServerCryptogramDecoder : ICommandDecoder
+    public Command Command => Command.SCRYPT;
+
+    public void Decode(byte[] input, IAnnotation output)
     {
-        public Command Command => Command.SCRYPT;
+        output.AppendByteArray("ServerCryptogram", input);
 
-        public void Decode(byte[] input, IAnnotation output)
+        if (input.Length != 16)
         {
-            output.AppendByteArray("ServerCryptogram", input);
-
-            if (input.Length != 16)
-            {
-                output.AppendItem("NonCompliance", "Invalid Payload");
-            }
+            output.AppendItem("NonCompliance", "Invalid Payload");
         }
     }
 }

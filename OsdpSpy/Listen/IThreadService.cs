@@ -1,10 +1,9 @@
 using System.Threading;
 
-namespace OsdpSpy.Listen
+namespace OsdpSpy.Listen;
+
+public interface IThreadService
 {
-    public interface IThreadService
-    {
-        bool IsRunning { get; }
-        void Start(CancellationToken token);
-    }
+    bool IsRunning { get; }
+    void Start(CancellationToken token);
 }
