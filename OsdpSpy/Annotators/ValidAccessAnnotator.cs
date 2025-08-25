@@ -9,15 +9,9 @@ using OsdpSpy.Osdp;
 
 namespace OsdpSpy.Annotators;
 
-public class ValidAccessAnnotator : AlertingAnnotator<IExchange>
+public class ValidAccessAnnotator(IFactory<IAnnotation> factory) : AlertingAnnotator<IExchange>(factory)
 {
-    public ValidAccessAnnotator(IFactory<IAnnotation> factory) 
-        : base(factory)
-    {
-        _list = new List<ValidAccessItem>();
-    }
-
-    private readonly List<ValidAccessItem> _list;
+    private readonly List<ValidAccessItem> _list = new();
 
     private const int Green = 0x02;
 

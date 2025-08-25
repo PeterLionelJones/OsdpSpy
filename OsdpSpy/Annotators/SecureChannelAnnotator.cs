@@ -9,20 +9,11 @@ using OsdpSpy.Osdp;
 
 namespace OsdpSpy.Annotators;
 
-public class SecureChannelAnnotator : AlertingAnnotator<IExchange>
+public class SecureChannelAnnotator(
+    ISecureChannelSink sink,
+    IKeyStore keys,
+    IFactory<IAnnotation> factory) : AlertingAnnotator<IExchange>(factory)
 {
-    public SecureChannelAnnotator(
-        ISecureChannelSink sink,
-        IKeyStore keys,
-        IFactory<IAnnotation> factory) : base(factory)
-    {
-        _sink = sink;
-        _keys = keys;
-    }
-
-    private readonly ISecureChannelSink _sink;
-    private readonly IKeyStore _keys;
-
     private const int ReaderCount = 128;
 
     private IExchange _input;
@@ -52,14 +43,14 @@ public class SecureChannelAnnotator : AlertingAnnotator<IExchange>
             // What secure channel base key are we using?
             var useDefaultScbk = _input.Acu.Frame.SecurityBlock[2] == 0;
             var scbk = useDefaultScbk
-                ? _keys.DefaultBaseKey
-                : _keys.Find(_client);
+                ? keys.DefaultBaseKey
+                : keys.Find(_client);
 
             // Do we have a valid secure channel base key?
             if (scbk == null) return;
 
             // Notify interested parties.
-            _sink.OnAuthenticating(_input.Acu.Frame.Address, useDefaultScbk, scbk);
+            sink.OnAuthenticating(_input.Acu.Frame.Address, useDefaultScbk, scbk);
 
             // Create a new session.
             var session = new Session();
@@ -107,13 +98,13 @@ public class SecureChannelAnnotator : AlertingAnnotator<IExchange>
         {
             // Authenticated, so set the initial RMAC.
             session.SetInitialRMac(rmac);
-            _sink.OnAuthenticationSychronised(_input.Pd.Frame.Address);
+            sink.OnAuthenticationSychronised(_input.Pd.Frame.Address);
         }
         else
         {
             // Authentication failed, or failed to track the authentication.
             _session[_input.Acu.Frame.Address] = null;
-            _sink.OnAuthenticationLost(_input.Pd.Frame.Address);
+            sink.OnAuthenticationLost(_input.Pd.Frame.Address);
         }
     }
 
@@ -145,7 +136,7 @@ public class SecureChannelAnnotator : AlertingAnnotator<IExchange>
         var keyLength = plain[1];
         var key = new byte[16];
         Buffer.BlockCopy(plain, 2, key, 0, keyLength);
-        _keys.Store(_client, key);
+        keys.Store(_client, key);
     }
 
     private void OnSetCommunication()

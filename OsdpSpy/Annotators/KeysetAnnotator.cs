@@ -5,10 +5,8 @@ using OsdpSpy.Osdp;
 
 namespace OsdpSpy.Annotators;
 
-public class KeysetAnnotator : AlertingAnnotator<IExchange>
+public class KeysetAnnotator(IFactory<IAnnotation> factory) : AlertingAnnotator<IExchange>(factory)
 {
-    public KeysetAnnotator(IFactory<IAnnotation> factory) : base(factory) {}
-
     public override void Annotate(IExchange input, IAnnotation output)
     {
         if (input.Acu.Frame.Command != Command.KEYSET) return;

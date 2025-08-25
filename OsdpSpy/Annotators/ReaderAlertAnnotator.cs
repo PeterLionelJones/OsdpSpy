@@ -3,10 +3,9 @@ using OsdpSpy.Annotations;
 
 namespace OsdpSpy.Annotators;
 
-public class ReaderAlertAnnotator : AlertingAnnotator<IExchange>, ISecureChannelSink
+public class ReaderAlertAnnotator(IFactory<IAnnotation> factory)
+    : AlertingAnnotator<IExchange>(factory), ISecureChannelSink
 {
-    public ReaderAlertAnnotator(IFactory<IAnnotation> factory) : base(factory) {}
-
     private enum State
     {
         PlainText = 0,

@@ -4,10 +4,8 @@ using OsdpSpy.Annotations;
 
 namespace OsdpSpy.Annotators;
 
-public class TimeoutAnnotator : AlertingAnnotator<IExchange>
+public class TimeoutAnnotator(IFactory<IAnnotation> factory) : AlertingAnnotator<IExchange>(factory)
 {
-    public TimeoutAnnotator(IFactory<IAnnotation> factory) : base(factory) {}
-
     private readonly DateTime _start = DateTime.UtcNow;
     private DateTime _lastReport = DateTime.UtcNow;
     private long _total;

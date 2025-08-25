@@ -6,7 +6,7 @@ using OsdpSpy.Osdp;
 
 namespace OsdpSpy.Annotators;
 
-public class ReadsBeforeResetAnnotator : AlertingAnnotator<IExchange>
+public class ReadsBeforeResetAnnotator(IFactory<IAnnotation> factory) : AlertingAnnotator<IExchange>(factory)
 {
     private readonly DateTime _start = DateTime.UtcNow;
     private DateTime _lastReport = DateTime.UtcNow;
@@ -14,8 +14,6 @@ public class ReadsBeforeResetAnnotator : AlertingAnnotator<IExchange>
     private int _totalCardsRead = 0;
     private int _totalResets = 0;
     private double _averageReadsBeforeReset = 0.0;
-        
-    public ReadsBeforeResetAnnotator(IFactory<IAnnotation> factory) : base(factory) {}
 
     private void OnCardRead()
     {

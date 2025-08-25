@@ -5,17 +5,10 @@ using OsdpSpy.Listen;
 
 namespace OsdpSpy.Annotators;
 
-public class RawFrameAnnotator : Annotator<IExchange>
+public class RawFrameAnnotator(IExchangeLoggerOptions options) : Annotator<IExchange>
 {
-    public RawFrameAnnotator(IExchangeLoggerOptions options)
-    {
-        _options = options;
-    }
-
-    private readonly IExchangeLoggerOptions _options;
-
     public override bool IncludeInput(IExchange input)
-        => !input.IsPollAckPair() || !_options.FilterPollAck;
+        => !input.IsPollAckPair() || !options.FilterPollAck;
 
     public override void Annotate(IExchange input, IAnnotation output)
     {

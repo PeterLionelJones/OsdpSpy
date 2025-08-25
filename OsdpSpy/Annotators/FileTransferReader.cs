@@ -3,16 +3,13 @@ using System.Diagnostics;
 
 namespace OsdpSpy.Annotators;
 
-public class FileTransferReader
+public class FileTransferReader(int address)
 {
-    public FileTransferReader(int address)
-        => Address = address;
-
     private int _offset;
     private int _remaining;
     private DateTime _start;
         
-    public int Address { get; }
+    public int Address { get; } = address;
     public TimeSpan Elapsed { get; private set; }
         
     public byte[] Data { get; private set; }

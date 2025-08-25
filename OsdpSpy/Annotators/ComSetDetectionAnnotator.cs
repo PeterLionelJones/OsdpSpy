@@ -6,17 +6,10 @@ using OsdpSpy.Osdp;
 
 namespace OsdpSpy.Annotators;
 
-public class ComSetDetectionAnnotator : AlertingAnnotator<IExchange>
+public class ComSetDetectionAnnotator(
+    IBusFrameProducer frames,
+    IFactory<IAnnotation> factory) : AlertingAnnotator<IExchange>(factory)
 {
-    public ComSetDetectionAnnotator(
-        IBusFrameProducer frames, 
-        IFactory<IAnnotation> factory) : base(factory)
-    {
-        _frames = frames;
-    }
-
-    private readonly IBusFrameProducer _frames;
-        
     public override void Annotate(IExchange input, IAnnotation output)
     {
         // Looking for a COMSET command with a plaintext payload.
@@ -35,7 +28,7 @@ public class ComSetDetectionAnnotator : AlertingAnnotator<IExchange>
             .AndLogTo(this);
             
         // Switch the rate.
-        _frames.SetRate(rate);
+        frames.SetRate(rate);
     }
 }
 

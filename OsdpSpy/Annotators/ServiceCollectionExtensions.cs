@@ -16,8 +16,9 @@ public static class ServiceCollectionExtensions
         return services
             .AddSingleton<IAnnotatorCollection<IExchange>, AnnotatorCollection>()
             .AddAnnotators<Annotator<IExchange>>()
-            .AddSingleton<IReplyDecoderCollection, ReplyDecoderCollection>()
             .AddSingleton<ICommandDecoderCollection, CommandDecoderCollection>()
+            .AddSingleton<IMultipartMessageDecoderCollection, MultipartMessageDecoderCollection>()
+            .AddSingleton<IReplyDecoderCollection, ReplyDecoderCollection>()
             .AddSingleton<ISecureChannelSink, ReaderAlertAnnotator>()
             .AddImplementationsOf<IDecoder>();
     }

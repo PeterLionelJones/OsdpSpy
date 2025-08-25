@@ -4,18 +4,11 @@ using OsdpSpy.Decoders;
 
 namespace OsdpSpy.Annotators;
 
-public class ValidAccessItem
+public class ValidAccessItem(bool isCard, byte[] payload)
 {
-    public ValidAccessItem(bool isCard, byte[] payload)
-    {
-        Timestamp = DateTime.UtcNow;
-        IsCard = isCard;
-        Payload = payload;
-    }
-
-    public DateTime Timestamp { get; }
-    public bool IsCard { get; }
-    public byte[] Payload { get; }
+    public DateTime Timestamp { get; } = DateTime.UtcNow;
+    public bool IsCard { get; } = isCard;
+    public byte[] Payload { get; } = payload;
 
     public override string ToString()
     {

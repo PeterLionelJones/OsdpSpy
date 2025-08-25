@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Microsoft.Extensions.Logging;
 
 [assembly:InternalsVisibleTo("OsdpSpy.Tests.Annotations")]
 

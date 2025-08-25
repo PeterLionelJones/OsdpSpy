@@ -19,6 +19,7 @@ public enum Reply : byte
     SPER = 0x56,
     BIOREADR = 0x57,
     BIOMATCHR = 0x58,
+    EXTID = 0x60, // TODO:Awaiting designation by OSDP WG.
     CCRYPT = 0x76,
     RMAC_I = 0x78,
     BUSY = 0x79,

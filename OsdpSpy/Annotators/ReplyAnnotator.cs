@@ -6,15 +6,8 @@ using OsdpSpy.Osdp;
 
 namespace OsdpSpy.Annotators;
 
-public class ReplyAnnotator : Annotator<IExchange>
+public class ReplyAnnotator(IReplyDecoderCollection decoder) : Annotator<IExchange>
 {
-    public ReplyAnnotator(IReplyDecoderCollection decoder)
-    {
-        _decoder = decoder;
-    }
-
-    private readonly IReplyDecoderCollection _decoder;
-        
     public override void Annotate(IExchange input, IAnnotation output)
     {
         if (input.Pd?.Payload == null) return;
@@ -37,7 +30,7 @@ public class ReplyAnnotator : Annotator<IExchange>
         if (input.Pd.Payload.Plain != null)
         {
             output.AppendItem("PdPlain",input.Pd.Payload.Plain.ToHexString());
-            _decoder.Decode(input.Pd.Frame.Reply, input.Pd.Payload.Plain, output);
+            decoder.Decode(input.Pd.Frame.Reply, input.Pd.Payload.Plain, output);
         }
     }
 }

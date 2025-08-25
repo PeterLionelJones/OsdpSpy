@@ -18,18 +18,32 @@ public class DeviceCapabilitiesReportDecoder : IReplyDecoder
     }
 }
 
-internal class DeviceCapability
+internal enum FunctionCode
 {
-    public DeviceCapability(byte function, byte compliance, byte numberOf)
-    {
-        FunctionCode = function;
-        Compliance = compliance;
-        NumberOf = numberOf;
-    }
-        
-    public byte FunctionCode { get; }
-    public byte Compliance { get; }
-    public byte NumberOf { get; }
+    ContactStatusMonitoring = 1,
+    OutputControl = 2,
+    CardDataFormat = 3,
+    ReaderLedControl = 4,
+    ReaderAudibleOutput = 5,
+    ReaderTextOutput = 6,
+    TimeKeeping= 7,
+    CheckCharacterSupport = 8,
+    CommunicationSecurity = 9,
+    ReceiveBufferSize = 10,
+    LargestCombinedMessageSize = 11,
+    SmartCardSupport = 12,
+    Readers = 13,
+    Biometrics = 14,
+    SecurePinEntry = 15,
+    OsdpVersion = 16,
+    ExtendedId = 32  // TODO:Awaiting designation by OSDP WG.
+}
+
+internal class DeviceCapability(FunctionCode function, byte compliance, byte numberOf)
+{
+    public FunctionCode FunctionCode { get; } = function;
+    public byte Compliance { get; } = compliance;
+    public byte NumberOf { get; } = numberOf;
 }
 
 internal static class DeviceCapabilitiesReportDecoderExtensions
@@ -46,7 +60,7 @@ internal static class DeviceCapabilitiesReportDecoderExtensions
             var offset = i * RecordSize;
                 
             capability[i] = new DeviceCapability(
-                input[offset], 
+                (FunctionCode) input[offset], 
                 input[offset + 1], 
                 input[offset + 2]);
         }
@@ -58,23 +72,44 @@ internal static class DeviceCapabilitiesReportDecoderExtensions
     {
         return capability.FunctionCode switch
         {
-            1 => output.AppendContactStatusMonitoring(capability),
-            2 => output.AppendOutputControl(capability),
-            3 => output.AppendCardDataFormat(capability),
-            4 => output.AppendReaderLedControl(capability),
-            5 => output.AppendReaderAudibleOutput(capability),
-            6 => output.AppendReaderTextOutput(capability),
-            7 => output.AppendTimeKeeping(capability),
-            8 => output.AppendCheckCharacterSupport(capability),
-            9 => output.AppendCommunicationSecurity(capability),
-            10 => output.AppendReceiveBufferSize(capability),
-            11 => output.AppendLargestCombinedMessageSize(capability),
-            12 => output.AppendSmartCardSupport(capability),
-            13 => output.AppendReaders(capability),
-            14 => output.AppendBiometrics(capability),
-            15 => output.AppendSecurePinEntry(capability),
-            16 => output.AppendOsdpVersion(capability),
+            FunctionCode.ContactStatusMonitoring => output.AppendContactStatusMonitoring(capability),
+            FunctionCode.OutputControl => output.AppendOutputControl(capability),
+            FunctionCode.CardDataFormat => output.AppendCardDataFormat(capability),
+            FunctionCode.ReaderLedControl => output.AppendReaderLedControl(capability),
+            FunctionCode.ReaderAudibleOutput => output.AppendReaderAudibleOutput(capability),
+            FunctionCode.ReaderTextOutput => output.AppendReaderTextOutput(capability),
+            FunctionCode.TimeKeeping => output.AppendTimeKeeping(capability),
+            FunctionCode.CheckCharacterSupport => output.AppendCheckCharacterSupport(capability),
+            FunctionCode.CommunicationSecurity => output.AppendCommunicationSecurity(capability),
+            FunctionCode.ReceiveBufferSize => output.AppendReceiveBufferSize(capability),
+            FunctionCode.LargestCombinedMessageSize => output.AppendLargestCombinedMessageSize(capability),
+            FunctionCode.SmartCardSupport => output.AppendSmartCardSupport(capability),
+            FunctionCode.Readers => output.AppendReaders(capability),
+            FunctionCode.Biometrics => output.AppendBiometrics(capability),
+            FunctionCode.SecurePinEntry => output.AppendSecurePinEntry(capability),
+            FunctionCode.OsdpVersion => output.AppendOsdpVersion(capability),
+            FunctionCode.ExtendedId => output.AppendExtendedId(capability),
             _ => output.AppendUnknownFunctionCode(capability)
+        };
+    }
+
+    private static IAnnotation AppendExtendedId(
+        this IAnnotation output, 
+        DeviceCapability capability)
+    {
+        return output
+            .AppendItem(
+                "ExtendedId", 
+                capability.Compliance.ToExtendedIdString());
+    }
+
+    private static string ToExtendedIdString(this byte compliance)
+    {
+        return compliance switch
+        {
+            0x00 => "00 - Extended Id Not Supported",
+            0x01 => "01 - Supports Extended ID",
+            _ => $"{compliance:X02} - Unspecified Compliance Level"
         };
     }
 
@@ -384,13 +419,10 @@ internal static class DeviceCapabilitiesReportDecoderExtensions
     {
         return output
             .AppendItem(
-                $"Function{capability.FunctionCode:X02}", 
-                "Unspecified Function Code")
-            .AppendItem(
-                $"Compliance{capability.FunctionCode:X02}", 
-                $"{capability.Compliance:X02}")
-            .AppendItem(
-                $"NumberOf{capability.FunctionCode:X02}", 
-                $"{capability.NumberOf:X02}");
+                $"UnknownFunction{capability.FunctionCode}", 
+                capability.ToUnknownString());
     }
+
+    private static string ToUnknownString(this DeviceCapability capability) 
+        => $"Function Code = {capability.FunctionCode}, Compliance = {capability.Compliance:X02}, Count = {capability.NumberOf:X02}";
 }

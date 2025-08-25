@@ -8,18 +8,11 @@ using OsdpSpy.Osdp;
 
 namespace OsdpSpy.Annotators;
 
-public class FileTransferAnnotator : AlertingAnnotator<IExchange>
+public class FileTransferAnnotator(
+    IFileTransferOptions options,
+    IFactory<IAnnotation> factory) : AlertingAnnotator<IExchange>(factory)
 {
-    public FileTransferAnnotator(
-        IFileTransferOptions options,
-        IFactory<IAnnotation> factory) : base(factory)
-    {
-        _options = options;
-        _readers = new List<FileTransferReader>();
-    }
-
-    private readonly IFileTransferOptions _options;
-    private readonly List<FileTransferReader> _readers;
+    private readonly List<FileTransferReader> _readers = new();
 
     private FileTransferReader FindReader(int address)
     {
@@ -64,9 +57,9 @@ public class FileTransferAnnotator : AlertingAnnotator<IExchange>
                 .AppendItem("TransferRate", fileSize/reader.Elapsed.TotalSeconds)
                 .AppendFile(reader.Data);
 
-            if (_options.CaptureOsdpFileTransfer)
+            if (options.CaptureOsdpFileTransfer)
             {
-                var filename = reader.Data.SaveFile(_options.OsdpFileTransferDirectory);
+                var filename = reader.Data.SaveFile(options.OsdpFileTransferDirectory);
                 alert = alert.AppendItem("SavedTo", filename);
             }
 

@@ -5,15 +5,8 @@ using OsdpSpy.Extensions;
 
 namespace OsdpSpy.Annotators;
 
-public class CommandAnnotator : Annotator<IExchange>
+public class CommandAnnotator(ICommandDecoderCollection decoder) : Annotator<IExchange>
 {
-    public CommandAnnotator(ICommandDecoderCollection decoder)
-    {
-        _decoder = decoder;
-    }
-
-    private readonly ICommandDecoderCollection _decoder;
-        
     public override void Annotate(IExchange input, IAnnotation output)
     {
         output.AppendNewLine();
@@ -28,7 +21,7 @@ public class CommandAnnotator : Annotator<IExchange>
         if (input.Acu.Payload.Plain != null)
         {
             output.AppendItem("AcuPlain",input.Acu.Payload.Plain.ToHexString());
-            _decoder.Decode(input.Acu.Frame.Command, input.Acu.Payload.Plain, output);
+            decoder.Decode(input.Acu.Frame.Command, input.Acu.Payload.Plain, output);
         }
     }
 }
