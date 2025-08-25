@@ -27,6 +27,18 @@ namespace OsdpSpy.Annotations
             if (suffix != null) logMsg += $" {suffix}";
             return output.Append(logMsg, logObject);
         }
+
+        public static IAnnotation AppendItem(
+            this IAnnotation output, 
+            bool predicate, 
+            string name, 
+            object logObject,
+            string suffix = null)
+        {
+            return predicate 
+                ? output.AppendItem(name, logObject, suffix) 
+                : output;
+        }
         
         public static IAnnotation Annotate(this IAnnotation a, string m, object p1)
             => a.Append(m, new[] { p1 });
