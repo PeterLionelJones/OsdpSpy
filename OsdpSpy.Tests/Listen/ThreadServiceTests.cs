@@ -62,13 +62,13 @@ public class ThreadServiceTests
     [Test]
     public void Constructor_CheckStates_StatesValid()
     {
-        Assert.IsFalse(_unit.FailStart);
-        Assert.IsFalse(_unit.ThrowException);
-        Assert.IsFalse(_unit.WasStarted);
-        Assert.IsFalse(_unit.WasServicedAsynchronously);
-        Assert.IsFalse(_unit.WasServiced);
-        Assert.IsFalse(_unit.WasStopped);
-        Assert.IsFalse(_unit.IsRunning);
+        Assert.That(_unit.FailStart, Is.False);
+        Assert.That(_unit.ThrowException, Is.False);
+        Assert.That(_unit.WasStarted, Is.False);
+        Assert.That(_unit.WasServicedAsynchronously, Is.False);
+        Assert.That(_unit.WasServiced, Is.False);
+        Assert.That(_unit.WasStopped, Is.False);
+        Assert.That(_unit.IsRunning, Is.False);
     }
 
     [Test]
@@ -80,14 +80,14 @@ public class ThreadServiceTests
         _unit.Start(stoppingToken);
         await Task.Delay(100, stoppingToken);
         var isRunning = _unit.IsRunning;
-        tokenSource.Cancel();
+        await tokenSource.CancelAsync();
         await Task.Delay(100, CancellationToken.None);
         
-        Assert.IsTrue(isRunning);
-        Assert.IsTrue(_unit.WasStarted);
-        Assert.IsTrue(_unit.WasServiced);
-        Assert.IsTrue(_unit.WasServicedAsynchronously);
-        Assert.IsTrue(_unit.WasStopped);
+        Assert.That(isRunning, Is.True);
+        Assert.That(_unit.WasStarted, Is.True);
+        Assert.That(_unit.WasServiced, Is.True);
+        Assert.That(_unit.WasServicedAsynchronously, Is.True);
+        Assert.That(_unit.WasStopped, Is.True);
     }
     
     [Test]
@@ -100,14 +100,14 @@ public class ThreadServiceTests
         _unit.Start(stoppingToken);
         await Task.Delay(100, stoppingToken);
         var isRunning = _unit.IsRunning;
-        tokenSource.Cancel();
+        await tokenSource.CancelAsync();
         await Task.Delay(100, CancellationToken.None);
         
-        Assert.IsTrue(isRunning);
-        Assert.IsTrue(_unit.WasStarted);
-        Assert.IsTrue(_unit.WasServiced);
-        Assert.IsTrue(_unit.WasServicedAsynchronously);
-        Assert.IsTrue(_unit.WasStopped);
+        Assert.That(isRunning);
+        Assert.That(_unit.WasStarted, Is.True);
+        Assert.That(_unit.WasServiced, Is.True);
+        Assert.That(_unit.WasServicedAsynchronously, Is.True);
+        Assert.That(_unit.WasStopped, Is.True);
     }
     
     [Test]
@@ -119,10 +119,10 @@ public class ThreadServiceTests
         _unit.FailStart = true;
         _unit.Start(stoppingToken);
         
-        Assert.IsFalse(_unit.IsRunning);
-        Assert.IsFalse(_unit.WasStarted);
-        Assert.IsFalse(_unit.WasServiced);
-        Assert.IsFalse(_unit.WasServicedAsynchronously);
-        Assert.IsFalse(_unit.WasStopped);
+        Assert.That(_unit.IsRunning, Is.False);
+        Assert.That(_unit.WasStarted, Is.False);
+        Assert.That(_unit.WasServiced, Is.False);
+        Assert.That(_unit.WasServicedAsynchronously, Is.False);
+        Assert.That(_unit.WasStopped, Is.False);
     }
 }

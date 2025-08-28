@@ -21,6 +21,6 @@ public class AnnotationFactoryTests
 
         var returnedObj = factory.Create();
 
-        Assert.IsNotNull(returnedObj);
+        Assert.That(returnedObj, Is.Not.Null);
     }
 }

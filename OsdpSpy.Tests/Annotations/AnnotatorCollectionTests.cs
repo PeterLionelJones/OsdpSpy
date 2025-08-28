@@ -10,15 +10,9 @@ namespace OsdpSpy.Tests.Annotations;
 [TestFixture]
 public class AnnotatorCollectionTests
 {
-    private class TestAnnotator : Annotator<object>
-    {
-        public TestAnnotator() {}
-    }
+    private class TestAnnotator : Annotator<object>;
     
-    private class TestCollection : AnnotatorCollection<object>
-    {
-        public TestCollection(IFactory<IAnnotation> factory) : base(factory) {}
-    }
+    private class TestCollection(IFactory<IAnnotation> factory) : AnnotatorCollection<object>(factory);
 
     private static IEnumerable<IAnnotator<object>> NewRange(int quantity)
     {
@@ -40,7 +34,7 @@ public class AnnotatorCollectionTests
 
         var annotatorCollection = new TestCollection(factory);
         
-        Assert.IsNotNull(annotatorCollection);
+        Assert.That(annotatorCollection, Is.Not.Null);
         Assert.That(annotatorCollection.Count == 0);
     }
 
@@ -58,7 +52,7 @@ public class AnnotatorCollectionTests
 
         annotatorCollection.AddRange(annotatorRange);
         
-        Assert.IsNotNull(annotatorCollection);
+        Assert.That(annotatorCollection, Is.Not.Null);
         Assert.That(annotatorCollection.Count == count);
     }
     
@@ -67,7 +61,7 @@ public class AnnotatorCollectionTests
     [TestCase(1)]
     [TestCase(5)]
     [TestCase(10)]
-    public void Annotate_RunAnntotors_VerifyOutput(int count)
+    public void Annotate_RunAnnotators_VerifyOutput(int count)
     {
         var annotationMock = new Mock<IAnnotation>();
         var annotation = annotationMock.Object;
@@ -87,12 +81,12 @@ public class AnnotatorCollectionTests
         
         annotatorCollection.Annotate(new object());
 
-        Assert.IsNotNull(annotatorCollection);
+        Assert.That(annotatorCollection, Is.Not.Null);
         Assert.That(annotatorCollection.Count == count);
     }
     
     [Test]
-    public void Annotate_RunAnntotorsOnNullInput_VerifyOutput()
+    public void Annotate_RunAnnotatorsOnNullInput_VerifyOutput()
     {
         var annotationMock = new Mock<IAnnotation>();
         var annotation = annotationMock.Object;
@@ -115,7 +109,7 @@ public class AnnotatorCollectionTests
 
         annotatorCollection.Annotate(new object());
 
-        Assert.IsNotNull(annotatorCollection);
+        Assert.That(annotatorCollection, Is.Not.Null);
         Assert.That(annotatorCollection.Count == 2);
     }
     
@@ -144,7 +138,7 @@ public class AnnotatorCollectionTests
         annotatorCollection.Annotate(new object());
         annotatorCollection.ReportState();
 
-        Assert.IsNotNull(annotatorCollection);
+        Assert.That(annotatorCollection, Is.Not.Null);
         Assert.That(annotatorCollection.Count == 2);
         annotatorMock.Verify(foo => foo.ReportState(), Times.Exactly(2));
     }
@@ -174,7 +168,7 @@ public class AnnotatorCollectionTests
         annotatorCollection.Annotate(new object());
         annotatorCollection.Summarise();
 
-        Assert.IsNotNull(annotatorCollection);
+        Assert.That(annotatorCollection, Is.Not.Null);
         Assert.That(annotatorCollection.Count == 2);
         annotatorMock.Verify(foo => foo.Summarise(), Times.Exactly(2));
     }

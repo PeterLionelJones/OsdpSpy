@@ -28,7 +28,7 @@ public class IsValidBaudRateAttributeTests
     {
         var isValid = _unit.IsValid(input);
         
-        Assert.IsTrue(isValid);
+        Assert.That(isValid, Is.True);
     }
 
     [Test]
@@ -41,6 +41,6 @@ public class IsValidBaudRateAttributeTests
     {
         var isValid = _unit.IsValid(input);
         
-        Assert.IsFalse(isValid);
+        Assert.That(isValid, Is.False);
     }
 }

@@ -11,9 +11,9 @@ public class SecureSessionTests
     {
         var testObject = new SecureSession();
         
-        Assert.IsNotNull(testObject.Smac1);
-        Assert.IsNotNull(testObject.Smac2);
-        Assert.IsNotNull(testObject.Enc);
-        Assert.IsNotNull(testObject.Mac);
+        Assert.That(testObject.Smac1, Is.Not.Null);
+        Assert.That(testObject.Smac2, Is.Not.Null);
+        Assert.That(testObject.Enc, Is.Not.Null);
+        Assert.That(testObject.Mac, Is.Not.Null);
     }
 }

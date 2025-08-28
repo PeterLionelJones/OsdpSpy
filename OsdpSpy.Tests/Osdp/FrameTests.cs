@@ -87,7 +87,7 @@ public class FrameTests
         var testObject = new Frame(frameData);
         
         Assert.That(testObject.Address != Frame.ConfigurationAddress);
-        Assert.IsTrue(testObject.GoodCheck);
+        Assert.That(testObject.GoodCheck, Is.True);
         Assert.That(testObject.Sequence < 4);
    }
 
@@ -109,9 +109,9 @@ public class FrameTests
         var testObject = new Frame(frameData);
         
         Assert.That(testObject.Address != Frame.ConfigurationAddress);
-        Assert.IsTrue(testObject.IsAcu);
-        Assert.IsFalse(testObject.IsPd);
-        Assert.IsTrue(testObject.GoodCheck);
+        Assert.That(testObject.IsAcu, Is.True);
+        Assert.That(testObject.IsPd, Is.False);
+        Assert.That(testObject.GoodCheck, Is.True);
         Assert.That(testObject.Sequence < 4);
     }
 
@@ -133,9 +133,9 @@ public class FrameTests
         var testObject = new Frame(frameData);
         
         Assert.That(testObject.Address != Frame.ConfigurationAddress);
-        Assert.IsFalse(testObject.IsAcu);
-        Assert.IsTrue(testObject.IsPd);
-        Assert.IsTrue(testObject.GoodCheck);
+        Assert.That(testObject.IsAcu, Is.False);
+        Assert.That(testObject.IsPd, Is.True);
+        Assert.That(testObject.GoodCheck, Is.True);
         Assert.That(testObject.Sequence < 4);
     }
     
@@ -154,15 +154,15 @@ public class FrameTests
         
         var testObject = new Frame(frameData);
         
-        Assert.IsTrue(testObject.IsSecure);
+        Assert.That(testObject.IsSecure, Is.True);
         Assert.That(testObject.Address != Frame.ConfigurationAddress);
-        Assert.IsFalse(testObject.GoodMac);
-        Assert.IsTrue(testObject.GoodCheck);
+        Assert.That(testObject.GoodMac);
+        Assert.That(testObject.GoodCheck, Is.True);
         Assert.That(testObject.Sequence < 4);
-        Assert.IsTrue(testObject.UseCrc16);
-        Assert.IsTrue(testObject.IsSecure);
-        Assert.IsNotNull(testObject.SecurityBlock);
-        Assert.IsTrue(testObject.HasMac);
+        Assert.That(testObject.UseCrc16, Is.True);
+        Assert.That(testObject.IsSecure, Is.True);
+        Assert.That(testObject.SecurityBlock, Is.Not.Null);
+        Assert.That(testObject.HasMac, Is.True);
     }
     
     [Test]
@@ -184,12 +184,12 @@ public class FrameTests
         
         var testObject = new Frame(frameData);
         
-        Assert.IsFalse(testObject.IsSecure);
+        Assert.That(testObject.IsSecure, Is.False);
         Assert.That(testObject.Address != Frame.ConfigurationAddress);
-        Assert.IsTrue(testObject.GoodCheck);
+        Assert.That(testObject.GoodCheck, Is.True);
         Assert.That(testObject.Sequence < 4);
-        Assert.IsFalse(testObject.IsSecure);
-        Assert.IsNull(testObject.SecurityBlock);
-        Assert.IsFalse(testObject.HasMac);
+        Assert.That(testObject.IsSecure, Is.False);
+        Assert.That(testObject.SecurityBlock, Is.Null);
+        Assert.That(testObject.HasMac, Is.False);
     }
 }

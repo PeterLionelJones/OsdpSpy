@@ -15,10 +15,10 @@ public class FrameProductFactoryTests
         
         var frameProduct = testObject.Create(frame);
         
-        Assert.IsNotNull(frameProduct);
+        Assert.That(frameProduct, Is.Not.Null);
         Assert.That(frameProduct.Frame == frame);
-        Assert.IsNotNull(frameProduct.Timestamp);
-        Assert.IsNotNull(frameProduct.Payload);
+        Assert.That(frameProduct.Timestamp, Is.Not.Null);
+        Assert.That(frameProduct.Payload, Is.Not.Null);
     }
     
     [Test]
@@ -29,10 +29,10 @@ public class FrameProductFactoryTests
         
         var frameProduct = testObject.Create(DateTime.Now, frame);
         
-        Assert.IsNotNull(frameProduct);
+        Assert.That(frameProduct, Is.Not.Null);
         Assert.That(frameProduct.Frame == frame);
-        Assert.IsNotNull(frameProduct.Timestamp);
-        Assert.IsNotNull(frameProduct.Payload);
+        Assert.That(frameProduct.Timestamp, Is.Not.Null);
+        Assert.That(frameProduct.Payload, Is.Not.Null);
     }
 
     [Test]
@@ -41,7 +41,7 @@ public class FrameProductFactoryTests
         Assert.Throws<ArgumentNullException>(() =>
         {
             var testObject = new FrameProductFactory();
-            var frameProduct = testObject.Create(null);
+            testObject.Create(null);
         });
     }
 
@@ -51,7 +51,7 @@ public class FrameProductFactoryTests
         Assert.Throws<ArgumentNullException>(() =>
         {
             var testObject = new FrameProductFactory();
-            var frameProduct = testObject.Create(DateTime.Now, null);
+            testObject.Create(DateTime.Now, null);
         });
     }
 }

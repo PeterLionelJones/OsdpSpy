@@ -32,7 +32,7 @@ public class ExchangeProducerTests
         var testObject = new ExchangeProducer(factory.Object);
         testObject.Subscribe(frameProducer.Object);
         
-        Assert.IsNotNull(frameProducer.Object.FrameHandler);
+        Assert.That(frameProducer.Object.FrameHandler, Is.Not.Null);
     }
 
     [Test]
@@ -57,7 +57,7 @@ public class ExchangeProducerTests
         testObject.Subscribe(frameProducer.Object);
         testObject.Unsubscribe();
         
-        Assert.IsNull(frameProducer.Object.FrameHandler);
+        Assert.That(frameProducer.Object.FrameHandler, Is.Null);
     }
 
     [Test]
@@ -80,8 +80,8 @@ public class ExchangeProducerTests
         testObject.Subscribe(frameProducer.Object);
         frameProducer.Object.FrameHandler.Invoke(this, txProduct);
         
-        Assert.IsNull(txFrame);
-        Assert.IsNull(rxFrame);
+        Assert.That(txFrame, Is.Null);
+        Assert.That(rxFrame, Is.Null);
     }
 
     [Test]
@@ -104,8 +104,8 @@ public class ExchangeProducerTests
         testObject.Subscribe(frameProducer.Object);
         frameProducer.Object.FrameHandler.Invoke(this, rxProduct);
         
-        Assert.IsNull(txFrame);
-        Assert.IsNull(rxFrame);
+        Assert.That(txFrame, Is.Null);
+        Assert.That(rxFrame, Is.Null);
     }
 
     [Test]
@@ -129,7 +129,7 @@ public class ExchangeProducerTests
         frameProducer.Object.FrameHandler.Invoke(this, txProduct);
         
         Assert.That(txFrame == txProduct.Frame);
-        Assert.IsNull(rxFrame);
+        Assert.That(rxFrame, Is.Null);
     }
 
     [Test]

@@ -26,7 +26,7 @@ public class FactoryTests
 
         var returnedObj = factory.Create();
 
-        Assert.IsNotNull(returnedObj);
+        Assert.That(returnedObj, Is.Not.Null);
         Assert.That(returnedObj.Field == obj.Field);
     }
 }

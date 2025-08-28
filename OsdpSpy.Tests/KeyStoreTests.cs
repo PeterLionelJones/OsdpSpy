@@ -49,7 +49,7 @@ public class KeyStoreTests
     [Test]
     public void Constructor_Constructed_ListIsClear()
     {
-        Assert.IsNotNull(_unit.KeyItemList);
+        Assert.That(_unit.KeyItemList, Is.Not.Null);
         Assert.That(_unit.KeyItemList.Count == 0);
     }
 
@@ -58,7 +58,7 @@ public class KeyStoreTests
     {
         _unit.Clear();
 
-        Assert.IsNotNull(_unit.KeyItemList);
+        Assert.That(_unit.KeyItemList, Is.Not.Null);
         Assert.That(_unit.KeyItemList.Count == 0);
     }
 
@@ -71,7 +71,7 @@ public class KeyStoreTests
         _unit.Store(_uid3, _key3);        
         _unit.Store(_uid4, _key4);        
         
-        Assert.IsNotNull(_unit.KeyItemList);
+        Assert.That(_unit.KeyItemList, Is.Not.Null);
         Assert.That(_unit.KeyItemList.Count == 4);
     }
 
@@ -82,7 +82,7 @@ public class KeyStoreTests
         _unit.Store(_uid1, _key1);        
         _unit.Store(_uid1, _key1);        
         
-        Assert.IsNotNull(_unit.KeyItemList);
+        Assert.That(_unit.KeyItemList, Is.Not.Null);
         Assert.That(_unit.KeyItemList.Count == 1);
     }
 
@@ -95,7 +95,7 @@ public class KeyStoreTests
         _unit.Store(_uid1, _key1);
         var key1 = _unit.Find(_uid1);
         
-        Assert.IsNotNull(_unit.KeyItemList);
+        Assert.That(_unit.KeyItemList, Is.Not.Null);
         Assert.That(_unit.KeyItemList.Count == 1);
         Assert.That(defaultKey.SequenceEqual(_unit.DefaultBaseKey));
         Assert.That(key1.SequenceEqual(_key1));
@@ -115,7 +115,7 @@ public class KeyStoreTests
         var retrievedKey3 = _unit.Find(_uid3);
         var retrievedKey4 = _unit.Find(_uid4);
         
-        Assert.IsNotNull(_unit.KeyItemList);
+        Assert.That(_unit.KeyItemList, Is.Not.Null);
         Assert.That(_unit.KeyItemList.Count == 4);
         Assert.That(retrievedKey1.SequenceEqual(_key1));
         Assert.That(retrievedKey2.SequenceEqual(_key2));
@@ -133,9 +133,9 @@ public class KeyStoreTests
 
         var retrievedKey4 = _unit.Find(_uid4);
         
-        Assert.IsNotNull(_unit.KeyItemList);
+        Assert.That(_unit.KeyItemList, Is.Not.Null);
         Assert.That(_unit.KeyItemList.Count == 3);
-        Assert.IsNull(retrievedKey4);
+        Assert.That(retrievedKey4, Is.Null);
     }
 
     [Test]
@@ -155,5 +155,4 @@ public class KeyStoreTests
 
         Assert.Pass();
     }
-    
 }

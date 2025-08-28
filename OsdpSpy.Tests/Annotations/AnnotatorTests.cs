@@ -7,16 +7,13 @@ namespace OsdpSpy.Tests.Annotations;
 [TestFixture]
 public class AnnotatorTests
 {
-    private class TestAnnotator : Annotator<object>
-    {
-        public TestAnnotator() {}
-    }
+    private class TestAnnotator : Annotator<object>;
     
     [Test]
     public void Constructor_ConstructTestAnnotator_Succeeds()
     {
         var annotator = new TestAnnotator();
-        Assert.IsNotNull(annotator);
+        Assert.That(annotator, Is.Not.Null);
     }
     
     [Test]
@@ -29,7 +26,7 @@ public class AnnotatorTests
         var annotator = new TestAnnotator();
         annotator.Annotate(input, annotation);
 
-        Assert.IsNotNull(annotator);
+        Assert.That(annotator, Is.Not.Null);
     }
     
     [Test]
@@ -40,8 +37,8 @@ public class AnnotatorTests
         var annotator = new TestAnnotator();
         var includeInput = annotator.IncludeInput(input);
 
-        Assert.IsNotNull(annotator);
-        Assert.IsTrue(includeInput);
+        Assert.That(annotator, Is.Not.Null);
+        Assert.That(includeInput, Is.True);
     }
     
     [Test]
@@ -49,7 +46,7 @@ public class AnnotatorTests
     {
         var annotator = new TestAnnotator();
         annotator.ReportState();
-        Assert.IsNotNull(annotator);
+        Assert.That(annotator, Is.Not.Null);
     }
     
     [Test]
@@ -57,6 +54,6 @@ public class AnnotatorTests
     {
         var annotator = new TestAnnotator();
         annotator.Summarise();
-        Assert.IsNotNull(annotator);
+        Assert.That(annotator, Is.Not.Null);
     }
 }

@@ -35,7 +35,7 @@ public class ResponseFrameTests
             testObject.AddByte((byte)('0' + i));
         }
         
-        Assert.IsTrue(testObject.IsComplete);
+        Assert.That(testObject.IsComplete, Is.True);
     }
 
     [Test]
@@ -53,7 +53,7 @@ public class ResponseFrameTests
             testObject.AddByte(inch);
         }
         
-        Assert.IsFalse(testObject.IsComplete);
+        Assert.That(testObject.IsComplete, Is.False);
     }
     
     [Test]
@@ -68,7 +68,7 @@ public class ResponseFrameTests
             if (!clobbered) testObject.KillFrame();
         }
         
-        Assert.IsFalse(testObject.IsComplete);
+        Assert.That(testObject.IsComplete, Is.False);
     }
 
     [Test]
@@ -85,7 +85,7 @@ public class ResponseFrameTests
         var elapsed = testObject.Elapsed;
         var precise = testObject.ElapsedWithPrecision;
         
-        Assert.IsTrue(testObject.IsComplete);
+        Assert.That(testObject.IsComplete, Is.True);
         Assert.That(elapsed > 8);
         Assert.That(precise > 8.0);
     }
@@ -102,7 +102,7 @@ public class ResponseFrameTests
 
         var traceString = testObject.TraceString;
 
-        Assert.IsTrue(testObject.IsComplete);
+        Assert.That(testObject.IsComplete, Is.True);
         Assert.That(traceString.Contains("TX:"));
     }
 
@@ -118,7 +118,7 @@ public class ResponseFrameTests
 
         var traceString = testObject.TraceString;
 
-        Assert.IsTrue(testObject.IsComplete);
+        Assert.That(testObject.IsComplete, Is.True);
         Assert.That(traceString.Contains("RX:"));
     }
 }

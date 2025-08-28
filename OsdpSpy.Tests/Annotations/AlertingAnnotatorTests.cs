@@ -21,7 +21,7 @@ public class AlertingAnnotatorTests
 
         var annotator = new TestAnnotator(factory);
 
-        Assert.IsNotNull(annotator);
+        Assert.That(annotator, Is.Not.Null);
         Assert.That(annotator.InternalQueue.IsEmpty);
     }
     
@@ -40,9 +40,9 @@ public class AlertingAnnotatorTests
             "Message", 
             "Heading");
 
-        Assert.IsNotNull(annotator);
+        Assert.That(annotator, Is.Not.Null);
         Assert.That(annotator.InternalQueue.IsEmpty);
-        Assert.IsNotNull(alert);
+        Assert.That(alert, Is.Not.Null);
     }
     
     [Test]
@@ -61,9 +61,9 @@ public class AlertingAnnotatorTests
             "Heading");
         annotator.LogAlert(alert);
 
-        Assert.IsNotNull(annotator);
-        Assert.IsNotNull(alert);
-        Assert.That(annotator.InternalQueue.Count == 1);
+        Assert.That(annotator, Is.Not.Null);
+        Assert.That(alert, Is.Not.Null);
+        Assert.That(annotator.InternalQueue.Count, Is.EqualTo(1));
     }
     
     [Test]
@@ -83,8 +83,8 @@ public class AlertingAnnotatorTests
         annotator.LogAlert(alert);
         annotator.ReportState();
 
-        Assert.IsNotNull(annotator);
-        Assert.IsNotNull(alert);
+        Assert.That(annotator, Is.Not.Null);
+        Assert.That(alert, Is.Not.Null);
         Assert.That(annotator.InternalQueue.IsEmpty);
     }
     
@@ -100,7 +100,7 @@ public class AlertingAnnotatorTests
         var annotator = new TestAnnotator(factory);
         annotator.ReportState();
 
-        Assert.IsNotNull(annotator);
+        Assert.That(annotator, Is.Not.Null);
         Assert.That(annotator.InternalQueue.IsEmpty);
     }
 }

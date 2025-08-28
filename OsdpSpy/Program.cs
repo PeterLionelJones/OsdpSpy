@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OsdpSpy.Abstractions;
 using OsdpSpy.Annotators;
+using OsdpSpy.Clear;
 using OsdpSpy.Import;
 using OsdpSpy.List;
 using OsdpSpy.Listen;
@@ -18,6 +19,7 @@ namespace OsdpSpy;
 
 [HelpOption]
 [Command(Name = "osdpspy", Description = "\nosdpspy Protocol Analysis Tool")]
+[Subcommand(typeof(ClearCommand))]
 [Subcommand(typeof(ImportCommand))]
 [Subcommand(typeof(ListenCommand))]
 [Subcommand(typeof(ListCommand))]
@@ -44,12 +46,12 @@ internal class Program
     }
 
     [Option("-v|--version")]
-    private static bool ReportVersion { get; }
+    private static bool ReportVersion { get; set; }
 
     private static string GetVersion()
     {
-        var version = Assembly.GetEntryAssembly().GetName().Version;
-        return $"{version.Major}.{version.Minor}.{version.Build}";
+        var version = Assembly.GetEntryAssembly()?.GetName().Version;
+        return $"{version?.Major}.{version?.Minor}.{version?.Build}";
     }
 
     private static string Version => GetVersion(); 
@@ -108,7 +110,7 @@ internal class Program
 
     // ReSharper disable once UnusedParameter.Local
     // ReSharper disable once UnusedMember.Local
-    private static int OnExecute(CommandLineApplication app)
+    private int OnExecute(CommandLineApplication app)
     {
         if (ReportVersion)
         {
