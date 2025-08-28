@@ -44,7 +44,7 @@ public static class MultipartMessageExtensions
     {
         return reply switch
         {
-            Reply.EXTID => true,
+            Reply.EXT_PDID => true,
             _ => false 
         };
     }

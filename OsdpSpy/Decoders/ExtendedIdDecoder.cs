@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using OsdpSpy.Annotations;
 using OsdpSpy.Osdp;
 
@@ -10,13 +11,23 @@ public enum ExtendedIdTag
     Manufacturer = 0,
     ProductName = 1,
     SerialNumber = 2,
-    FirmwareVersions = 3,
-    HardwareDescription = 4
+    FirmwareVersion = 3,
+    HardwareDescription = 4,
+    Url = 5,
+    ConfigurationReference = 6,
+    Unknown = 0xFF
+}
+
+public class ExtendedIdEntry(ExtendedIdTag tag, string value)
+{
+    public ExtendedIdTag Tag { get; init; } = tag;
+    public int Index { get; set; }
+    public string Value { get; init; } = value;
 }
 
 public class ExtendedIdDecoder : IMultipartMessageDecoder
 {
-    public Reply Reply => Reply.EXTID;
+    public Reply Reply => Reply.EXT_PDID;
 
     public void Decode(byte[] input, IAnnotation output)
     {
@@ -33,30 +44,15 @@ public class ExtendedIdDecoder : IMultipartMessageDecoder
 
 internal static class ExtendedIdDecoderExtensions
 {
-    public static IAnnotation Append(this IAnnotation output, KeyValuePair<ExtendedIdTag, string> item)
+    public static IAnnotation Append(this IAnnotation output, ExtendedIdEntry item) 
+        => output.AppendItem(item.ToItemName(), item.Value);
+
+    private static string ToItemName(this ExtendedIdEntry item) 
+        => item.Index == 0 ? item.Tag.ToString() : $"{item.Tag}{item.Index + 1}";
+
+    public static List<ExtendedIdEntry> ToTlvStream(this byte[] input)
     {
-        return item.Key switch
-        {
-            ExtendedIdTag.FirmwareVersions => output.AppendVersions(item),
-            _ => output.AppendItem(item.Key.ToString(), item.Value)
-        };
-    }
-
-    public static IAnnotation AppendVersions(this IAnnotation output, KeyValuePair<ExtendedIdTag, string> item)
-    {
-        var versions = item.Value.Split('\n');
-
-        for (var i = 0; i < versions.Length; i++)
-        {
-            output.AppendItem($"FirmwareVersion{i+1}", versions[i]);
-        }
-
-        return output;
-    }
-
-    public static Dictionary<ExtendedIdTag, string> ToTlvStream(this byte[] input)
-    {
-        var items = new Dictionary<ExtendedIdTag, string>();
+        var items = new List<ExtendedIdEntry>();
         var offset = 0;
         var remaining = input.Length;
 
@@ -68,12 +64,32 @@ internal static class ExtendedIdDecoderExtensions
             var item = new byte[itemLength];
             Buffer.BlockCopy(input, offset + 3,  item, 0, itemLength);
             
-            items.Add(tag, System.Text.Encoding.UTF8.GetString(item));
+            items.Add(new ExtendedIdEntry(tag, System.Text.Encoding.UTF8.GetString(item)));
             
             remaining -= length;
             offset += length;
         }
 
-        return items;
+        return items.SortAndNumber();
+    }
+
+    private static List<ExtendedIdEntry> SortAndNumber(this List<ExtendedIdEntry> input)
+    {
+        var output = input.OrderBy(x => x.Tag).ToList();
+
+        var lastTag = ExtendedIdTag.Unknown;
+        var index = 0;
+
+        foreach (var entry in output)
+        {
+            if (entry.Tag != lastTag)
+            {
+                lastTag = entry.Tag;
+                index = 0;
+            }
+            entry.Index = index++;
+        }
+
+        return output;
     }
 }
