@@ -36,7 +36,7 @@ internal enum FunctionCode
     Biometrics = 14,
     SecurePinEntry = 15,
     OsdpVersion = 16,
-    ExtendedId = 32  // TODO:Awaiting designation by OSDP WG.
+    ExtendedId = 17
 }
 
 internal class DeviceCapability(FunctionCode function, byte compliance, byte numberOf)
